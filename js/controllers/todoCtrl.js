@@ -43,6 +43,7 @@ var query = echoRef.orderByChild("order");
 //.limitToFirst(1000);
 $scope.todos = $firebaseArray(query);
 
+
 //$scope.input.wholeMsg = '';
 $scope.editedTodo = null;
 
@@ -140,6 +141,11 @@ $scope.addEcho = function (todo) {
 	// Disable the button
 	$scope.$storage[todo.$id] = "echoed";
 };
+
+$scope.orderpref = 'head';
+$scope.setOrderpref = function (pref){
+	$scope.orderpref = pref;
+}
 
 $scope.doneEditing = function (todo) {
 	$scope.editedTodo = null;

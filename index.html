@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="app">
+<html lang="en" ng-app="cover">
 <head>
 
     <meta charset="utf-8">
@@ -29,7 +29,7 @@
 
 </head>
 
-<body id="page-top">
+<body id="page-top" ng-controller="controller">
 
     <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
@@ -63,11 +63,23 @@
     <header>
         <div class="header-content">
             <div class="header-content-inner">
-                <div class="row well">
-                  <form name="form" ng-submit="join()" class="navbar-form navbar-left ng-pristine ng-invalid ng-invalid-required ng-valid-pattern" role="search">
-                    <input type="text" name="input" class="form-control large ng-pristine ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="example.text" ng-pattern="/^\s*\w*\s*$/" required="" ng-trim="false" autofocus="" aria-describedby="sizing-addon1" placeholder="Room name">
-                    <a href="#" class="btn btn-lg btn-default ng-hide" ng-hide="form.input.$error.required || form.input.$error.pattern" ng-click="join()">Join</a>
-                  </form>
+                <div class="row">
+                    <div class="col-lg-offset-4 col-lg-4 well">
+                      <form name="form" ng-submit="join()" class="navbar-form navbar-left" role="search">
+        								<input type="text" name = "input" class="form-control large"
+        								ng-model="example.text"
+        								ng-pattern="example.word" required
+        								ng-trim="false"
+        								autofocus
+        								aria-describedby="sizing-addon1"
+        								placeholder="Room name">
+                                        <span class="text-danger" ng-show="form.input.$error.pattern">Invalid Room Name</span>
+        								<a href="" class="btn btn-md btn-default"
+        								ng-hide="form.input.$error.required || form.input.$error.pattern"
+        								ng-click="join()"
+        								>Join</a>
+        				</form>
+                    </div>
                 </div>
                 <!-- <h1>Your Favorite Source of Free Bootstrap Themes</h1>
                 <hr>
@@ -138,38 +150,38 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 text-center">
-				<br><br>
-                    <div class="panel" style="display: block;">
-						<h1>JUST_ASK</h1>
-						<span class="r-version">v2.0.0</span>
-						<h2>A totally anonymous and real-time updating question moderated system in a typical class setting.</h2>
-						<a class="btn btn-primary">Github</a>
+                    <br><br>
+                        <div class="panel" style="display: block;">
+                            <h1>JUST_ASK</h1>
+                            <span class="r-version">v2.0.0</span>
+                            <h2>A totally anonymous and real-time updating question moderated system in a typical class setting.</h2>
+                            <a class="btn btn-primary">Github</a>
+                        </div>
                 </div>
             </div>
         </div>
     </section>
 
-			<!-- Bootstrap core JavaScript
-			================================================== -->
-			<!-- Placed at the end of the document so the pages load faster -->
-			<script src="js/lib/jquery.min.js"></script>
-			<script src="js/lib/bootstrap.min.js"></script>
-      <script src="js/cover.js"></script>
-			<!-- 1.4.2 -->
-			<script src="js/lib/angular.min.js"></script>
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="js/lib/jquery.min.js"></script>
+	<script src="js/lib/bootstrap.min.js"></script>
+    <script src="js/cover.js"></script>
+	<!-- 1.4.2 -->
+	<script src="js/lib/angular.min.js"></script>
 
-			<script>
-			angular.module('app', [])
-			.controller('controller', ['$scope', '$location', '$window', function($scope, $location, $window) {
-				$scope.example = {
-					text: '',
-					word: /^\s*\w*\s*$/
-				};
-
-				$scope.join = function () {
-					$window.location.href = 'room.html#/' + $scope.example.text;
-				}
-			}]);
-			</script>
-		</body>
-  </html>
+	<script>
+    angular.module('cover', [])
+		.controller('controller', ['$scope', '$location', '$window', function($scope, $location, $window) {
+			$scope.example = {
+				text: '',
+				word: /^\s*\w*\s*$/
+			};
+			$scope.join = function () {
+				$window.location.href = 'room.html#/' + $scope.example.text;
+		    }
+	    }]);
+	</script>
+</body>
+</html>

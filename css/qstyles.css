@@ -1,9 +1,13 @@
 /* Bootstrap fix
 Ref: http://stackoverflow.com/questions/19432787/bootstrap-3-0-0-adding-extra-space-on-row-class
 */
+body{
+    background: url('../images/quake.jpg');
+    background-position: center bottom;
+    background-size: 300px;
+}
+
 .container{
-  background: url('../images/quake.jpg');
-  background-position: center bottom;
   width: 100%;
 }
 
@@ -17,8 +21,9 @@ Ref: http://stackoverflow.com/questions/19432787/bootstrap-3-0-0-adding-extra-sp
 }
 
 .top-banner{
-  background: url('../images/abstract-cartoon-cloud-art-backgrounds.jpg') no-repeat;
-  background-position: center top;
+  /*background: url('../images/abstract-cartoon-cloud-art-backgrounds.jpg') no-repeat;
+  background-position: center top;*/
+  background: rgba(255,255,255,0.8);
   height: 400px;
   padding: 0;
   margin-top: -270px;
@@ -39,6 +44,10 @@ Ref: http://stackoverflow.com/questions/19432787/bootstrap-3-0-0-adding-extra-sp
   min-height: 130px;
 }
 
+.section:last-child{
+  margin-bottom: 20px;
+}
+
 .section .title{
   font-size: 2em;
   color: #c3d5db;
@@ -51,10 +60,35 @@ input:focus{
 .q-input{
   margin: 2px;
   margin-left: 30px;
+  padding-left: 10px;
   background: 0;
   border: none;
+  outline: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
   font-size: 2em;
-  width: 100%;
+  width: 97%
+}
+
+.q-input:focus{
+    background-color: #e7e7e7;
+}
+
+.send-button{
+  height: 130px;
+  border-left: 2px solid #999;
+}
+
+.send-button:hover{
+  background-color: #e7e7e7;
+}
+
+.send-button .icon{
+  margin-top: 25%;
+  margin-left: 8%;
+  padding: 5px;
+  font-size: 2em;
 }
 
 .icon{
@@ -206,20 +240,6 @@ input:focus{
 .footer a{
   color: #fff;
   margin-right: 10px;
-}
-
-.send-button{
-  border-left: 2px solid #999;
-  height: 85px;
-}
-
-.send-button:hover{
-  background: #e7e7e7;
-}
-
-.send-button .icon{
-  padding: 5px;
-  font-size: 2em;
 }
 
 .subscribe-yellow{
