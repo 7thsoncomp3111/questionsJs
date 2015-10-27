@@ -1,0 +1,227 @@
+/* Bootstrap fix
+Ref: http://stackoverflow.com/questions/19432787/bootstrap-3-0-0-adding-extra-space-on-row-class
+*/
+.container{
+  background: url('../images/quake.jpg');
+  background-position: center bottom;
+  width: 100%;
+}
+
+.row {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.center{
+  text-align: center;
+}
+
+.top-banner{
+  background: url('../images/abstract-cartoon-cloud-art-backgrounds.jpg') no-repeat;
+  background-position: center top;
+  height: 400px;
+  padding: 0;
+  margin-top: -270px;
+}
+
+.pull-up{
+  margin-top: -105px;
+}
+
+.section{
+  display:inline-block;
+  margin: 10px;
+  padding: 15px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  width: 100%;
+  border-bottom: 5px solid #e7e7e7;
+  min-height: 130px;
+}
+
+.section .title{
+  font-size: 2em;
+  color: #c3d5db;
+}
+
+input:focus{
+    outline: 0;
+}
+
+.q-input{
+  margin: 2px;
+  margin-left: 30px;
+  background: 0;
+  border: none;
+  font-size: 2em;
+  width: 100%;
+}
+
+.icon{
+  position: absolute;
+  padding-top: 10px;
+  color: #999;
+  font-size: 1.5em;
+}
+
+.icon:hover{
+  color: #666;
+  cursor: pointer;
+}
+
+.question{
+  margin: 10px;
+  padding: 15px;
+  border-bottom: 2px solid #e7e7e7;
+}
+
+.question.now{
+  background: #ffff99;
+}
+
+.question:last-child{
+  border: none;
+}
+
+.question a:hover, .question a:focus{
+  text-decoration: none;
+}
+
+.question .title{
+  color: #c3d5db;
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.question .title:hover{
+  color: #6495a4;
+}
+
+.question .body img{
+  width: 100%;
+}
+
+.questionFooter{
+  margin-left: 30%;
+  padding-bottom: 5px;
+  width: auto;
+}
+
+.questionFooter .interactive{
+  background: #c3d5db;
+  color: #fff;
+  border-radius: 0.2em;
+}
+
+.questionFooter .interactive .subscribe-btn{
+  background-image: none;
+  border: none;
+  background-color: #7d9faa;
+  padding-top: 7px;
+  border-radius: 0;
+}
+
+.questionFooter .interactive .subscribe-btn:hover{
+  background-color: #eb9316;
+}
+
+.questionFooter .interactive:hover{
+  background-color: #6495a4;
+}
+
+.questionFooter .interactive i{
+  padding: 5px;
+  width: 55px;
+}
+
+.questionFooter .interactive i::before{
+  padding-right: 5px;
+}
+
+.comments{
+  margin: 15px;
+}
+
+.comments .comment{
+  margin: 0.5em;
+  border-radius: 0.5em;
+  padding: 1em;
+}
+
+.comment .voting{
+  float: right;
+  font-size: 2em;
+}
+
+.comment .voting a{
+    color: #444;
+}
+
+.comment .voting .up:hover{
+  color: green;
+  text-decoration: none;
+}
+
+.comment .voting .down:hover{
+  color: red;
+  text-decoration: none;
+}
+
+.comment.level0{
+  margin-left: 1em;
+  background: #999;
+}
+
+.comment.level1{
+  margin-left: 3em;
+  background: #ccc;
+}
+
+.comment.level2{
+  margin-left: 5em;
+  background: #eee;
+}
+
+.left{
+  float: left;
+}
+
+.right{
+  float: right;
+}
+
+.time{
+  display: inline-block;
+  color: #777;
+  font-style: italic;
+}
+
+.footer{
+  background: url('../images/abstract-cartoon-cloud-art-backgrounds.jpg') no-repeat;
+  background-position: center bottom;
+  background-size: 1280px;
+  padding: 5px;
+}
+
+.footer a{
+  color: #fff;
+  margin-right: 10px;
+}
+
+.send-button{
+  border-left: 2px solid #999;
+  height: 85px;
+}
+
+.send-button:hover{
+  background: #e7e7e7;
+}
+
+.send-button .icon{
+  padding: 5px;
+  font-size: 2em;
+}
+
+.subscribe-yellow{
+  color: #7d9faa;
+}

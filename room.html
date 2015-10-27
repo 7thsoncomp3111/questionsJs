@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en" ng-app="todomvc" scroll data-framework="firebase">
+<head>
+	<meta charset="utf-8">
+
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- http://stackoverflow.com/questions/1341089/using-meta-tags-to-turn-off-caching-in-all-browsers -->
+	<meta http-equiv="cache-control" content="max-age=0" />
+	<meta http-equiv="cache-control" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+	<meta http-equiv="pragma" content="no-cache" />
+
+	<title>Question Room: {{roomId}}</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+	<!-- need this for comlted ones. TODO: can I do this in bootstrap -->
+	<link rel="stylesheet" href="main.css">
+	<link rel="stylesheet" href="css/qstyles.css">
+
+</head>
+<body ng-controller="TodoCtrl">
+	<div class="top-banner"></div>
+	<div class="container">
+		<div class="row">
+			<font size="10">Questions for {{roomId}}?</font>&nbsp;
+
+				<!--
+
+				<a ng-class="{selected: location.path() == '/newechos'}" class="btn btn-primary" href="#/newechos">New Echos</a>
+				<a ng-class="{selected: location.path() == '/tags'}" class="btn btn-success" href="#/tags">Tags</a>
+				<a ng-class="{selected: location.path() == '/users'}" class="btn btn-info" href="#/users">Users</a>
+				<a ng-class="{selected: location.path() == '/about'}" class="btn btn-warning" href="#/about">About</a>
+			-->
+
+			<small>Share room url: {{absurl}}</small> &nbsp;
+			<a class="btn btn-default" href="/index.html">Main</a>
+			<button ng-hide="$authData" class="btn btn-primary left" type="button" ng-click="FBLogin()">Want Admin? Sign in with Facebook</button>
+
+			<!-- after login -->
+			<img ng-show="$authData" src="https://graph.facebook.com/{{$authData.facebook.id}}/picture/?type=square&return_ssl_resources=1" alt="{{name}}" />
+			{{$authData.facebook.displayName}}
+			<button ng-show="$authData" class="btn btn-primary left" type="button" ng-click="FBLogout()">Logout</button>
+		</div>
+		<div class="row pull-up">
+			<!-- Settings -->
+			<div class="col-md-3">
+				<div class="section">
+					<p class="title center">Settings</p>
+					<div class="btn-group">
+						<div class="btn btn-sm btn-default active">Activity</div>
+						<div class="btn btn-sm btn-default">Date</div>
+						<div class="btn btn-sm btn-default">Rating</div>
+					</div>
+				</div>
+			</div>
+			<!-- Main -->
+			<div class="col-md-6">
+				<div class="section">
+					<div class="row">
+						<div class="input-group">
+							<!--
+							<form id="todo-form" ng-submit="addTodo()">
+						-->
+						<textarea type="text" id="new-todo" class="form-control"
+						placeholder="Search or Post Question"
+						ng-model="input.wholeMsg" autofocus></textarea>
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" ng-click="addTodo()">Ask</button>
+						</span>
+						</div><!-- /input-group -->
+					</div>
+					<div class="row">
+						<div class="col-md-10">
+							<div class="icon"><i class="glyphicon glyphicon-camera"></i></div>
+							<input class="q-input" placeholder="| Enter Title" id="one">
+							<div class="icon"><i class="glyphicon glyphicon-search"></i></div>
+							<input class="q-input" placeholder="| Ask A Question" id="two">
+						</div>
+						<div class="col-md-2 send-button">
+							<br>
+							<div class="icon"><i class="glyphicon glyphicon-send"></i></div>
+						</div>
+					</div>
+				</div>
+				<!-- <div id="questionList"></div> -->
+				<div class="list-group" id="todo-list">
+					<span class="list-group-item" ng-repeat="todo in todos | filter:input | questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+						<h4 class="list-group-item-heading" ng-switch on="todo.headLastChar">
+							<span class="label label-danger" ng-show="todo.new">New</span>
+							<span class="badge">{{todo.echo}}</span>
+							<!-- switch -->
+							<span ng-switch-when="?" class="glyphicon glyphicon-question-sign"></span>
+							<span ng-switch-when="!" class="glyphicon glyphicon-ice-lolly"></span>
+							<span ng-class="{completed: todo.completed}">{{todo.head}}</span>
+						</h4>
+						<p class="list-group-item-text"><span ng-bind-html="todo.trustedDesc"></span> created: {{todo.dateString}}
+							<span ng-show="todo.tags">tags: {{todo.tags}}</span></p>
+
+							<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="addEcho(todo)" ng-disabled="$storage[todo.$id]">Like</button>
+							<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button>
+							&nbsp;
+							<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
+						</span>
+					</div>
+
+					<!--
+
+					<div id="toTop" class="btn btn-info"><span class="fa fa-arrow-up">Back to Top</span></div>
+
+					<button ng-hide="totalCount<=maxQuestion"
+					class="pull-right btn btn-default glyphicon glyphicon-arrow-down"
+					type="button" ng-click="increaseMax()"> Show more</button>
+				-->
+			</div>
+			<!-- Feed -->
+			<div class="col-md-3">
+				<div class="section">
+					<p class="title center">Feed</p>
+					<div id="questionListTop"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="footer">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-8">
+					<a href="#">Terms of Service</a>
+					<a href="#">Privacy</a>
+					<a href="#">Security</a>
+				</div>
+				<div class="col-md-4">
+					<p class="muted pull-right">© 2015 7th Son. All rights reserved</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- Autolink from https://github.com/gregjacobs/Autolinker.js> -->
+<script src="js/lib/Autolinker.min.js"></script>
+
+<!-- 2.2.2 -->
+<script src="js/lib/firebase.js"></script>
+<script src="js/lib/angular.min.js"></script>
+<script src="js/lib/angularfire.js"></script>
+
+<!-- Ng storage 0.3.6  -->
+<script src="js/lib/ngStorage.min.js"></script>
+
+<script src="js/app.js"></script>
+<script src="js/filters/questionFilter.js"></script>
+<script src="js/controllers/todoCtrl.js"></script>
+<script src="js/directives/todoFocus.js"></script>
+<script src="js/directives/todoBlur.js"></script>
+<script src="js/directives/todoEscape.js"></script>
+</body>
+</html>
