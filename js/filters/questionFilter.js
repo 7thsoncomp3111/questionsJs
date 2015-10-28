@@ -3,7 +3,7 @@
 
 /**
 * The questionFilter
-* Show the new questions on the top and show only max questions 
+* Show the new questions on the top and show only max questions
 *
 */
 todomvc.filter('questionFilter', function () {
@@ -24,10 +24,10 @@ todomvc.filter('questionFilter', function () {
       // sorting new questions based on the time if echo is the same.
       // Newer ones are on the top
       newQuestions.sort(function(a, b) {
-        if (a.echo == b.echo) {
+        if (a.upvote-a.downvote == b.upvote-b.downvote) {
           return b.timestamp - a.timestamp;
         }
-        return b.echo - a.echo;
+        return (b.upvote-b.downvote) - (a.upvote-a.downvote);
       });
     });
 

@@ -92,8 +92,6 @@ input:focus{
 }
 
 .icon{
-  position: absolute;
-  padding-top: 10px;
   color: #999;
   font-size: 1.5em;
 }
@@ -103,6 +101,10 @@ input:focus{
   cursor: pointer;
 }
 
+.icon-inputbox{
+    position: absolute;
+    padding-top: 10px;
+}
 /*.question{
   margin: 10px;
   padding: 15px;
@@ -267,4 +269,10 @@ input:focus{
 .tag:hover{
     background-color: #6495a4;
     color: #fff;
+}
+
+#tagsearchbar{
+    padding: 2px 5px;
+    background-color: #ddd;
+    border-radius: 2px;
 }

@@ -114,17 +114,6 @@ $scope.$watchCollection('todos', function () {
 	$scope.absurl = $location.absUrl();
 }, true);
 
-//Append tag to tag search box
-$scope.tagsearch = false;
-$scope.tagsearchitems = Array();
-$scope.clickTag = function(t){
-	$scope.tagsearch = true;
-	$scope.tagsearchitems.push(t);
-	console.log($scope.tagsearchitems);
-	//$scope.$apply();
-	//$scope.todos.$save(todo);
-}
-
 // Get the first sentence and rest
 $scope.getFirstAndRestSentence = function($string) {
 	var head = $string;
@@ -206,6 +195,30 @@ $scope.addDownvote = function (todo) {
 //$scope.orderpref = '-timestamp';
 $scope.setOrderpref = function (pref){
 	$scope.orderpref = pref;
+}
+
+//Append tag to tag search box
+$scope.tagsearch = false;
+$scope.tagsearchitems = Array();
+$scope.clickTag = function(t){
+	if($scope.tagsearchitems.indexOf(t)==-1){
+		$scope.tagsearch = true;
+		$scope.tagsearchitems.push(t);
+	}
+}
+
+//Clear all tags in tag search box
+$scope.clearTag = function(t_index){
+	if(t_index == null){
+		$scope.tagsearch = false;
+		$scope.tagsearchitems = [];
+	}
+	else{
+		$scope.tagsearchitems.splice(t_index,1);
+		if($scope.tagsearchitems[0] == null){
+			$scope.tagsearch = false;
+		}
+	}
 }
 
 $scope.doneEditing = function (todo) {
