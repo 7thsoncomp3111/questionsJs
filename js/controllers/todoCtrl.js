@@ -7,8 +7,8 @@
 * - exposes the model to the template and provides event handlers
 */
 todomvc.controller('TodoCtrl',
-['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window',
-function ($scope, $location, $firebaseArray, $sce, $localStorage, $window) {
+['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window','$compile',
+function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $compile) {
 	// set local storage
 	$scope.$storage = $localStorage;
 
@@ -73,6 +73,7 @@ $scope.$watchCollection('todos', function () {
 		function onlyUnique(value, index, self) {
 			return self.indexOf(value) === index;
 		}
+
 		var tagmatches = todo.wholeMsg.match(/#\w+/g);
 		if(tagmatches!=null){
 			//Filter duplicate matches
@@ -88,6 +89,13 @@ $scope.$watchCollection('todos', function () {
 		todo.tags = tagmatches;
 
 		todo.trustedDesc = $sce.trustAsHtml(todo.linkedDesc);
+		// break into tokens,
+		// for replace tag string with tag link by directive replaceTagLinks
+		var trustedDescTokens = String(todo.trustedDesc).split(' ');
+		trustedDescTokens.forEach(function(elem, i, A){
+			A[i] = {title: elem.replace("#",""), hasTag: elem.match(/#/)!=null};
+		})
+		todo.trustedDescTokens = trustedDescTokens;
 	});
 	//Get tagcount
 	var counts = {};

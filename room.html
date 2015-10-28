@@ -97,7 +97,7 @@
 							<span ng-switch-when="!" class="glyphicon glyphicon-ice-lolly"></span>
 							<span ng-class="{completed: todo.completed}">{{todo.head}}</span>
 						</h4>
-						<p class="list-group-item-text"><span ng-bind-html="todo.trustedDesc"></span> created: {{todo.dateString}}
+						<p class="list-group-item-text"><span ng-repeat="trustedToken in todo.trustedDescTokens track by $index"><span replacetaglink></span></span> created: {{todo.dateString}}
 							<div ng-show="todo.tags"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
 
 							<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="addUpvote(todo)" ng-disabled="$storage[todo.$id]">Upvote</button>
@@ -189,6 +189,7 @@
 <script src="js/directives/todoFocus.js"></script>
 <script src="js/directives/todoBlur.js"></script>
 <script src="js/directives/todoEscape.js"></script>
+<script src="js/directives/replaceTagLink.js"></script>
 
 </body>
 </html>

@@ -271,6 +271,18 @@ input:focus{
     color: #fff;
 }
 
+.inlinetag{
+    background-color: #f3f3f3;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.inlinetag:hover{
+    cursor: pointer;
+    background-color: #e0e0e0;
+    color: #6495a4;
+    border-bottom: 2px solid #6495a4;
+}
+
 #tagsearchbar{
     padding: 2px 5px;
     background-color: #ddd;
