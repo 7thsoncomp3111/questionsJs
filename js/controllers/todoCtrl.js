@@ -51,6 +51,7 @@ $scope.editedTodo = null;
 $scope.$watchCollection('todos', function () {
 	var total = 0;
 	var remaining = 0;
+	var alltags = Array();
 	$scope.todos.forEach(function (todo) {
 		// Skip invalid entries so they don't break the entire app.
 		if (!todo || !todo.head ) {
@@ -68,11 +69,44 @@ $scope.$watchCollection('todos', function () {
 		todo.downvotePercent = todo.downvote/(todo.upvote+todo.downvote)*100;
 		// set time
 		todo.dateString = new Date(todo.timestamp).toString();
-		todo.tags = todo.wholeMsg.match(/#\w+/g);
+		// set tags
+		function onlyUnique(value, index, self) {
+			return self.indexOf(value) === index;
+		}
+		var tagmatches = todo.wholeMsg.match(/#\w+/g);
+		if(tagmatches!=null){
+			//Filter duplicate matches
+			var uniquetags = tagmatches.filter( onlyUnique );
+			uniquetags.forEach(function(elem, i, A){
+				//Remove hash
+				A[i]=elem.replace("#","");
+				alltags.push(A[i]);
+			});
+			//Sort alphabetically
+			tagmatches = uniquetags.sort();
+		}
+		todo.tags = tagmatches;
 
 		todo.trustedDesc = $sce.trustAsHtml(todo.linkedDesc);
 	});
-
+	//Get tagcount
+	var counts = {};
+	var ranknum = 0;
+	for(var i=0; i<alltags.length; i++) {
+	    var num = alltags[i];
+		if(counts[num]){
+			counts[num] +=1;
+			ranknum++;
+		}
+		else{
+			counts[num]=1;
+		}
+	}
+	//Convert object to array
+	var rankedTags = $.map(counts, function(value, index) {
+    	return [{title: index, count: value}];
+	});
+	$scope.rankedTags = rankedTags;
 	$scope.totalCount = total;
 	$scope.remainingCount = remaining;
 	$scope.completedCount = total - remaining;
@@ -158,7 +192,7 @@ $scope.addDownvote = function (todo) {
 	$scope.$storage[todo.$id] = "echoed";
 };
 
-$scope.orderpref = '-timestamp';
+//$scope.orderpref = '-timestamp';
 $scope.setOrderpref = function (pref){
 	$scope.orderpref = pref;
 }

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="todomvc" scroll data-framework="firebase">
+<html lang="en" ng-app="todomvc" scroll data-framework="firebase" ng-controller="TodoCtrl">
 <head>
 	<meta charset="utf-8">
 
@@ -19,11 +19,11 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 
 	<!-- need this for comlted ones. TODO: can I do this in bootstrap -->
-	<link rel="stylesheet" href="main.css">
+	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="css/qstyles.css">
 
 </head>
-<body ng-controller="TodoCtrl">
+<body>
 	<div class="top-banner"></div>
 	<div class="container">
 		<div class="row pull-up headerrow">
@@ -90,7 +90,7 @@
 							<span ng-class="{completed: todo.completed}">{{todo.head}}</span>
 						</h4>
 						<p class="list-group-item-text"><span ng-bind-html="todo.trustedDesc"></span> created: {{todo.dateString}}
-							<span ng-show="todo.tags">tags: {{todo.tags}}</span></p>
+							<div ng-show="todo.tags"><div ng-repeat="t in todo.tags" class="btn tag">{{t}}</div></div></p>
 
 							<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="addUpvote(todo)" ng-disabled="$storage[todo.$id]">Upvote</button>
 							<button class="btn btn-default btn-xs glyphicon glyphicon-hand-down" ng-click="addDownvote(todo)" ng-disabled="$storage[todo.$id]">Downvote</button>
@@ -124,17 +124,9 @@
 					<p class="title center">Feed</p>
 					<div>
 						<h3>Popular Tags</h3>
-						<ul>
-							<li>
-								#UST
-							</li>
-							<li>
-								#COMP
-							</li>
-							<li>
-								#GOODGRADE
-							</li>
-						</ul>
+						<div ng-repeat="t in rankedTags | orderBy: '-count' | limitTo:10">
+							<div class="btn tag">{{t.title}}</div>({{t.count}})
+						</div>
 					</div>
 					<div>
 						<h3>Popular Posts</h3>
@@ -168,6 +160,8 @@
 			</div>
 		</div>
 	</div>
+
+<script src="js/lib/jquery.min.js"></script>
 
 <!-- Autolink from https://github.com/gregjacobs/Autolinker.js> -->
 <script src="js/lib/Autolinker.min.js"></script>
