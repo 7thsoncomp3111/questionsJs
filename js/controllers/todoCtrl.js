@@ -61,7 +61,11 @@ $scope.$watchCollection('todos', function () {
 		if (todo.completed === false) {
 			remaining++;
 		}
-
+		//set rating
+		todo.rating = todo.upvote-todo.downvote;
+		// set upvote/downvote percentage
+		todo.upvotePercent = todo.upvote/(todo.upvote+todo.downvote)*100;
+		todo.downvotePercent = todo.downvote/(todo.upvote+todo.downvote)*100;
 		// set time
 		todo.dateString = new Date(todo.timestamp).toString();
 		todo.tags = todo.wholeMsg.match(/#\w+/g);
@@ -119,7 +123,8 @@ $scope.addTodo = function () {
 		completed: false,
 		timestamp: new Date().getTime(),
 		tags: "...",
-		echo: 0,
+		upvote: 0,
+		downvote: 0,
 		order: 0
 	});
 	// remove the posted question in the input
@@ -131,9 +136,9 @@ $scope.editTodo = function (todo) {
 	$scope.originalTodo = angular.extend({}, $scope.editedTodo);
 };
 
-$scope.addEcho = function (todo) {
+$scope.addUpvote = function (todo) {
 	$scope.editedTodo = todo;
-	todo.echo = todo.echo + 1;
+	todo.upvote = todo.upvote + 1;
 	// Hack to order using this order.
 	todo.order = todo.order -1;
 	$scope.todos.$save(todo);
@@ -142,7 +147,18 @@ $scope.addEcho = function (todo) {
 	$scope.$storage[todo.$id] = "echoed";
 };
 
-$scope.orderpref = 'head';
+$scope.addDownvote = function (todo) {
+	$scope.editedTodo = todo;
+	todo.downvote = todo.downvote + 1;
+	// Hack to order using this order.
+	todo.order = todo.order -1;
+	$scope.todos.$save(todo);
+
+	// Disable the button
+	$scope.$storage[todo.$id] = "echoed";
+};
+
+$scope.orderpref = '-timestamp';
 $scope.setOrderpref = function (pref){
 	$scope.orderpref = pref;
 }

@@ -29,7 +29,7 @@
 
 </head>
 
-<body id="page-top" ng-controller="controller">
+<body id="page-top">
 
     <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
@@ -64,7 +64,7 @@
         <div class="header-content">
             <div class="header-content-inner">
                 <div class="row">
-                    <div class="col-lg-offset-4 col-lg-4 well">
+                    <div class="col-lg-offset-4 col-lg-4 well" ng-controller="controller">
                       <form name="form" ng-submit="join()" class="navbar-form navbar-left" role="search">
         								<input type="text" name = "input" class="form-control large"
         								ng-model="example.text"
@@ -74,7 +74,7 @@
         								aria-describedby="sizing-addon1"
         								placeholder="Room name">
                                         <span class="text-danger" ng-show="form.input.$error.pattern">Invalid Room Name</span>
-        								<a href="" class="btn btn-md btn-default"
+        								<a href="" class="btn btn-md btn-primary"
         								ng-hide="form.input.$error.required || form.input.$error.pattern"
         								ng-click="join()"
         								>Join</a>

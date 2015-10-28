@@ -54,10 +54,10 @@
 				<div class="section">
 					<p class="title center">Settings</p>
 					<div class="btn-group">
-						<div class="btn btn-sm btn-default active" ng-click="setOrderpref('head')">Title</div>
+						<div class="btn btn-sm btn-default" ng-click="setOrderpref('head')">Title</div>
 						<div class="btn btn-sm btn-default disabled" ng-click="setOrderpref('activity')">Activity</div>
-						<div class="btn btn-sm btn-default" ng-click="setOrderpref('timestamp')">Date</div>
-						<div class="btn btn-sm btn-default" ng-click="setOrderpref('-echo')">Rating</div>
+						<div class="btn btn-sm btn-default active" ng-click="setOrderpref('-timestamp')">Date</div>
+						<div class="btn btn-sm btn-default" ng-click="setOrderpref('-rating')">Rating</div>
 					</div>
 				</div>
 			</div>
@@ -84,7 +84,6 @@
 					<span class="section list-group-item" ng-repeat="todo in todos | filter:input | questionFilter:maxQuestion | orderBy:orderpref" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
 						<h4 class="list-group-item-heading" ng-switch on="todo.headLastChar">
 							<span class="label label-danger" ng-show="todo.new">New</span>
-							<span class="badge">{{todo.echo}}</span>
 							<!-- switch -->
 							<span ng-switch-when="?" class="glyphicon glyphicon-question-sign"></span>
 							<span ng-switch-when="!" class="glyphicon glyphicon-ice-lolly"></span>
@@ -93,12 +92,22 @@
 						<p class="list-group-item-text"><span ng-bind-html="todo.trustedDesc"></span> created: {{todo.dateString}}
 							<span ng-show="todo.tags">tags: {{todo.tags}}</span></p>
 
-							<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="addEcho(todo)" ng-disabled="$storage[todo.$id]">Like</button>
+							<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="addUpvote(todo)" ng-disabled="$storage[todo.$id]">Upvote</button>
+							<button class="btn btn-default btn-xs glyphicon glyphicon-hand-down" ng-click="addDownvote(todo)" ng-disabled="$storage[todo.$id]">Downvote</button>
 							<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button>
 							&nbsp;
 							<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
-						</span>
-					</div>
+							<span class="upvote">Upvote: {{todo.upvote}}</span>
+							<span class="downvote">Downvote: {{todo.downvote}}</span>
+							<button class="btn btn-default btn-xs glyphicon glyphicon-trash" ng-click="removeTodo(todo)">Remove</button>
+							<div class="progress">
+							  <div class="progress-bar progress-bar-success" style="width: {{todo.upvotePercent}}%">
+							  </div>
+							  <div class="progress-bar progress-bar-danger" style="width: {{todo.downvotePercent}}%">
+							  </div>
+							</div>
+					</span>
+				</div>
 
 					<!--
 
