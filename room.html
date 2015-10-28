@@ -79,6 +79,9 @@
 						</div>
 					</div>
 				</div>
+				<div class="section" ng-show="tagsearch">
+					<div class="well" id="tagsearchbar"><div ng-repeat="t in tagsearchitems" class="btn tag">{{t}}</div></div>
+				</div>
 				<!-- <div id="questionList"></div> -->
 				<div class="" id="todo-list">
 					<span class="section list-group-item" ng-repeat="todo in todos | filter:input | questionFilter:maxQuestion | orderBy:orderpref" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
@@ -90,7 +93,7 @@
 							<span ng-class="{completed: todo.completed}">{{todo.head}}</span>
 						</h4>
 						<p class="list-group-item-text"><span ng-bind-html="todo.trustedDesc"></span> created: {{todo.dateString}}
-							<div ng-show="todo.tags"><div ng-repeat="t in todo.tags" class="btn tag">{{t}}</div></div></p>
+							<div ng-show="todo.tags"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
 
 							<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="addUpvote(todo)" ng-disabled="$storage[todo.$id]">Upvote</button>
 							<button class="btn btn-default btn-xs glyphicon glyphicon-hand-down" ng-click="addDownvote(todo)" ng-disabled="$storage[todo.$id]">Downvote</button>

@@ -114,6 +114,17 @@ $scope.$watchCollection('todos', function () {
 	$scope.absurl = $location.absUrl();
 }, true);
 
+//Append tag to tag search box
+$scope.tagsearch = false;
+$scope.tagsearchitems = Array();
+$scope.clickTag = function(t){
+	$scope.tagsearch = true;
+	$scope.tagsearchitems.push(t);
+	console.log($scope.tagsearchitems);
+	//$scope.$apply();
+	//$scope.todos.$save(todo);
+}
+
 // Get the first sentence and rest
 $scope.getFirstAndRestSentence = function($string) {
 	var head = $string;
