@@ -74,7 +74,7 @@ $scope.$watchCollection('todos', function () {
 			return self.indexOf(value) === index;
 		}
 
-		var tagmatches = todo.wholeMsg.match(/#\w+/g);
+		var tagmatches = todo.wholeMsg.match(/#[\w\d\-\'\&]+/g);
 		if(tagmatches!=null){
 			//Filter duplicate matches
 			var uniquetags = tagmatches.filter( onlyUnique );
@@ -91,9 +91,9 @@ $scope.$watchCollection('todos', function () {
 		todo.trustedDesc = $sce.trustAsHtml(todo.linkedDesc);
 		// break into tokens,
 		// for replace tag string with tag link by directive replaceTagLinks
-		var trustedDescTokens = String(todo.trustedDesc).split(' ');
+		var trustedDescTokens = String(todo.trustedDesc).split(/(#[\w\d\-\'\&]+)/g);
 		trustedDescTokens.forEach(function(elem, i, A){
-			A[i] = {title: elem.replace("#",""), hasTag: elem.match(/#/)!=null};
+			A[i] = {title: elem.replace("#",""), hasTag: elem.match(/#/g)!=null};
 		})
 		todo.trustedDescTokens = trustedDescTokens;
 	});
