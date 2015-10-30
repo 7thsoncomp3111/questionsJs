@@ -132,7 +132,7 @@
 					<p class="title center">Feed</p>
 					<div>
 						<h3>Popular Tags</h3>
-						<div ng-repeat="t in rankedTags | orderBy: '-count' | limitTo:10" ng-click="clickTag(t.title)">
+						<div ng-repeat="t in rankedTags | orderBy: 'title' | orderBy: '-count' | limitTo:10" ng-click="clickTag(t.title)">
 							<div class="btn tag">{{t.title}}</div>({{t.count}})
 						</div>
 					</div>
