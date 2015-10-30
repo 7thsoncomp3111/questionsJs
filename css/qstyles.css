@@ -92,8 +92,6 @@ input:focus{
 }
 
 .icon{
-  position: absolute;
-  padding-top: 10px;
   color: #999;
   font-size: 1.5em;
 }
@@ -103,6 +101,10 @@ input:focus{
   cursor: pointer;
 }
 
+.icon-inputbox{
+    position: absolute;
+    padding-top: 10px;
+}
 /*.question{
   margin: 10px;
   padding: 15px;
@@ -267,4 +269,22 @@ input:focus{
 .tag:hover{
     background-color: #6495a4;
     color: #fff;
+}
+
+.inlinetag{
+    background-color: #f3f3f3;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.inlinetag:hover{
+    cursor: pointer;
+    background-color: #e0e0e0;
+    color: #6495a4;
+    border-bottom: 2px solid #6495a4;
+}
+
+#tagsearchbar{
+    padding: 2px 5px;
+    background-color: #ddd;
+    border-radius: 2px;
 }
