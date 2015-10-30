@@ -1,24 +1,38 @@
 {
-  "rules": {
-  "$roomname": {
-        "questions": {
-          ".read": true,
-          ".write": true,
+    "rules": {
+        "room":{
+            "$roomname": {
+                "questions": {
+                    ".read": true,
+                    ".write": true,
 
-          // Must have echo, head, desc
-         // ".validate": "newData.hasChildren(['echo', 'head', 'desc', 'timestamp'])",
+                    // Must have echo, head, desc
+                    // ".validate": "newData.hasChildren(['echo', 'head', 'desc', 'timestamp'])",
 
-          // a widget can have a title or color attribute
-          "upvote": { ".validate": "newData.isNumber()" },
-          "downvote": { ".validate": "newData.isNumber()" },
-          "head": { ".validate": "newData.isString()"},
-          "desc": { ".validate": true },
-          "timestamp": { ".validate": "newData.val() <= now" }
+                    "upvote": { ".validate": "newData.isNumber()" },
+                    "downvote": { ".validate": "newData.isNumber()" },
+                    "views": { ".validate": "newData.isNumber()" },
+                    "head": { ".validate": "newData.isString()"},
+                    "desc": { ".validate": true },
+                    "timestamp": { ".validate": "newData.val() <= now" }
 
-          // but no other child paths are allowed
-          // in this case, $other means any key excluding "title" and "color"
-          //"$other": { ".validate": false }
-      }
+                    // but no other child paths are allowed
+                    //"$other": { ".validate": false }
+                },
+                "threads": {
+                    ".read": true,
+                    ".write": true,
+
+                    "hash": {".validate": "newData.isString()"},
+                    "upvote": { ".validate": "newData.isNumber()" },
+                    "downvote": { ".validate": "newData.isNumber()" },
+                    "head": { ".validate": "newData.isString()"},
+                    "prev": {".validate": "newData.isString()"},
+                    "next": {".validate": "newData.isString()"},
+                    "timestamp": { ".validate": "newData.val() <= now" },
+                    "hidden" : {".validate": false}
+                }
+            }
+        }
     }
-  }
 }
