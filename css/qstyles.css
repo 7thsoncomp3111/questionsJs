@@ -268,3 +268,44 @@ input:focus{
     background-color: #6495a4;
     color: #fff;
 }
+#voting{
+  height:100%;
+}
+.upvote{
+  display: inline-block;
+  overflow: hidden;
+  width: 40px;
+  height: 25px;
+  cursor: pointer;
+  background: url('../images/upvote.png') no-repeat right 0px;
+  background-position: 0 -25px;
+  float: left;
+  margin:auto;
+  clear:both;
+}
+.upvote:hover{
+  background-position: 0 2px;
+  float: left;
+}
+
+.downvote{
+  display: block;
+  overflow: hidden;
+  width: 40px;
+  height: 25px;
+  cursor: pointer;
+  background: url('../images/downvote.png') no-repeat right 0px;
+  background-position: 0 2px;
+  float: left;
+}
+.downvote:hover{
+  background-position: 0 -25px;
+  float: left;
+}
+
+.rating{
+  display: block;
+  float:left;
+  width:40px;
+  margin:auto;
+}
