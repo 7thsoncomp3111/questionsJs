@@ -85,7 +85,7 @@
                     <div>
                         <h3>Existing Rooms</h3>
                         <div class="well">
-                            <p ng-repeat="room in rooms"><a href="##" ng-click="join(room.$id)">{{room.$id}}</a></p>
+                            <span ng-repeat="room in rooms"><a href="#" ng-click="join(room.$id)">{{room.$id}}</a></span>
                         </div>
                     </div>
                 </div>
@@ -185,16 +185,16 @@
 	<script>
     angular.module('cover', ['firebase'])
 		.controller('MainController', ['$scope', '$location', '$window', '$firebaseArray', function($scope, $location, $window, $firebaseArray) {
-			
+
 			$scope.input = {
 				text: '',
 				word: /^\s*\w*\s*$/
 			};
-			
+
 			$scope.join = function (name) {
 				$window.location.href = 'room.html#/' + (name || $scope.input.text);
 		    };
-			
+
             var firebaseURL = "https://resplendent-inferno-9346.firebaseio.com/room";
             var echoRef = new Firebase(firebaseURL);
             var query = echoRef.orderByKey();
