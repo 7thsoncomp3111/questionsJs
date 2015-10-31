@@ -101,12 +101,11 @@ input:focus{
   cursor: pointer;
 }
 
-<<<<<<< HEAD
 .icon-inputbox{
     position: absolute;
     padding-top: 10px;
 }
-=======
+
 /*Sung's CSS -start*/
 .completed {
 	color: #d9d9d9;
@@ -142,120 +141,6 @@ input:focus{
 }
 #toTop .fa {margin-right: 5px;}
 /*Sung's CSS -end*/
-
->>>>>>> voting-ui
-/*.question{
-  margin: 10px;
-  padding: 15px;
-  border-bottom: 2px solid #e7e7e7;
-}
-
-.question.now{
-  background: #ffff99;
-}
-
-.question:last-child{
-  border: none;
-}
-
-.question a:hover, .question a:focus{
-  text-decoration: none;
-}
-
-.question .title{
-  color: #c3d5db;
-  font-weight: bold;
-  font-size: 1em;
-}
-
-.question .title:hover{
-  color: #6495a4;
-}
-
-.question .body img{
-  width: 100%;
-}
-
-.questionFooter{
-  margin-left: 30%;
-  padding-bottom: 5px;
-  width: auto;
-}
-
-.questionFooter .interactive{
-  background: #c3d5db;
-  color: #fff;
-  border-radius: 0.2em;
-}
-
-.questionFooter .interactive .subscribe-btn{
-  background-image: none;
-  border: none;
-  background-color: #7d9faa;
-  padding-top: 7px;
-  border-radius: 0;
-}
-
-.questionFooter .interactive .subscribe-btn:hover{
-  background-color: #eb9316;
-}
-
-.questionFooter .interactive:hover{
-  background-color: #6495a4;
-}
-
-.questionFooter .interactive i{
-  padding: 5px;
-  width: 55px;
-}
-
-.questionFooter .interactive i::before{
-  padding-right: 5px;
-}
-
-.comments{
-  margin: 15px;
-}
-
-.comments .comment{
-  margin: 0.5em;
-  border-radius: 0.5em;
-  padding: 1em;
-}
-
-.comment .voting{
-  float: right;
-  font-size: 2em;
-}
-
-.comment .voting a{
-    color: #444;
-}
-
-.comment .voting .up:hover{
-  color: green;
-  text-decoration: none;
-}
-
-.comment .voting .down:hover{
-  color: red;
-  text-decoration: none;
-}
-
-.comment.level0{
-  margin-left: 1em;
-  background: #999;
-}
-
-.comment.level1{
-  margin-left: 3em;
-  background: #ccc;
-}
-
-.comment.level2{
-  margin-left: 5em;
-  background: #eee;
-}*/
 
 .left{
   float: left;
@@ -327,7 +212,8 @@ input:focus{
     padding: 2px 5px;
     background-color: #ddd;
     border-radius: 2px;
-=======
+}
+
 .section .contentbox{
     width: 94%;
 }
@@ -353,5 +239,4 @@ input:focus{
 
 .rating{
   display: block;
->>>>>>> voting-ui
 }
