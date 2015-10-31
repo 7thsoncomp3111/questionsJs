@@ -157,15 +157,19 @@ input:focus{
 }*/
 
 .footer{
-  background: url('../images/abstract-cartoon-cloud-art-backgrounds.jpg') no-repeat;
-  background-position: center bottom;
-  background-size: 1280px;
-  padding: 5px;
+    position: absolute;
+    background: url('../images/abstract-cartoon-cloud-art-backgrounds.jpg') no-repeat;
+    background-position: center bottom;
+    background-size: 1280px;
+    left: 0;
+    bottom: 0;
+    height: 30px;
+    width: 100%;
 }
 
 .footer a{
-  color: #fff;
-  margin-right: 10px;
+    color: #fff;
+    margin-right: 10px;
 }
 
 /*.subscribe-yellow{
@@ -176,9 +180,9 @@ input:focus{
     position: absolute;
     width: 95.2%;
     border-radius: 0;
-    margin-top: 15px;
     margin-left: -15px;
     height: 5px;
+    bottom: 5px;
 }
 
 .tag{
@@ -195,7 +199,6 @@ input:focus{
     color: #fff;
 }
 
-<<<<<<< HEAD
 .inlinetag{
     background-color: #f3f3f3;
     border-bottom: 2px solid #e0e0e0;
