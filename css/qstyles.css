@@ -23,7 +23,7 @@ body{
 .top-banner{
   /*background: url('../images/abstract-cartoon-cloud-art-backgrounds.jpg') no-repeat;
   background-position: center top;*/
-  background: rgba(255,255,255,0.8);
+  background: rgba(0,0,0,0.25);
   height: 400px;
   padding: 0;
   margin-top: -270px;
@@ -101,10 +101,49 @@ input:focus{
   cursor: pointer;
 }
 
+<<<<<<< HEAD
 .icon-inputbox{
     position: absolute;
     padding-top: 10px;
 }
+=======
+/*Sung's CSS -start*/
+.completed {
+	color: #d9d9d9;
+	text-decoration: line-through;
+}
+
+
+.icon{display: inline-block;}
+.icon,
+.icon + span{vertical-align: middle;}
+
+.icon.facebook{
+  background: url(../img/icon-facebook.png) no-repeat 0 0;
+  height: 29px;
+  width: 38px;
+}
+
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+}
+
+
+#toTop{
+	position: fixed;
+	bottom: 95px;
+	right: 40px;
+	cursor: pointer;
+	display: none;
+}
+#toTop .fa {margin-right: 5px;}
+/*Sung's CSS -end*/
+
+>>>>>>> voting-ui
 /*.question{
   margin: 10px;
   padding: 15px;
@@ -226,11 +265,11 @@ input:focus{
   float: right;
 }
 
-.time{
+/*.time{
   display: inline-block;
   color: #777;
   font-style: italic;
-}
+}*/
 
 .footer{
   background: url('../images/abstract-cartoon-cloud-art-backgrounds.jpg') no-repeat;
@@ -244,17 +283,17 @@ input:focus{
   margin-right: 10px;
 }
 
-.subscribe-yellow{
+/*.subscribe-yellow{
   color: #7d9faa;
-}
+}*/
 
 .progress{
     position: absolute;
-    bottom: -25px;
-    left: -0.2%;
-    width: 100.4%;
-    height: 5px;
+    width: 95.2%;
     border-radius: 0;
+    margin-top: 15px;
+    margin-left: -15px;
+    height: 5px;
 }
 
 .tag{
@@ -271,6 +310,7 @@ input:focus{
     color: #fff;
 }
 
+<<<<<<< HEAD
 .inlinetag{
     background-color: #f3f3f3;
     border-bottom: 2px solid #e0e0e0;
@@ -287,4 +327,31 @@ input:focus{
     padding: 2px 5px;
     background-color: #ddd;
     border-radius: 2px;
+=======
+.section .contentbox{
+    width: 94%;
+}
+
+.section .votebox{
+    position: absolute;
+    text-align: center;
+    width: 20px;
+    right: 20px;
+}
+
+.updownvote{
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    color: #999;
+    font-size: 1.5em;
+}
+
+.updownvote:hover{
+    color: #666;
+}
+
+.rating{
+  display: block;
+>>>>>>> voting-ui
 }
