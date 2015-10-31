@@ -7,4 +7,4 @@
 *
 * @type {angular.Module}
 */
-var todomvc = angular.module('todomvc', ['firebase', 'ngStorage', 'sc.twemoji']);
+var todomvc = angular.module('todomvc', ['firebase', 'ngStorage', 'emojiApp']);
