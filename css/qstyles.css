@@ -257,11 +257,17 @@ input:focus{
     width: 94%;
 }
 
+.question-title{
+    word-wrap: break-word;
+}
+
 .section .votebox{
     position: absolute;
     text-align: center;
-    width: 20px;
-    right: 20px;
+    right: 15px;
+    top: 33%;
+    height: 100%;
+    margin-top: -5px;
 }
 
 .updownvote{

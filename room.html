@@ -90,7 +90,7 @@
 						<span class="section" ng-show="tagsearch&&(todos | tagFilter:tagsearchitems).length==0"><span class="glyphicon glyphicon-alert icon"></span> Sorry, none of the questions match the tag combination.</span>
 						<span class="section" ng-repeat="todo in todos | filter:input | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
 							<div class="pull-left contentbox">
-								<h4 ng-switch on="todo.headLastChar">
+								<h4 class="question-title" ng-switch on="todo.headLastChar">
 									<span class="label label-danger" ng-show="todo.new">New</span>
 									<!-- switch -->
 									<span ng-switch-when="?" class="glyphicon glyphicon-question-sign"></span>
