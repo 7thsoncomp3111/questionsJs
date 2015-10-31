@@ -170,7 +170,8 @@ $scope.addTodo = function () {
 		order: 0
 	});
 	// remove the posted question in the input
-	$scope.input.wholeMsg = '';
+	//$scope.input.wholeMsg = ''; //depreciated, but keep to see if plugin is tidy up
+	$(".q-input").empty();
 };
 
 $scope.editTodo = function (todo) {
@@ -179,9 +180,9 @@ $scope.editTodo = function (todo) {
 };
 
 $scope.addUpvote = function (todo) {
-	
+
 	if ($scope.$storage[todo.$id]) return;
-	
+
 	$scope.editedTodo = todo;
 	todo.upvote++;
 	// Hack to order using this order.
@@ -193,9 +194,9 @@ $scope.addUpvote = function (todo) {
 };
 
 $scope.addDownvote = function (todo) {
-	
+
 	if ($scope.$storage[todo.$id]) return;
-	
+
 	$scope.editedTodo = todo;
 	todo.downvote++;
 	// Hack to order using this order.
