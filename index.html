@@ -29,7 +29,7 @@
 
 </head>
 
-<body id="page-top">
+<body id="page-top" ng-controller="MainController">
 
     <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
@@ -64,11 +64,11 @@
         <div class="header-content">
             <div class="header-content-inner">
                 <div class="row">
-                    <div class="col-lg-offset-4 col-lg-4 well" ng-controller="enterRoomCtrl">
+                    <div class="col-lg-offset-4 col-lg-4 well">
                       <form name="form" ng-submit="join()" class="navbar-form navbar-left" role="search">
         								<input type="text" name = "input" class="form-control large"
-        								ng-model="example.text"
-        								ng-pattern="example.word" required
+        								ng-model="input.text"
+        								ng-pattern="input.word" required
         								ng-trim="false"
         								autofocus
         								aria-describedby="sizing-addon1"
@@ -82,10 +82,10 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div ng-controller="rcmdRoomCtrl">
+                    <div>
                         <h3>Existing Rooms</h3>
                         <div class="well">
-                            <p ng-repeat="room in rooms">{{room}}</p>
+                            <p ng-repeat="room in rooms"><a href="##" ng-click="join(room.$id)">{{room.$id}}</a></p>
                         </div>
                     </div>
                 </div>
@@ -173,6 +173,7 @@
 	<!-- Bootstrap core JavaScript
 	================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="js/lib/underscore.min.js"></script>
 	<script src="js/lib/jquery.min.js"></script>
 	<script src="js/lib/bootstrap.min.js"></script>
     <script src="js/cover.js"></script>
@@ -183,16 +184,17 @@
 
 	<script>
     angular.module('cover', ['firebase'])
-		.controller('enterRoomCtrl', ['$scope', '$location', '$window', function($scope, $location, $window) {
-			$scope.example = {
+		.controller('MainController', ['$scope', '$location', '$window', '$firebaseArray', function($scope, $location, $window, $firebaseArray) {
+			
+			$scope.input = {
 				text: '',
 				word: /^\s*\w*\s*$/
 			};
-			$scope.join = function () {
-				$window.location.href = 'room.html#/' + $scope.example.text;
-		    }
-	    }])
-        .controller('rcmdRoomCtrl', ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
+			
+			$scope.join = function (name) {
+				$window.location.href = 'room.html#/' + (name || $scope.input.text);
+		    };
+			
             var firebaseURL = "https://resplendent-inferno-9346.firebaseio.com/room";
             var echoRef = new Firebase(firebaseURL);
             var query = echoRef.orderByKey();
@@ -200,7 +202,6 @@
             $firebaseArray(query).$loaded(function(data){
                 $scope.rooms = data;
             });
-            console.log($scope.rooms);
 	    }]);
 	</script>
 </body>
