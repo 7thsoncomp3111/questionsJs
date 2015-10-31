@@ -179,25 +179,31 @@ $scope.editTodo = function (todo) {
 };
 
 $scope.addUpvote = function (todo) {
+	
+	if ($scope.$storage[todo.$id]) return;
+	
 	$scope.editedTodo = todo;
-	todo.upvote = todo.upvote + 1;
+	todo.upvote++;
 	// Hack to order using this order.
 	todo.order = todo.order -1;
 	$scope.todos.$save(todo);
 
 	// Disable the button
-	$scope.$storage[todo.$id] = "echoed";
+	$scope.$storage[todo.$id] = true;
 };
 
 $scope.addDownvote = function (todo) {
+	
+	if ($scope.$storage[todo.$id]) return;
+	
 	$scope.editedTodo = todo;
-	todo.downvote = todo.downvote + 1;
+	todo.downvote++;
 	// Hack to order using this order.
 	todo.order = todo.order -1;
 	$scope.todos.$save(todo);
 
 	// Disable the button
-	$scope.$storage[todo.$id] = "echoed";
+	$scope.$storage[todo.$id] = true;
 };
 
 //$scope.orderpref = '-timestamp';
