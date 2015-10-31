@@ -23,7 +23,7 @@ body{
 .top-banner{
   /*background: url('../images/abstract-cartoon-cloud-art-backgrounds.jpg') no-repeat;
   background-position: center top;*/
-  background: rgba(255,255,255,0.8);
+  background: rgba(0,0,0,0.25);
   height: 400px;
   padding: 0;
   margin-top: -270px;
@@ -102,6 +102,42 @@ input:focus{
   color: #666;
   cursor: pointer;
 }
+
+/*Sung's CSS -start*/
+.completed {
+	color: #d9d9d9;
+	text-decoration: line-through;
+}
+
+
+.icon{display: inline-block;}
+.icon,
+.icon + span{vertical-align: middle;}
+
+.icon.facebook{
+  background: url(../img/icon-facebook.png) no-repeat 0 0;
+  height: 29px;
+  width: 38px;
+}
+
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+}
+
+
+#toTop{
+	position: fixed;
+	bottom: 95px;
+	right: 40px;
+	cursor: pointer;
+	display: none;
+}
+#toTop .fa {margin-right: 5px;}
+/*Sung's CSS -end*/
 
 /*.question{
   margin: 10px;
@@ -224,11 +260,11 @@ input:focus{
   float: right;
 }
 
-.time{
+/*.time{
   display: inline-block;
   color: #777;
   font-style: italic;
-}
+}*/
 
 .footer{
   background: url('../images/abstract-cartoon-cloud-art-backgrounds.jpg') no-repeat;
@@ -242,17 +278,17 @@ input:focus{
   margin-right: 10px;
 }
 
-.subscribe-yellow{
+/*.subscribe-yellow{
   color: #7d9faa;
-}
+}*/
 
 .progress{
     position: absolute;
-    bottom: -25px;
-    left: -0.2%;
-    width: 100.4%;
-    height: 5px;
+    width: 95.2%;
     border-radius: 0;
+    margin-top: 15px;
+    margin-left: -15px;
+    height: 5px;
 }
 
 .tag{
@@ -268,44 +304,30 @@ input:focus{
     background-color: #6495a4;
     color: #fff;
 }
-#voting{
-  height:100%;
-}
-.upvote{
-  display: inline-block;
-  overflow: hidden;
-  width: 40px;
-  height: 25px;
-  cursor: pointer;
-  background: url('../images/upvote.png') no-repeat right 0px;
-  background-position: 0 -25px;
-  float: left;
-  margin:auto;
-  clear:both;
-}
-.upvote:hover{
-  background-position: 0 2px;
-  float: left;
+
+.section .contentbox{
+    width: 94%;
 }
 
-.downvote{
-  display: block;
-  overflow: hidden;
-  width: 40px;
-  height: 25px;
-  cursor: pointer;
-  background: url('../images/downvote.png') no-repeat right 0px;
-  background-position: 0 2px;
-  float: left;
+.section .votebox{
+    position: absolute;
+    text-align: center;
+    width: 20px;
+    right: 20px;
 }
-.downvote:hover{
-  background-position: 0 -25px;
-  float: left;
+
+.updownvote{
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    color: #999;
+    font-size: 1.5em;
+}
+
+.updownvote:hover{
+    color: #666;
 }
 
 .rating{
   display: block;
-  float:left;
-  width:40px;
-  margin:auto;
 }

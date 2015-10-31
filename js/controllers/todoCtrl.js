@@ -31,7 +31,7 @@ if (!roomId || roomId.length === 0) {
 }
 
 // TODO: Please change this URL for your app
-var firebaseURL = "https://resplendent-inferno-9346.firebaseio.com/";
+var firebaseURL = "https://resplendent-inferno-9346.firebaseio.com/room/";
 
 
 $scope.roomId = roomId;
