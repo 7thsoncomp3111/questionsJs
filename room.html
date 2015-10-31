@@ -12,151 +12,153 @@
 	<meta http-equiv="expires" content="0" />
 	<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
 	<meta http-equiv="pragma" content="no-cache" />
-
-	<title>Question Room: {{roomId}}</title>
+	<!-- TODO: Add * notification on new questions-->
+	<title><{{roomId}}> @JUST_ASK</title>
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 
-	<!-- need this for comlted ones. TODO: can I do this in bootstrap -->
 	<link rel="stylesheet" href="css/qstyles.css">
 
 </head>
 <body>
-	<div class="top-banner"></div>
-	<div class="container">
-		<div class="row pull-up headerrow">
-			<div>
-			{{roomId}}
+	<div id="contentwrap">
+		<div class="top-banner">
+			<div class="container">
+				<div class="row headerrow">
+					<span id="roomId">{{roomId}}</span>
 
-				<!--
+						<!--
 
-				<a ng-class="{selected: location.path() == '/newechos'}" class="btn btn-primary" href="#/newechos">New Echos</a>
-				<a ng-class="{selected: location.path() == '/tags'}" class="btn btn-success" href="#/tags">Tags</a>
-				<a ng-class="{selected: location.path() == '/users'}" class="btn btn-info" href="#/users">Users</a>
-				<a ng-class="{selected: location.path() == '/about'}" class="btn btn-warning" href="#/about">About</a>
-			-->
+						<a ng-class="{selected: location.path() == '/newechos'}" class="btn btn-primary" href="#/newechos">New Echos</a>
+						<a ng-class="{selected: location.path() == '/tags'}" class="btn btn-success" href="#/tags">Tags</a>
+						<a ng-class="{selected: location.path() == '/users'}" class="btn btn-info" href="#/users">Users</a>
+						<a ng-class="{selected: location.path() == '/about'}" class="btn btn-warning" href="#/about">About</a>
+					-->
 
-			<small>Share room url: {{absurl}}</small> &nbsp;
-			<a class="btn btn-default" href="./">Main</a>
-			<!-- <button ng-hide="$authData" class="btn btn-primary left" type="button" ng-click="FBLogin()">Want Admin? Sign in with Facebook</button> -->
+					<div class="btn"><span class="glyphicon glyphicon-share-alt"></span>Share this room<: {{absurl}}</div>&nbsp;
+					<a class="btn btn-sm btn-default" href="./">Main</a>
+					<!-- <button ng-hide="$authData" class="btn btn-primary left" type="button" ng-click="FBLogin()">Want Admin? Sign in with Facebook</button> -->
 
-			<!-- after login -->
-			<!-- <img ng-show="$authData" src="https://graph.facebook.com/{{$authData.facebook.id}}/picture/?type=square&return_ssl_resources=1" alt="{{name}}" />
-			{{$authData.facebook.displayName}}
-			<button ng-show="$authData" class="btn btn-primary left" type="button" ng-click="FBLogout()">Logout</button> -->
+					<!-- after login -->
+					<!-- <img ng-show="$authData" src="https://graph.facebook.com/{{$authData.facebook.id}}/picture/?type=square&return_ssl_resources=1" alt="{{name}}" />
+					{{$authData.facebook.displayName}}
+					<button ng-show="$authData" class="btn btn-primary left" type="button" ng-click="FBLogout()">Logout</button> -->
+				</div>
 			</div>
 		</div>
-		<div class="row">
-			<!-- Settings -->
-			<div class="col-md-3">
-				<div class="section">
-					<p class="title center">Settings</p>
-					<div class="btn-group">
-						<div class="btn btn-sm btn-default" ng-click="setOrderpref('head')">Title</div>
-						<div class="btn btn-sm btn-default disabled" ng-click="setOrderpref('activity')">Activity</div>
-						<div class="btn btn-sm btn-default active" ng-click="setOrderpref('-timestamp')">Date</div>
-						<div class="btn btn-sm btn-default" ng-click="setOrderpref('-rating')">Rating</div>
-					</div>
-				</div>
-			</div>
-			<!-- Main -->
-			<div class="col-md-6">
-				<div class="section">
-					<div class="row">
-						<div class="col-xs-10">
-							<div class="icon icon-inputbox"><i class="glyphicon glyphicon-camera"></i></div>
-							<input class="q-input" placeholder="| Enter Title" id="one">
-							<div class="icon icon-inputbox"><i class="glyphicon glyphicon-search"></i></div>
-							<textarea type="text" id="new-todo" class="q-input" placeholder="| Ask A Question" id="two"
-							ng-model="input.wholeMsg" autofocus
-							></textarea>
-						</div>
-						<div class="col-xs-2 send-button" type="button" ng-click="addTodo()">
-							<br>
-							<div class="icon"><i class="glyphicon glyphicon-send"></i></div>
+		<div class="container">
+			<div class="row pull-up">
+				<!-- Settings -->
+				<div class="col-md-3">
+					<div class="section">
+						<p class="title center">Settings</p>
+						<div class="btn-group">
+							<div class="btn btn-sm btn-default" ng-click="setOrderpref('head')">Title</div>
+							<div class="btn btn-sm btn-default disabled" ng-click="setOrderpref('activity')">Activity</div>
+							<div class="btn btn-sm btn-default active" ng-click="setOrderpref('-timestamp')">Date</div>
+							<div class="btn btn-sm btn-default" ng-click="setOrderpref('-rating')">Rating</div>
 						</div>
 					</div>
 				</div>
-				<div class="section" ng-show="tagsearch">
-					<div class="pull-right glyphicon glyphicon-remove icon" ng-click="clearTag()"></div>
-					<span>Tag filter applied</span>
-					<div id="tagsearchbar">
-						<div ng-repeat="t in tagsearchitems" class="btn tag" ng-click="clearTag($index)">{{t}}</div>
-					</div>
-				</div>
-				<!-- <div id="questionList"></div> -->
-				<div class="" id="todo-list">
-					<span class="section" ng-show="tagsearch&&(todos | tagFilter:tagsearchitems).length==0"><span class="glyphicon glyphicon-alert icon"></span> Sorry, none of the questions match the tag combination.</span>
-					<span class="section" ng-repeat="todo in todos | filter:input | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
-						<div class="pull-left contentbox">
-							<h4 ng-switch on="todo.headLastChar">
-								<span class="label label-danger" ng-show="todo.new">New</span>
-								<!-- switch -->
-								<span ng-switch-when="?" class="glyphicon glyphicon-question-sign"></span>
-								<span ng-switch-when="!" class="glyphicon glyphicon-ice-lolly"></span>
-								<span ng-class="{completed: todo.completed}">{{todo.head}}</span>
-							</h4>
-							<p><span ng-repeat="trustedToken in todo.trustedDescTokens track by $index"><span replacetaglink></span></span> created: {{todo.dateString}}
-								<div ng-show="todo.tags"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
-
-								<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="addUpvote(todo)" ng-disabled="$storage[todo.$id]">Upvote</button>
-								<button class="btn btn-default btn-xs glyphicon glyphicon-hand-down" ng-click="addDownvote(todo)" ng-disabled="$storage[todo.$id]">Downvote</button>
-								<button ng-show="!isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button>
-								&nbsp;
-								<button ng-show="!isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
-						</div>
-						<div class="pull-right votebox">
-							<div class="updownvote glyphicon glyphicon-triangle-top" ng-click="addUpvote(todo)" ng-disabled="$storage[todo.$id]"></div>
-							<div class="rating">{{todo.rating}}</div>
-							<div class="updownvote  glyphicon glyphicon-triangle-bottom" ng-click="addDownvote(todo)" ng-disabled="$storage[todo.$id]"></div>
-						</div>
-						<div class="progress">
-						  <div class="progress-bar progress-bar-success" style="width: {{todo.upvotePercent}}%">
-						  </div>
-						  <div class="progress-bar progress-bar-danger" style="width: {{todo.downvotePercent}}%">
-						  </div>
-						</div>
-					</span>
-				</div>
-
-					<!--
-
-					<div id="toTop" class="btn btn-info"><span class="fa fa-arrow-up">Back to Top</span></div>
-
-					<button ng-hide="totalCount<=maxQuestion"
-					class="pull-right btn btn-default glyphicon glyphicon-arrow-down"
-					type="button" ng-click="increaseMax()"> Show more</button>
-				-->
-			</div>
-			<!-- Feed -->
-			<div class="col-md-3">
-				<div class="section">
-					<p class="title center">Feed</p>
-					<div>
-						<h3>Popular Tags</h3>
-						<div ng-repeat="t in rankedTags | orderBy: 'title' | orderBy: '-count' | limitTo:10" ng-click="clickTag(t.title)">
-							<div class="btn tag">{{t.title}}</div>({{t.count}})
+				<!-- Main -->
+				<div class="col-md-6">
+					<div class="section">
+						<div class="row">
+							<div class="col-xs-10">
+								<div class="icon icon-inputbox"><i class="glyphicon glyphicon-camera"></i></div>
+								<input class="q-input" placeholder="| Enter Title" id="one">
+								<div class="icon icon-inputbox"><i class="glyphicon glyphicon-search"></i></div>
+								<textarea type="text" id="new-todo" class="q-input" placeholder="| Ask A Question" id="two"
+								ng-model="input.wholeMsg" autofocus
+								></textarea>
+							</div>
+							<div class="col-xs-2 send-button" type="button" ng-click="addTodo()">
+								<br>
+								<div class="icon"><i class="glyphicon glyphicon-send"></i></div>
+							</div>
 						</div>
 					</div>
-					<div>
-						<h3>Popular Posts</h3>
-						<ul>
-							<li>
-								#UST
-							</li>
-							<li>
-								#COMP
-							</li>
-							<li>
-								#GOODGRADE
-							</li>
-						</ul>
+					<div class="section" ng-show="tagsearch">
+						<div class="pull-right glyphicon glyphicon-remove icon" ng-click="clearTag()"></div>
+						<span>Tag filter applied</span>
+						<div id="tagsearchbar">
+							<div ng-repeat="t in tagsearchitems" class="btn tag" ng-click="clearTag($index)">{{t}}</div>
+						</div>
+					</div>
+					<div id="todo-list">
+						<span class="section" ng-show="tagsearch&&(todos | tagFilter:tagsearchitems).length==0"><span class="glyphicon glyphicon-alert icon"></span> Sorry, none of the questions match the tag combination.</span>
+						<span class="section" ng-repeat="todo in todos | filter:input | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+							<div class="pull-left contentbox">
+								<h4 ng-switch on="todo.headLastChar">
+									<span class="label label-danger" ng-show="todo.new">New</span>
+									<!-- switch -->
+									<span ng-switch-when="?" class="glyphicon glyphicon-question-sign"></span>
+									<span ng-switch-when="!" class="glyphicon glyphicon-ice-lolly"></span>
+									<span ng-class="{completed: todo.completed}">{{todo.head}}</span>
+								</h4>
+								<p><span ng-repeat="trustedToken in todo.trustedDescTokens track by $index"><span replacetaglink></span></span> created: {{todo.dateString}}
+									<div ng-show="todo.tags"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
+
+									<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="addUpvote(todo)" ng-disabled="$storage[todo.$id]">Upvote</button>
+									<button class="btn btn-default btn-xs glyphicon glyphicon-hand-down" ng-click="addDownvote(todo)" ng-disabled="$storage[todo.$id]">Downvote</button>
+									<button ng-show="!isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button>
+									&nbsp;
+									<button ng-show="!isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
+							</div>
+							<div class="pull-right votebox">
+								<div class="updownvote glyphicon glyphicon-triangle-top" ng-click="addUpvote(todo)" ng-disabled="$storage[todo.$id]"></div>
+								<div class="rating">{{todo.rating}}</div>
+								<div class="updownvote  glyphicon glyphicon-triangle-bottom" ng-click="addDownvote(todo)" ng-disabled="$storage[todo.$id]"></div>
+							</div>
+							<div class="progress">
+							  <div class="progress-bar progress-bar-success" style="width: {{todo.upvotePercent}}%">
+							  </div>
+							  <div class="progress-bar progress-bar-danger" style="width: {{todo.downvotePercent}}%">
+							  </div>
+							</div>
+						</span>
+					</div>
+
+						<!--
+
+						<div id="toTop" class="btn btn-info"><span class="fa fa-arrow-up">Back to Top</span></div>
+
+						<button ng-hide="totalCount<=maxQuestion"
+						class="pull-right btn btn-default glyphicon glyphicon-arrow-down"
+						type="button" ng-click="increaseMax()"> Show more</button>
+					-->
+				</div>
+				<!-- Feed -->
+				<div class="col-md-3">
+					<div class="section">
+						<p class="title center">Feed</p>
+						<div>
+							<h3>Popular Tags</h3>
+							<div ng-repeat="t in rankedTags | orderBy: 'title' | orderBy: '-count' | limitTo:10" ng-click="clickTag(t.title)">
+								<div class="btn tag">{{t.title}}</div>({{t.count}})
+							</div>
+						</div>
+						<div>
+							<h3>Popular Posts</h3>
+							<ul>
+								<li>
+									#UST
+								</li>
+								<li>
+									#COMP
+								</li>
+								<li>
+									#GOODGRADE
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div class="push"></div>
 	<div class="footer">
 		<div class="row">
 			<div class="col-md-12">
