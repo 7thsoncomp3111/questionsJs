@@ -99,16 +99,13 @@
 								</h4>
 								<p><span ng-repeat="trustedToken in todo.trustedDescTokens track by $index"><span replacetaglink></span></span> created: {{todo.dateString}}
 									<div ng-show="todo.tags"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
-
-									<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="addUpvote(todo)" ng-disabled="$storage[todo.$id]">Upvote</button>
-									<button class="btn btn-default btn-xs glyphicon glyphicon-hand-down" ng-click="addDownvote(todo)" ng-disabled="$storage[todo.$id]">Downvote</button>
 									<button ng-show="!isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button>
 									&nbsp;
 									<button ng-show="!isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
 							</div>
 							<div class="pull-right votebox">
 								<div class="updownvote glyphicon glyphicon-triangle-top" ng-click="addUpvote(todo)" ng-disabled="$storage[todo.$id]"></div>
-								<div class="rating">{{todo.rating}}</div>
+								<div class="rating">{{ todo.upvote - todo.downvote }}</div>
 								<div class="updownvote  glyphicon glyphicon-triangle-bottom" ng-click="addDownvote(todo)" ng-disabled="$storage[todo.$id]"></div>
 							</div>
 							<div class="progress">
