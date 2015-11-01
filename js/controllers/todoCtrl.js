@@ -68,8 +68,6 @@ $scope.$watchCollection('todos', function () {
 		var votes = todo.upvote + todo.downvote;
 		todo.upvotePercent = votes == 0 ? 0 : todo.upvote / votes * 100;
 		todo.downvotePercent = votes == 0 ? 0 : todo.downvote/ votes * 100;
-		// set time
-		todo.dateString = new Date(todo.timestamp).toString();
 		// set tags
 		function onlyUnique(value, index, self) {
 			return self.indexOf(value) === index;
