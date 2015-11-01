@@ -18,6 +18,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 
+	<link type="text/stylesheet" rel="stylesheet" href="css/emoji.min.css" />
 	<link rel="stylesheet" href="css/qstyles.css">
 
 </head>
@@ -66,15 +67,15 @@
 					<div class="section">
 						<div class="row">
 							<div class="col-xs-10">
-								<div class="icon icon-inputbox"><i class="glyphicon glyphicon-camera"></i></div>
-								<input class="q-input" placeholder="| Enter Title" id="one">
+								<!-- <div class="icon icon-inputbox"><i class="glyphicon glyphicon-camera"></i></div> -->
+								<!-- <input class="q-input" placeholder="| Enter Title" id="one"> -->
 								<div class="icon icon-inputbox"><i class="glyphicon glyphicon-search"></i></div>
-								<textarea type="text" id="new-todo" class="q-input" placeholder="| Ask A Question" id="two"
-								ng-model="input.wholeMsg" autofocus
-								></textarea>
+								<div emoji-form emoji-message="input">
+									<textarea type="text" id="new-todo" class="q-input" placeholder="| Ask A Question" id="two" ng-model="input.messagetext" autofocus></textarea>
+									<div class="btn" id="emojibtn"><i class="icon icon-emoji"></i></div>
+								</div>
 							</div>
 							<div class="col-xs-2 send-button" type="button" ng-click="addTodo()">
-								<br>
 								<div class="icon"><i class="glyphicon glyphicon-send"></i></div>
 							</div>
 						</div>
@@ -88,17 +89,17 @@
 					</div>
 					<div id="todo-list">
 						<span class="section" ng-show="tagsearch&&(todos | tagFilter:tagsearchitems).length==0"><span class="glyphicon glyphicon-alert icon"></span> Sorry, none of the questions match the tag combination.</span>
-						<span class="section" ng-repeat="todo in todos | filter:input | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+						<span class="section" ng-repeat="todo in todos | filter:input.messagetext | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
 							<div class="pull-left contentbox">
 								<h4 class="question-title" ng-switch on="todo.headLastChar">
 									<span class="label label-danger" ng-show="todo.new">New</span>
 									<!-- switch -->
 									<span ng-switch-when="?" class="glyphicon glyphicon-question-sign"></span>
 									<span ng-switch-when="!" class="glyphicon glyphicon-ice-lolly"></span>
-									<span ng-class="{completed: todo.completed}">{{todo.head}}</span>
+									<span ng-class="{completed: todo.completed}" ng-bind-html="todo.head | escapeHTML | codeToSmiley">{{todo.head}}</span>
 								</h4>
-								<p><span ng-repeat="trustedToken in todo.trustedDescTokens track by $index"><span replacetaglink></span></span></p>
 								
+								<div compile="todo.linkedDesc | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
 								<div ng-show="todo.tags"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
 								
 								<div style="float:left">
@@ -198,15 +199,18 @@
 <script src="js/app.js"></script>
 <script src="js/filters/questionFilter.js"></script>
 <script src="js/filters/tagFilter.js"></script>
+<script src="js/filters/escapeHTML.js"></script>
+<script src="js/filters/addTagLinks.js"></script>
+<script src="js/filters/nl2br.js"></script>
+<script src="js/directives/compile.js"></script>
 <script src="js/controllers/todoCtrl.js"></script>
-<script src="js/directives/todoFocus.js"></script>
-<script src="js/directives/todoBlur.js"></script>
-<script src="js/directives/todoEscape.js"></script>
-<script src="js/directives/replaceTagLink.js"></script>
 
-<!-- Angular-tweemoji -->
-<script src="js/twemoji/angular-twemoji.min.js"></script>
-<script src="js/twemoji/twemoji.min.js"></script>
+<!-- Ng Sanitize 1.3.7 -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.7/angular-sanitize.min.js"></script>
+
+<!-- angular-emoji-popup -->
+<script type="text/javascript" src="js/emoji/config.js"></script>
+<script type="text/javascript" src="js/emoji/emoji.min.js"></script>
 
 </body>
 </html>
