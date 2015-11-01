@@ -65,8 +65,9 @@ $scope.$watchCollection('todos', function () {
 		//set rating
 		todo.rating = todo.upvote-todo.downvote;
 		// set upvote/downvote percentage
-		todo.upvotePercent = todo.upvote/(todo.upvote+todo.downvote)*100;
-		todo.downvotePercent = todo.downvote/(todo.upvote+todo.downvote)*100;
+		var votes = todo.upvote + todo.downvote;
+		todo.upvotePercent = votes == 0 ? 0 : todo.upvote / votes * 100;
+		todo.downvotePercent = votes == 0 ? 0 : todo.downvote/ votes * 100;
 		// set time
 		todo.dateString = new Date(todo.timestamp).toString();
 		// set tags
