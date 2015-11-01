@@ -7,8 +7,8 @@
 * - exposes the model to the template and provides event handlers
 */
 todomvc.controller('TodoCtrl',
-['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window','$compile', '$filter',
-function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $compile, $filter) {
+['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window','$compile',
+function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $compile) {
 	// set local storage
 	$scope.$storage = $localStorage;
 
@@ -43,7 +43,8 @@ var query = echoRef.orderByChild("order");
 //.limitToFirst(1000);
 $scope.todos = $firebaseArray(query);
 
-$scope.input = {};
+
+//$scope.input.wholeMsg = '';
 $scope.editedTodo = null;
 
 // pre-precessing for collection
@@ -72,7 +73,7 @@ $scope.$watchCollection('todos', function () {
 			return self.indexOf(value) === index;
 		}
 
-		var tagmatches = todo.wholeMsg.match(/#[\w\-]+/g);
+		var tagmatches = todo.wholeMsg.match(/#[\w\d\-\'\&]+/g);
 		if(tagmatches!=null){
 			//Filter duplicate matches
 			var uniquetags = tagmatches.filter( onlyUnique );
@@ -85,6 +86,15 @@ $scope.$watchCollection('todos', function () {
 			tagmatches = uniquetags.sort();
 		}
 		todo.tags = tagmatches;
+
+		todo.trustedDesc = $sce.trustAsHtml(todo.linkedDesc);
+		// break into tokens,
+		// for replace tag string with tag link by directive replaceTagLinks
+		var trustedDescTokens = String(todo.trustedDesc).split(/(#[\w\d\-\'\&]+)/g);
+		trustedDescTokens.forEach(function(elem, i, A){
+			A[i] = {title: elem.replace("#",""), hasTag: elem.match(/#/g)!=null};
+		})
+		todo.trustedDescTokens = trustedDescTokens;
 	});
 	//Get tagcount
 	var counts = {};
@@ -133,9 +143,7 @@ $scope.getFirstAndRestSentence = function($string) {
 };
 
 $scope.addTodo = function () {
-	
-	var newTodo = $scope.input.messagetext.trim();
-	newTodo = $filter('colonToCode')(newTodo);
+	var newTodo = $scope.input.wholeMsg.trim();
 
 	// No input, so just do nothing
 	if (!newTodo.length) {
@@ -160,10 +168,7 @@ $scope.addTodo = function () {
 		order: 0
 	});
 	// remove the posted question in the input
-	//$scope.input.wholeMsg = ''; //depreciated, but keep to see if plugin is tidy up
-	
-	$(".q-input").empty();
-	$scope.input = {};
+	$scope.input.wholeMsg = '';
 };
 
 $scope.editTodo = function (todo) {
@@ -172,9 +177,9 @@ $scope.editTodo = function (todo) {
 };
 
 $scope.addUpvote = function (todo) {
-
+	
 	if ($scope.$storage[todo.$id]) return;
-
+	
 	$scope.editedTodo = todo;
 	todo.upvote++;
 	// Hack to order using this order.
@@ -186,9 +191,9 @@ $scope.addUpvote = function (todo) {
 };
 
 $scope.addDownvote = function (todo) {
-
+	
 	if ($scope.$storage[todo.$id]) return;
-
+	
 	$scope.editedTodo = todo;
 	todo.downvote++;
 	// Hack to order using this order.

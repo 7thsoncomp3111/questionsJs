@@ -103,25 +103,19 @@ input:focus{
 }
 
 .send-button{
-  height: 45px;
+  height: 130px;
   border-left: 2px solid #999;
-  cursor:pointer;
 }
 
 .send-button:hover{
   background-color: #e7e7e7;
 }
 
-.send-button:hover .icon {
-    color: #666;
-    cursor: pointer;
-}
-
 .send-button .icon{
-	display:block;
-	padding:5px;
+  margin-top: 25%;
+  margin-left: 8%;
+  padding: 5px;
   font-size: 2em;
-  text-align:center;
 }
 
 .icon{
