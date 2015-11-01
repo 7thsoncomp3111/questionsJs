@@ -33,8 +33,8 @@ if (!roomId || roomId.length === 0) {
 // TODO: Please change this URL for your app
 var firebaseURL = "https://resplendent-inferno-9346.firebaseio.com/room/";
 
-
 $scope.roomId = roomId;
+
 var url = firebaseURL + roomId + "/questions/";
 var echoRef = new Firebase(url);
 
@@ -65,10 +65,9 @@ $scope.$watchCollection('todos', function () {
 		//set rating
 		todo.rating = todo.upvote-todo.downvote;
 		// set upvote/downvote percentage
-		todo.upvotePercent = todo.upvote/(todo.upvote+todo.downvote)*100;
-		todo.downvotePercent = todo.downvote/(todo.upvote+todo.downvote)*100;
-		// set time
-		todo.dateString = new Date(todo.timestamp).toString();
+		var votes = todo.upvote + todo.downvote;
+		todo.upvotePercent = votes == 0 ? 0 : todo.upvote / votes * 100;
+		todo.downvotePercent = votes == 0 ? 0 : todo.downvote/ votes * 100;
 		// set tags
 		function onlyUnique(value, index, self) {
 			return self.indexOf(value) === index;
@@ -119,7 +118,6 @@ $scope.$watchCollection('todos', function () {
 	$scope.remainingCount = remaining;
 	$scope.completedCount = total - remaining;
 	$scope.allChecked = remaining === 0;
-	$scope.absurl = $location.absUrl();
 }, true);
 
 // Get the first sentence and rest
@@ -230,7 +228,7 @@ $scope.clearTag = function(t_index){
 	}
 	else{
 		$scope.tagsearchitems.splice(t_index,1);
-		if($scope.tagsearchitems[0] == null){
+		if(!$scope.tagsearchitems.length){
 			$scope.tagsearch = false;
 		}
 	}

@@ -37,7 +37,7 @@
 						<a ng-class="{selected: location.path() == '/about'}" class="btn btn-warning" href="#/about">About</a>
 					-->
 
-					<div class="btn"><span class="glyphicon glyphicon-share-alt"></span>Share this room<: {{absurl}}</div>&nbsp;
+					<div class="btn"><span class="glyphicon glyphicon-share-alt"></span>Share this room<: {{ location.absUrl() }}</div>&nbsp;
 					<a class="btn btn-sm btn-default" href="./">Main</a>
 					<!-- <button ng-hide="$authData" class="btn btn-primary left" type="button" ng-click="FBLogin()">Want Admin? Sign in with Facebook</button> -->
 
@@ -101,11 +101,17 @@
 									<span ng-switch-when="!" class="glyphicon glyphicon-ice-lolly"></span>
 									<span ng-class="{completed: todo.completed}" ng-bind-html="todo.head | colonToSmiley">{{todo.head}}</span>
 								</h4>
-								<p><span ng-repeat="trustedToken in todo.trustedDescTokens track by $index"><span replacetaglink></span></span> created: {{todo.dateString}}
-									<div ng-show="todo.tags"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
+								<p><span ng-repeat="trustedToken in todo.trustedDescTokens track by $index"><span replacetaglink></span></span></p>
+								
+								<div ng-show="todo.tags"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
+								
+								<div style="float:left">
 									<button ng-show="!isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button>
-									&nbsp;
 									<button ng-show="!isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
+								</div>
+								<span am-time-ago="todo.timestamp" style="display:block; float:right; color:#999"></span>
+								<div style="clear:both"></div>
+								
 							</div>
 							<div class="pull-right votebox">
 								<div class="updownvote glyphicon glyphicon-triangle-top" ng-click="addUpvote(todo)" ng-disabled="$storage[todo.$id]"></div>
@@ -188,6 +194,10 @@
 
 <!-- Ng storage 0.3.6  -->
 <script src="js/lib/ngStorage.min.js"></script>
+
+<!-- moment -->
+<script src="js/lib/moment.min.js"></script>
+<script src="js/lib/angular-moment.min.js"></script>
 
 <script src="js/app.js"></script>
 <script src="js/filters/questionFilter.js"></script>
