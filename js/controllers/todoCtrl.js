@@ -61,8 +61,6 @@ $scope.$watchCollection('todos', function () {
 		if (todo.completed === false) {
 			remaining++;
 		}
-		//set rating
-		todo.rating = todo.upvote-todo.downvote;
 		// set upvote/downvote percentage
 		var votes = todo.upvote + todo.downvote;
 		todo.upvotePercent = votes == 0 ? 0 : todo.upvote / votes * 100;
