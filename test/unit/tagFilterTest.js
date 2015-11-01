@@ -81,8 +81,8 @@ var tagList=[{
   completed: false,
   timestamp: new Date().getTime(), // latest
   tags: "ggg",
-  upvote: 1,
-  downvote: 1,
+  upvote: 0,
+  downvote: 0,
   order: 7
 //},
 }];
