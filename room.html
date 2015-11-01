@@ -99,7 +99,7 @@
 									<span ng-class="{completed: todo.completed}" ng-bind-html="todo.head | escapeHTML | codeToSmiley">{{todo.head}}</span>
 								</h4>
 								
-								<div compile="todo.linkedDesc | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
+								<div compile="(todo.linkedDesc || '') | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
 								<div ng-show="todo.tags"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
 								
 								<div style="float:left">
