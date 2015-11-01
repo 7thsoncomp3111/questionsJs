@@ -11,6 +11,7 @@ body {
 }
 
 body {
+    background-color: #ebf0f2;
     font-family: Merriweather,'Helvetica Neue',Arial,sans-serif;
 }
 
@@ -422,10 +423,9 @@ body {
   z-index: 10;
   width: 200px;
   height: 250px;
-  background: #eee;
-  top: 50%;
+  background: #fff;
   left: 50%;
-  margin: -110px 0 0 -100px;
+  margin: -110px 0 25px -100px;
   padding: 20px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -465,4 +465,67 @@ body {
 
 #contact{
   border-top: 1px solid #999;
+}
+
+.room-input{
+    border: 2px transparent;
+    color: #7d9faa;
+    border-radius: 2px;
+    border-bottom-left-radius: 0;
+}
+
+.room-input:focus{
+    box-shadow: none;
+    border: 2px solid #7d9faa;
+}
+
+#join-btn{
+    position: absolute;
+    background-color: #7d9faa;
+    color: #fff;
+    border-radius: 0;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    margin-left: 10px;
+    padding-bottom: 8px;
+    top: 0;
+    right: 15px;
+}
+
+.room-input-error{
+    position: absolute;
+    margin-top: -2px;
+    width: 40%;
+    text-align: center;
+    left: 0;
+    margin-left: 15px;
+    background-color: #c10000;
+    color: #fff;
+    padding: 2px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    font-size: 0.8em;
+}
+
+.room-list{
+    position: absolute;
+    background: #7d9faa;
+    width: 75%;
+}
+
+.room-list a{
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 2px;
+}
+
+.room-list a:hover{
+    background-color: rgba(255,255,255,0.4);
+}
+
+#github-btn{
+    background-color: #7d9faa;
+    color: #fff;
+    border-radius: 0;
 }

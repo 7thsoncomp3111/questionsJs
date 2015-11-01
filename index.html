@@ -64,28 +64,22 @@
         <div class="header-content">
             <div class="header-content-inner">
                 <div class="row">
-                    <div class="col-lg-offset-4 col-lg-4 well">
-                      <form name="form" ng-submit="join()" class="navbar-form navbar-left" role="search">
-        								<input type="text" name = "input" class="form-control large"
+                    <div class="col-lg-offset-4 col-lg-4">
+                      <form name="form" ng-submit="join()" class="room-input-form" role="search">
+        								<input type="text" name = "input" class="form-control large room-input"
         								ng-model="input.text"
         								ng-pattern="input.word" required
         								ng-trim="false"
         								autofocus
         								aria-describedby="sizing-addon1"
-        								placeholder="Room name">
-                                        <span class="text-danger" ng-show="form.input.$error.pattern">Invalid Room Name</span>
-        								<a href="" class="btn btn-md btn-primary"
-        								ng-hide="form.input.$error.required || form.input.$error.pattern"
+        								placeholder="">
+                                        <a href="" class="btn btn-md" ng-class="{disabled: !input.text}" id="join-btn"
         								ng-click="join()"
         								>Join</a>
         				</form>
-                    </div>
-                </div>
-                <div class="row">
-                    <div>
-                        <h3>Existing Rooms</h3>
-                        <div class="well">
-                            <span ng-repeat="room in rooms"><a href="#" ng-click="join(room.$id)">{{room.$id}}</a></span>
+                        <span class="room-input-error" ng-show="form.input.$error.pattern">Invalid Room Name</span>
+                        <div class="room-list" ng-show="input.text">
+                            <span ng-repeat="room in rooms | filter:input.text"><a href="#" ng-click="join(room.$id)">{{room.$id}}</a></span>
                         </div>
                     </div>
                 </div>
@@ -163,7 +157,7 @@
                             <h1>JUST_ASK</h1>
                             <span class="r-version">v2.0.0</span>
                             <h2>A totally anonymous and real-time updating question moderated system in a typical class setting.</h2>
-                            <a class="btn btn-primary">Github</a>
+                            <a class="btn btn-default" id="github-btn">Github</a>
                         </div>
                 </div>
             </div>
