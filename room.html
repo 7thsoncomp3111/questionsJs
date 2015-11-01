@@ -36,7 +36,7 @@
 						<a ng-class="{selected: location.path() == '/about'}" class="btn btn-warning" href="#/about">About</a>
 					-->
 
-					<div class="btn"><span class="glyphicon glyphicon-share-alt"></span>Share this room<: {{absurl}}</div>&nbsp;
+					<div class="btn"><span class="glyphicon glyphicon-share-alt"></span>Share this room<: {{ location.absUrl() }}</div>&nbsp;
 					<a class="btn btn-sm btn-default" href="./">Main</a>
 					<!-- <button ng-hide="$authData" class="btn btn-primary left" type="button" ng-click="FBLogin()">Want Admin? Sign in with Facebook</button> -->
 

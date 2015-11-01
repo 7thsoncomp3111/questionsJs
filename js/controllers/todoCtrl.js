@@ -33,8 +33,8 @@ if (!roomId || roomId.length === 0) {
 // TODO: Please change this URL for your app
 var firebaseURL = "https://resplendent-inferno-9346.firebaseio.com/room/";
 
-
 $scope.roomId = roomId;
+
 var url = firebaseURL + roomId + "/questions/";
 var echoRef = new Firebase(url);
 
@@ -119,7 +119,6 @@ $scope.$watchCollection('todos', function () {
 	$scope.remainingCount = remaining;
 	$scope.completedCount = total - remaining;
 	$scope.allChecked = remaining === 0;
-	$scope.absurl = $location.absUrl();
 }, true);
 
 // Get the first sentence and rest
@@ -229,7 +228,7 @@ $scope.clearTag = function(t_index){
 	}
 	else{
 		$scope.tagsearchitems.splice(t_index,1);
-		if($scope.tagsearchitems[0] == null){
+		if(!$scope.tagsearchitems.length){
 			$scope.tagsearch = false;
 		}
 	}
