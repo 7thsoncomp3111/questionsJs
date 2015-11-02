@@ -1,14 +1,14 @@
 'use strict';
 
-var tagList=[{
+var list=[{
   wholeMsg: "newTodo",
   head: "head",
   headLastChar: "?",
   desc: "desc",
-  linkedDesc: "linkedDesc",
+  linkedDesc: "#a",
   completed: false,
   timestamp: 0,
-  tags: "aaa",
+  tags: ['a'],
   upvote: 0,
   downvote: 0,
   order: 1
@@ -17,10 +17,10 @@ var tagList=[{
   head: "head",
   headLastChar: "?",
   desc: "desc",
-  linkedDesc: "linkedDesc",
+  linkedDesc: "#b",
   completed: false,
   timestamp: 0,
-  tags: "bbb",
+  tags: ['b'],
   upvote: 0,
   downvote: 0,
   order: 2
@@ -29,10 +29,10 @@ var tagList=[{
   head: "head",
   headLastChar: "?",
   desc: "desc",
-  linkedDesc: "linkedDesc",
+  linkedDesc: "#c",
   completed: false,
   timestamp: 0,
-  tags: "ccc",
+  tags: ['c'],
   upvote: 0,
   downvote: 0,
   order: 3
@@ -41,50 +41,13 @@ var tagList=[{
   head: "head",
   headLastChar: "?",
   desc: "desc",
-  linkedDesc: "linkedDesc",
+  linkedDesc: "#a #c",
   completed: false,
   timestamp: 0,
-  tags: "ddd",
-  upvote: 0,
-  downvote: 0,
-  order: 4
-},{
-  wholeMsg: "newTodo",
-  head: "head",
-  headLastChar: "?",
-  desc: "desc",
-  linkedDesc: "linkedDesc",
-  completed: false,
-  timestamp: new Date().getTime(), //new
-  tags: "eee",
-  upvote: 0,
-  downvote: 0,
-  order: 5
-},{
-  wholeMsg: "newTodo",
-  head: "head",
-  headLastChar: "?",
-  desc: "desc",
-  linkedDesc: "linkedDesc",
-  completed: false,
-  timestamp: new Date().getTime()-1, //new
-  tags: "fff",
-  upvote: 3,
-  downvote: 2,
-  order: 6
-},{
-  wholeMsg: "newTodo",
-  head: "head",
-  headLastChar: "?",
-  desc: "desc",
-  linkedDesc: "linkedDesc",
-  completed: false,
-  timestamp: new Date().getTime(), // latest
-  tags: "ggg",
-  upvote: 0,
-  downvote: 0,
-  order: 7
-//},
+  tags: ['a', 'c'],
+  upvote: 10,
+  downvote: 5,
+  order: 3
 }];
 
 describe('TodoCtrl', function() {
@@ -100,20 +63,35 @@ describe('TodoCtrl', function() {
       expect($filter('tagFilter')).not.toBeNull();
     }));
 
-    it('Filter order test', inject(function(tagFilterFilter) { // need to put Filter suffix
-      var filteredList = tagFilterFilter(tagList, 100);
-      for (var i in filteredList) {
-        expect(""+filteredList[i].order).toEqual(i);
-      }
+    it('no tag filter', inject(function(tagFilterFilter) { // need to put Filter suffix
+      var filteredList = tagFilterFilter(list, []);
+	  expect(filteredList.length).toEqual(list.length);
     }));
-
-    it('Filter max test', inject(function(tagFilterFilter) { // need to put Filter suffix
-      var filteredList = tagFilterFilter(tagList, 1);
-      expect(filteredList.length).toEqual(0);
-
-      for (var i in filteredList) {
-        expect(""+filteredList[i].order).toEqual(i);
-      }
+	
+    it('tag #a', inject(function(tagFilterFilter) { // need to put Filter suffix
+      var filteredList = tagFilterFilter(list, ['a']);
+	  expect(filteredList.length).toEqual(2);
     }));
+	
+    it('tag #b', inject(function(tagFilterFilter) { // need to put Filter suffix
+      var filteredList = tagFilterFilter(list, ['b']);
+	  expect(filteredList.length).toEqual(1);
+    }));
+	
+    it('tag #c', inject(function(tagFilterFilter) { // need to put Filter suffix
+      var filteredList = tagFilterFilter(list, ['c']);
+	  expect(filteredList.length).toEqual(2);
+    }));
+	
+    it('tag #d', inject(function(tagFilterFilter) { // need to put Filter suffix
+      var filteredList = tagFilterFilter(list, ['d']);
+	  expect(filteredList.length).toEqual(0); // no questions tagged with #d
+    }));
+	
+    it('tag #a order', inject(function(tagFilterFilter) { // need to put Filter suffix
+      var filteredList = tagFilterFilter(list, ['a']);
+	  expect(filteredList[0].upvote).toEqual(list[list.length - 1].upvote);
+    }));
+	
   });
 });
