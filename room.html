@@ -27,6 +27,7 @@
 		<div class="top-banner">
 			<div class="container">
 				<div class="row headerrow">
+					<a class="" id="home-btn" href="./index.html"><img src="images/logo2.png"></a>
 					<span id="roomId">{{roomId}}</span>
 
 						<!--
@@ -38,7 +39,6 @@
 					-->
 
 					<div class="btn"><span class="glyphicon glyphicon-share-alt"></span>Share this room<: {{ location.absUrl() }}</div>&nbsp;
-					<a class="btn btn-sm btn-default" href="./">Main</a>
 					<!-- <button ng-hide="$authData" class="btn btn-primary left" type="button" ng-click="FBLogin()">Want Admin? Sign in with Facebook</button> -->
 
 					<!-- after login -->
@@ -58,7 +58,7 @@
 							<div class="btn btn-sm btn-default" ng-click="setOrderpref('head')">Title</div>
 							<div class="btn btn-sm btn-default disabled" ng-click="setOrderpref('activity')">Activity</div>
 							<div class="btn btn-sm btn-default active" ng-click="setOrderpref('-timestamp')">Date</div>
-							<div class="btn btn-sm btn-default" ng-click="setOrderpref('-rating')">Rating</div>
+							<div class="btn btn-sm btn-default" ng-click="setOrderpref('-upvotePercent')">Rating</div>
 						</div>
 					</div>
 				</div>
@@ -89,25 +89,23 @@
 					</div>
 					<div id="todo-list">
 						<span class="section" ng-show="tagsearch&&(todos | tagFilter:tagsearchitems).length==0"><span class="glyphicon glyphicon-alert icon"></span> Sorry, none of the questions match the tag combination.</span>
-						<span class="section" ng-repeat="todo in todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref">
+						<span class="section questionbody" ng-class="{qnew: todo.new, qalert: todo.headLastChar == '!', completed: todo.completed}" ng-repeat="todo in todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref">
+							<div class="admintools" ng-show="!isAdmin">
+								<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true"></div> |
+								<div class="glyphicon glyphicon-minus-sign icon" aria-hidden="true" ng-click="todo.completed=!todo.completed"></div>
+								<div class="glyphicon glyphicon-lock icon" aria-hidden="true"></div>
+								<div class="glyphicon glyphicon-trash icon" aria-hidden="true" ng-click="removeTodo(todo)"></div>
+							</div>
 							<div class="pull-left contentbox">
-								<h4 class="question-title" ng-switch on="todo.headLastChar">
-									<span class="label label-danger" ng-show="todo.new">New</span>
-									<!-- switch -->
-									<span ng-switch-when="?" class="glyphicon glyphicon-question-sign"></span>
-									<span ng-switch-when="!" class="glyphicon glyphicon-ice-lolly"></span>
-									<span ng-class="{completed: todo.completed}" compile="todo.head | escapeHTML | addTagLinks | codeToSmiley"></span>
-								</h4>
-								
-								<div compile="(todo.linkedDesc || '') | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
-								<div ng-show="todo.tags.length"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
-								
-								<div style="float:left">
-									<button ng-show="!isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Remove</button>
+								<div class="question-title">
+									<span compile="todo.head | escapeHTML | addTagLinks | codeToSmiley"></span><span class="time" am-time-ago="todo.timestamp"></span>
 								</div>
-								<span am-time-ago="todo.timestamp" style="display:block; float:right; color:#999"></span>
-								<div style="clear:both"></div>
-								
+
+								<div class="question-content">
+									<div compile="(todo.linkedDesc || '') | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
+								</div>
+								<div ng-show="todo.tags.length"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
+
 							</div>
 							<div class="pull-right votebox">
 								<div class="updownvote glyphicon glyphicon-triangle-top" ng-click="addUpvote(todo)" ng-disabled="$storage[todo.$id]"></div>
@@ -161,7 +159,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="push"></div>
+	<div class="push" ng-show="todos.length==0"></div>
 	<div class="footer">
 		<div class="row">
 			<div class="col-md-12">

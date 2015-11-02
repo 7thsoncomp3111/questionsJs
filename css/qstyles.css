@@ -70,13 +70,42 @@ Ref: http://stackoverflow.com/questions/19432787/bootstrap-3-0-0-adding-extra-sp
     border-bottom: 5px solid #e7e7e7;
 }
 
-.section:last-child{
-  margin-bottom: 20px;
+.section.questionbody{
+    min-height: 120px;
+}
+
+/*Ref: http://callmenick.com/post/css-folded-corner-effect*/
+.section.questionbody:before {
+    display: block;
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: 0;
+    left: 0;
+    content: "";
+    border-top: solid 15px transparent;
+    border-left: solid 15px transparent;
+    border-right: solid 15px transparent;
+    border-bottom: solid 15px transparent;
+}
+
+.section.questionbody:last-child{
+  margin-bottom: 50px;
 }
 
 .section .title{
   font-size: 2em;
   color: #c3d5db;
+}
+
+.section.questionbody.qnew:before{
+    border-top: solid 15px #c3d5db;
+    border-left: solid 15px #c3d5db;
+}
+
+.section.questionbody.qalert:before{
+    border-top: solid 15px #ff8a74;
+    border-left: solid 15px #ff8a74;
 }
 
 input:focus{
@@ -175,19 +204,14 @@ input:focus{
 #toTop .fa {margin-right: 5px;}
 /*Sung's CSS -end*/
 
-.left{
-  float: left;
+.time{
+    display: inline;
+    color: #ccc;
+    margin-left: 5px;
+    font-weight: normal;
+    font-size: 0.8em;
+    font-style: italic;
 }
-
-.right{
-  float: right;
-}
-
-/*.time{
-  display: inline-block;
-  color: #777;
-  font-style: italic;
-}*/
 
 .footer{
     background: url('../images/abstract-cartoon-cloud-art-backgrounds.jpg') no-repeat;
@@ -223,7 +247,7 @@ input:focus{
     width: 100%;
     border-radius: 0;
     margin-left: -15px;
-    bottom: -25px;
+    bottom: -24.5px;
     height: 5px;
 }
 
@@ -263,8 +287,15 @@ input:focus{
     width: 94%;
 }
 
-.question-title{
+.question-title, .question-content{
+    margin: 0;
     word-wrap: break-word;
+}
+
+.question-title{
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 1.2em;
 }
 
 .section .votebox{
@@ -295,4 +326,23 @@ input:focus{
 
 .rating{
   display: block;
+}
+
+.admintools{
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 3px;
+    background-color: #eee;
+    color: #999;
+    font-size: 0.8em;
+}
+
+#home-btn{
+    margin: 5px;
+}
+
+#home-btn img{
+    height: 50px;
+    width: 50px;
 }
