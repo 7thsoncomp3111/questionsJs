@@ -9,7 +9,8 @@ var questionList=[{
   completed: false,
   timestamp: 0,
   tags: "...",
-  echo: 3,
+  upvote: 3,
+  downvote: 3,
   order: 3
 },{
   wholeMsg: "newTodo",
@@ -20,7 +21,8 @@ var questionList=[{
   completed: false,
   timestamp: 0,
   tags: "...",
-  echo: 2,
+  upvote: 2,
+  downvote: 2,
   order: 4
 },{
   wholeMsg: "newTodo",
@@ -31,7 +33,8 @@ var questionList=[{
   completed: false,
   timestamp: 0,
   tags: "...",
-  echo: 2,
+  upvote: 2,
+  downvote: 2,
   order: 5
 },{
   wholeMsg: "newTodo",
@@ -42,7 +45,8 @@ var questionList=[{
   completed: false,
   timestamp: 0,
   tags: "...",
-  echo: 2,
+  upvote: 2,
+  downvote: 2,
   order: 6
 },{
   wholeMsg: "newTodo",
@@ -53,7 +57,8 @@ var questionList=[{
   completed: false,
   timestamp: new Date().getTime(), //new
   tags: "...",
-  echo: 2,
+  upvote: 2,
+  downvote: 2,
   order: 0
 },{
   wholeMsg: "newTodo",
@@ -64,7 +69,8 @@ var questionList=[{
   completed: false,
   timestamp: new Date().getTime()-1, //new
   tags: "...",
-  echo: 0,
+  upvote: 0,
+  downvote: 0,
   order: 2
 },{
   wholeMsg: "newTodo",
@@ -75,8 +81,10 @@ var questionList=[{
   completed: false,
   timestamp: new Date().getTime(), // latest
   tags: "...",
-  echo: 0,
+  upvote: 0,
+  downvote: 0,
   order: 1
+//},
 }];
 
 describe('TodoCtrl', function() {
