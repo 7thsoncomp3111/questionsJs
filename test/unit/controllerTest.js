@@ -42,7 +42,9 @@ describe('TodoCtrl', function() {
     }));
 
     describe('TodoCtrl Testing', function() {
-      it('setFirstAndRestSentence', function() {
+		
+      it('getFirstAndRestSentence', function() {
+		  
         var ctrl = controller('TodoCtrl', {
           $scope: scope
         });
@@ -65,16 +67,29 @@ describe('TodoCtrl', function() {
           expect(results[0]).toEqual(testInputs[i].exp);
         }
       });
-
-      it('RoomId', function() {
-        location.path('/new/path');
+	  
+      it('roomId - empty', function() {
+		  
+        location.path('/');
 
         var ctrl = controller('TodoCtrl', {
           $scope: scope,
           $location: location
         });
 
-        expect(scope.roomId).toBe("new");
+        expect(scope.roomId).toBe("all");
+      });
+
+      it('roomId - non-empty', function() {
+		  
+        location.path('/comp3111');
+
+        var ctrl = controller('TodoCtrl', {
+          $scope: scope,
+          $location: location
+        });
+
+        expect(scope.roomId).toBe("comp3111");
       });
 
       it('toTop Testing', function() {
@@ -101,27 +116,27 @@ describe('TodoCtrl', function() {
         });
 
         scope.todos=[{
-          wholeMsg: "test testing",
+          wholeMsg: "test testing #a",
           head: "meteor",
           headLastChar: "!",
           desc: "yeoman",
           linkedDesc: Autolinker.link("underscore!", {newWindow: false, stripPrefix: false}),
           completed: false,
           timestamp: new Date().getTime(),
-          tags: "...",
-          echo: 0,
+          upvote: 0,
+		  downvote: 0,
           order: 0
         },
         {
-          wholeMsg: "test testing2",
+          wholeMsg: "test testing2 #b",
           head: "backbone",
           headLastChar: "!",
           desc: "",
           linkedDesc: Autolinker.link("", {newWindow: false, stripPrefix: false}),
           completed: false,
           timestamp: new Date().getTime(),
-          tags: "...",
-          echo: 3,
+          upvote: 3,
+		  downvote: 0,
           order: 2
         },
         {
@@ -132,64 +147,73 @@ describe('TodoCtrl', function() {
           linkedDesc: Autolinker.link("", {newWindow: false, stripPrefix: false}),
           completed: false,
           timestamp: new Date().getTime(),
-          tags: "...",
-          echo: 3,
+          upvote: 2,
+		  downvote: 2,
           order: 2
         },
         {}]
 
         scope.$digest();
+		
+		// vote percentage
+		expect(scope.todos[0].upvotePercent).toEqual(0);
+		expect(scope.todos[0].downvotePercent).toEqual(0);
+		
+		expect(scope.todos[1].upvotePercent).toEqual(100);
+		expect(scope.todos[1].downvotePercent).toEqual(0);
+		
+		expect(scope.todos[2].upvotePercent).toEqual(50);
+		expect(scope.todos[2].downvotePercent).toEqual(50);
+		
+		// tags
+		expect(scope.todos[0].tags).toEqual(['a']);
+		expect(scope.todos[1].tags).toEqual(['b']);
+		expect(scope.todos[2].tags).toEqual([]);
+		
+		// ranked tags
+		expect(scope.rankedTags.length).toEqual(2);
+		expect(scope.rankedTags[0]).toEqual({ title: 'a', count: 1 });
+		expect(scope.rankedTags[1]).toEqual({ title: 'b', count: 1 });
+		
+		// total count
+		expect(scope.totalCount).toEqual(3);
+		
       });
 
-      /*it('test addTodo', function() {
+      it('test addTodo - empty input', function() {
 
         var ctrl = controller('TodoCtrl',{
           $scope: scope
         });
-
-        scope.input = {
-          wholeMsg: "test input",
-          head: "head",
-          headLastChar: "!",
-          desc: "yeoman",
-          linkedDesc: Autolinker.link("underscore!", {newWindow: false, stripPrefix: false}),
-          completed: false,
-          timestamp: new Date().getTime(),
-          tags: "...",
-          upvote: 0,
-          downvote: 0,
-          order: 0
-        }
-        
-        scope.todos.$add = jasmine.createSpy("scope.todo.$add(todo) spy");
-        scope.addTodo();
-        expect(scope.todos.$add).toHaveBeenCalled();
+		
+		scope.getFirstAndRestSentence = jasmine.createSpy("scope.getFirstAndRestSentence");
+		
+		scope.input = { messagetext: '' };
+		scope.addTodo();
+		
+		// as the input is empty
+		expect(scope.getFirstAndRestSentence).not.toHaveBeenCalled();
+		
       });
-
-      it('test addTodo2', function() {
+	  
+      it('test addTodo - has input', function() {
 
         var ctrl = controller('TodoCtrl',{
           $scope: scope
         });
-
-        scope.input = {
-          wholeMsg: "",
-          head: "head",
-          headLastChar: "!",
-          desc: "yeoman",
-          linkedDesc: Autolinker.link("underscore!", {newWindow: false, stripPrefix: false}),
-          completed: false,
-          timestamp: new Date().getTime(),
-          tags: "...",
-          upvote: 0,
-          downvote: 0,
-          order: 0
-        };
-
-        scope.todos.$add = jasmine.createSpy("scope.todo.$add(todo) spy");
-        scope.addTodo();
-        expect(scope.todos.$add).not.toHaveBeenCalled();
-      });*/
+		
+		scope.todos.$add = jasmine.createSpy("scope.todos.$add(todo)");
+		
+		var len = scope.todos.length;
+		
+		scope.input = { messagetext: 'test' };
+		scope.addTodo();
+		
+		expect(scope.todos.$add).toHaveBeenCalled();
+		expect($(".q-input").text()).toEqual('');
+		expect(scope.input).toEqual({}); // cleared input
+		
+      });
 
       it('test upvote', function() {
 
@@ -198,6 +222,7 @@ describe('TodoCtrl', function() {
         });
 
         var test = {
+		  '$id': '123',
           wholeMsg: "backbone ",
           head: "head",
           headLastChar: "!",
@@ -213,7 +238,10 @@ describe('TodoCtrl', function() {
 
         scope.todos.$save = jasmine.createSpy("scope.todo.$save(todo) spy");
         scope.addUpvote(test);
+		expect(test.upvote).toEqual(1);
+		expect(test.order).toEqual(-1);
         expect(scope.todos.$save).toHaveBeenCalled();
+		expect(localStorage['123']).toEqual(true);
       });
 
 
@@ -224,6 +252,7 @@ describe('TodoCtrl', function() {
         });
 
         var test = {
+		  '$id': '456',
           wholeMsg: "backbone ",
           head: "head",
           headLastChar: "!",
@@ -239,140 +268,109 @@ describe('TodoCtrl', function() {
 
         scope.todos.$save = jasmine.createSpy("scope.todo.$save(todo) spy");
         scope.addDownvote(test);
+		expect(test.downvote).toEqual(1);
+		expect(test.order).toEqual(-1);
         expect(scope.todos.$save).toHaveBeenCalled();
+		expect(localStorage['456']).toEqual(true);
       });
+	  
+      it('test setOrderpref', function() {
 
-      it('test doneEditing', function() {
-
-        var ctrl = controller('TodoCtrl',{
-          $scope: scope
-        });        
-
-        var test = {
-          wholeMsg: "   test testing    ",
-          head: "head",
-          headLastChar: "!",
-          desc: "yeoman",
-          linkedDesc: Autolinker.link("underscore!", {newWindow: false, stripPrefix: false}),
-          completed: false,
-          timestamp: new Date().getTime(),
-          tags: "...",
-          echo: 0,
-          order: 0
-        };
-
-        scope.todos.$save = jasmine.createSpy("scope.todo.$save(todo) spy");
-        scope.doneEditing(test);
-        expect(scope.todos.$save).toHaveBeenCalled();
-      });
-      
-      it('test doneEditing2', function() {
-
-        var ctrl = controller('TodoCtrl',{
-          $scope: scope
-        });        
-
-        var test = {
-          wholeMsg: "       ",
-          head: "head",
-          headLastChar: "!",
-          desc: "yeoman",
-          linkedDesc: Autolinker.link("underscore!", {newWindow: false, stripPrefix: false}),
-          completed: false,
-          timestamp: new Date().getTime(),
-          tags: "...",
-          echo: 0,
-          order: 0
-        };
-
-        scope.todos.$save = jasmine.createSpy("scope.todo.$save(todo) spy");
-        scope.doneEditing(test);
-        expect(scope.todos.$save).not.toHaveBeenCalled();
-      });
-
-      it('test revertEditing', function () {
-        
         var ctrl = controller('TodoCtrl',{
           $scope: scope
         });
-
-        scope.originalTodo = {
-          wholeMsg: "       ",
-          head: "head",
-          headLastChar: "!",
-          desc: "yeoman",
-          linkedDesc: Autolinker.link("underscore!", {newWindow: false, stripPrefix: false}),
-          completed: false,
-          timestamp: new Date().getTime(),
-          tags: "...",
-          echo: 0,
-          order: 0
-        };
-
-        var test = {
-          wholeMsg: "backbone ",
-          head: "head",
-          headLastChar: "!",
-          desc: "yeoman",
-          linkedDesc: Autolinker.link("underscore!", {newWindow: false, stripPrefix: false}),
-          completed: false,
-          timestamp: new Date().getTime(),
-          tags: "...",
-          echo: 0,
-          order: 0
-        };
-        scope.revertEditing(test);
+		
+		var pref = 'vote';
+		scope.setOrderpref(pref);
+		expect(scope.orderpref).toEqual(pref);
       });
-
-      it('clearCompletedTodos Testing', function() {
-      
-          var ctrl = controller('TodoCtrl', {
-            $scope: scope,
-            $location: location,
-            $firebaseArray: firebaseArray,
-            $sce: sce,
-            $localStorage: localStorage,
-            $window: window
-          });
-      
-          scope.todos=[{
-            completed:true
-          }];
-
-          spyOn(scope,"removeTodo");
-          scope.clearCompletedTodos();
-          expect(scope.removeTodo).toHaveBeenCalled();
-
-          scope.todos=[{
-            completed:false
-          }];
-
-          scope.clearCompletedTodos();
-      });
-      
-      it('test toogleCompleted', function() {
+	  
+      it('test clickTag - already tagged', function() {
 
         var ctrl = controller('TodoCtrl',{
           $scope: scope
-        });        
-
-        var test = {
-          wholeMsg: "test testing",
-          head: "head",
-          headLastChar: "!",
-          desc: "yeoman",
-          linkedDesc: Autolinker.link("underscore!", {newWindow: false, stripPrefix: false}),
-          completed: false,
-          timestamp: new Date().getTime(),
-          tags: "...",
-          echo: 0,
-          order: 0
-        };
-
-        scope.todos.$save = jasmine.createSpy("scope.todo.$save(todo) spy");
-        scope.toggleCompleted(test);
-        expect(scope.todos.$save).toHaveBeenCalled();
+        });
+		
+		scope.tagsearch = false;
+		scope.tagsearchitems = ['a'];
+		
+		scope.clickTag('a');
+		
+		expect(scope.tagsearch).toEqual(false); // unchanged
+		expect(scope.tagsearchitems.length).toEqual(1); // unchanged
+		
       });
+	  
+      it('test clickTag - new tag', function() {
+
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+		
+		scope.tagsearch = false;
+		scope.tagsearchitems = [];
+		
+		scope.clickTag('a');
+		
+		expect(scope.tagsearch).toEqual(true);
+		expect(scope.tagsearchitems.length).toEqual(1);
+		
+      });
+	  
+      it('test clearTag - null', function() {
+
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+		
+		scope.clearTag(null);
+		expect(scope.tagsearch).toEqual(false);
+		expect(scope.tagsearchitems.length).toEqual(0);
+		
+      });
+	  
+      it('test clearTag - not null (original 1 tag)', function() {
+
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+		
+		scope.tagsearch = true;
+		scope.tagsearchitems = ['a'];
+		
+		scope.clearTag(0);
+		expect(scope.tagsearch).toEqual(false);
+		expect(scope.tagsearchitems.length).toEqual(0);
+		
+      });
+	  
+      it('test clearTag - not null (original 2 tags)', function() {
+
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+		
+		scope.tagsearch = true;
+		scope.tagsearchitems = ['a', 'b'];
+		
+		scope.clearTag(0);
+		expect(scope.tagsearch).toEqual(true);
+		expect(scope.tagsearchitems.length).toEqual(1);
+		expect(scope.tagsearchitems[0]).toEqual('b'); // removed index 0 (a), so b left
+		
+      });
+	  
+	  it('test removeTodo', function() {
+		  
+          var ctrl = controller('TodoCtrl',{
+            $scope: scope
+          });
+	  	
+		  scope.todos.$remove = jasmine.createSpy('scope.todos.$remove');
+		  scope.removeTodo({});
+		  expect(scope.todos.$remove).toHaveBeenCalled();
+		  
+	  });
 
       it('test FBLogout', function() {
 
@@ -407,6 +405,47 @@ describe('TodoCtrl', function() {
         scope.increaseMax();
         expect(scope.maxQuestion).toEqual(15);
       });
+	  
+      it('test scroll event (pass)', function() {
+
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+		
+		// make it 100% to pass the condition test
+		window.innerHeight = 10000;
+		window.scrollY = 10000;
+		
+		scope.maxQuestion = 100;
+		scope.totalCount = 1000;
+		
+		var w = angular.element(window);
+		w.triggerHandler('scroll');
+		
+		expect(scope.maxQuestion).toEqual(110);
+		
+      });
+	  
+      it('test scroll event (not pass)', function() {
+
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+		
+		// make it 100% not to pass the condition test
+		window.innerHeight = 0;
+		window.scrollY = -1000;
+		
+		scope.maxQuestion = 100;
+		scope.totalCount = 1000;
+		
+		var w = angular.element(window);
+		w.triggerHandler('scroll');
+		
+		expect(scope.maxQuestion).toEqual(100); // unchanged
+		
+      });
+	  
     });
   });
 
