@@ -9,11 +9,14 @@
 todomvc.controller('TodoCtrl',
 ['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window','$compile', '$filter',
 function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $compile, $filter) {
+	
 	// set local storage
 	$scope.$storage = $localStorage;
 
 	var scrollCountDelta = 10;
-	$scope.maxQuestion = scrollCountDelta;
+	
+	// show all questions for now
+	$scope.maxQuestion = 1000;//scrollCountDelta;
 
 	/*
 	$(window).scroll(function(){
@@ -44,14 +47,11 @@ var query = echoRef.orderByChild("order");
 $scope.todos = $firebaseArray(query);
 
 $scope.input = {};
-$scope.editedTodo = null;
 
 // pre-precessing for collection
 $scope.$watchCollection('todos', function () {
-	var total = 0;
-	var remaining = 0;
-	var alltags = Array();
 	
+	var total = 0;
 	var rankedTags = {};
 	
 	$scope.todos.forEach(function (todo) {
@@ -62,9 +62,6 @@ $scope.$watchCollection('todos', function () {
 		}
 
 		total++;
-		if (todo.completed === false) {
-			remaining++;
-		}
 		
 		// set upvote/downvote percentage
 		var votes = todo.upvote + todo.downvote;
@@ -91,14 +88,12 @@ $scope.$watchCollection('todos', function () {
 	
 	$scope.rankedTags = rankedTags;
 	$scope.totalCount = total;
-	$scope.remainingCount = remaining;
-	$scope.completedCount = total - remaining;
-	$scope.allChecked = remaining === 0;
 	
 }, true);
 
 // Get the first sentence and rest
 $scope.getFirstAndRestSentence = function($string) {
+	
 	var head = $string;
 	var desc = "";
 
@@ -146,23 +141,16 @@ $scope.addTodo = function () {
 		downvote: 0,
 		order: 0
 	});
-	// remove the posted question in the input
-	//$scope.input.wholeMsg = ''; //depreciated, but keep to see if plugin is tidy up
 	
+	// remove the posted question in the input
 	$(".q-input").empty();
 	$scope.input = {};
-};
-
-$scope.editTodo = function (todo) {
-	$scope.editedTodo = todo;
-	$scope.originalTodo = angular.extend({}, $scope.editedTodo);
 };
 
 $scope.addUpvote = function (todo) {
 
 	if ($scope.$storage[todo.$id]) return;
 
-	$scope.editedTodo = todo;
 	todo.upvote++;
 	// Hack to order using this order.
 	todo.order = todo.order -1;
@@ -176,7 +164,6 @@ $scope.addDownvote = function (todo) {
 
 	if ($scope.$storage[todo.$id]) return;
 
-	$scope.editedTodo = todo;
 	todo.downvote++;
 	// Hack to order using this order.
 	todo.order = todo.order -1;
@@ -193,7 +180,7 @@ $scope.setOrderpref = function (pref){
 
 //Append tag to tag search box
 $scope.tagsearch = false;
-$scope.tagsearchitems = Array();
+$scope.tagsearchitems = [];
 $scope.clickTag = function(t){
 	if($scope.tagsearchitems.indexOf(t)==-1){
 		$scope.tagsearch = true;
@@ -215,43 +202,8 @@ $scope.clearTag = function(t_index){
 	}
 }
 
-$scope.doneEditing = function (todo) {
-	$scope.editedTodo = null;
-	var wholeMsg = todo.wholeMsg.trim();
-	if (wholeMsg) {
-		$scope.todos.$save(todo);
-	} else {
-		$scope.removeTodo(todo);
-	}
-};
-
-$scope.revertEditing = function (todo) {
-	todo.wholeMsg = $scope.originalTodo.wholeMsg;
-	$scope.doneEditing(todo);
-};
-
 $scope.removeTodo = function (todo) {
 	$scope.todos.$remove(todo);
-};
-
-$scope.clearCompletedTodos = function () {
-	$scope.todos.forEach(function (todo) {
-		if (todo.completed) {
-			$scope.removeTodo(todo);
-		}
-	});
-};
-
-$scope.toggleCompleted = function (todo) {
-	todo.completed = !todo.completed;
-	$scope.todos.$save(todo);
-};
-
-$scope.markAll = function (allCompleted) {
-	$scope.todos.forEach(function (todo) {
-		todo.completed = allCompleted;
-		$scope.todos.$save(todo);
-	});
 };
 
 $scope.FBLogin = function () {
@@ -278,11 +230,11 @@ $scope.FBLogout = function () {
 
 $scope.increaseMax = function () {
 	if ($scope.maxQuestion < $scope.totalCount) {
-		$scope.maxQuestion+=scrollCountDelta;
+		$scope.maxQuestion += scrollCountDelta;
 	}
 };
 
-$scope.toTop =function toTop() {
+$scope.toTop = function toTop() {
 	$window.scrollTo(0,0);
 };
 
@@ -295,9 +247,6 @@ $scope.location = $location;
 // autoscroll
 angular.element($window).bind("scroll", function() {
 	if ($window.innerHeight + $window.scrollY >= $window.document.body.offsetHeight) {
-		console.log('Hit the bottom2. innerHeight' +
-		$window.innerHeight + "scrollY" +
-		$window.scrollY + "offsetHeight" + $window.document.body.offsetHeight);
 
 		// update the max value
 		$scope.increaseMax();

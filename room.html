@@ -89,7 +89,7 @@
 					</div>
 					<div id="todo-list">
 						<span class="section" ng-show="tagsearch&&(todos | tagFilter:tagsearchitems).length==0"><span class="glyphicon glyphicon-alert icon"></span> Sorry, none of the questions match the tag combination.</span>
-						<span class="section" ng-repeat="todo in todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+						<span class="section" ng-repeat="todo in todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref">
 							<div class="pull-left contentbox">
 								<h4 class="question-title" ng-switch on="todo.headLastChar">
 									<span class="label label-danger" ng-show="todo.new">New</span>
@@ -103,7 +103,6 @@
 								<div ng-show="todo.tags.length"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
 								
 								<div style="float:left">
-									<!-- <button ng-show="!isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button> -->
 									<button ng-show="!isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Remove</button>
 								</div>
 								<span am-time-ago="todo.timestamp" style="display:block; float:right; color:#999"></span>
