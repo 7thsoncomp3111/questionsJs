@@ -14,7 +14,7 @@ describe('TodoCtrl', function() {
     }));
 
     it('contains special characters', inject(function(escapeHTMLFilter) { // need to put Filter suffix
-		expect(escapeHTMLFilter('abc<iframe>&"\'/')).toEqual('abc&lt;iframe&gt;&amp;&quot;&#39;&#x2F;');
+		expect(escapeHTMLFilter('abc<iframe>&"')).toEqual('abc&lt;iframe&gt;&amp;&quot;');
     }));
   });
 });
