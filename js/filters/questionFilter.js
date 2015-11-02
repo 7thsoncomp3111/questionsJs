@@ -31,6 +31,13 @@ todomvc.filter('questionFilter', function () {
       }
       return (b.upvote-b.downvote) - (a.upvote-a.downvote);
     });
+	
+    sorted.sort(function(a, b) {
+      if (a.upvote-a.downvote == b.upvote-b.downvote) {
+        return b.timestamp - a.timestamp;
+      }
+      return (b.upvote-b.downvote) - (a.upvote-a.downvote);
+    });
 
     // Combined list
     return newQuestions.concat(sorted);
