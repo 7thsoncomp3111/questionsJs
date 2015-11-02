@@ -529,3 +529,10 @@ body {
     color: #fff;
     border-radius: 0;
 }
+
+#features-header{
+    background: #999;
+    color: #fff;
+    font-size: 2em;
+    text-align: center;
+}
