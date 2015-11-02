@@ -109,7 +109,7 @@ describe('TodoCtrl', function() {
 
     it('Filter max test', inject(function(questionFilterFilter) { // need to put Filter suffix
       var filteredList = questionFilterFilter(questionList, 1);
-      expect(filteredList.length).toEqual(5);
+      expect(filteredList.length).toEqual(4);
 
       for (var i in filteredList) {
         expect(""+filteredList[i].order).toEqual(i);
