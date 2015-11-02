@@ -69,7 +69,7 @@
 							<div class="col-xs-10">
 								<!-- <div class="icon icon-inputbox"><i class="glyphicon glyphicon-camera"></i></div> -->
 								<!-- <input class="q-input" placeholder="| Enter Title" id="one"> -->
-								<div class="icon icon-inputbox"><i class="glyphicon glyphicon-search"></i></div>
+								<!-- <div class="icon icon-inputbox"><i class="glyphicon glyphicon-search"></i></div> -->
 								<div emoji-form emoji-message="input">
 									<textarea type="text" id="new-todo" class="q-input" placeholder="| Ask A Question" id="two" ng-model="input.messagetext" autofocus></textarea>
 									<div class="btn" id="emojibtn"><i class="icon icon-emoji"></i></div>
@@ -89,22 +89,22 @@
 					</div>
 					<div id="todo-list">
 						<span class="section" ng-show="tagsearch&&(todos | tagFilter:tagsearchitems).length==0"><span class="glyphicon glyphicon-alert icon"></span> Sorry, none of the questions match the tag combination.</span>
-						<span class="section" ng-repeat="todo in todos | filter:input.messagetext | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+						<span class="section" ng-repeat="todo in todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
 							<div class="pull-left contentbox">
 								<h4 class="question-title" ng-switch on="todo.headLastChar">
 									<span class="label label-danger" ng-show="todo.new">New</span>
 									<!-- switch -->
 									<span ng-switch-when="?" class="glyphicon glyphicon-question-sign"></span>
 									<span ng-switch-when="!" class="glyphicon glyphicon-ice-lolly"></span>
-									<span ng-class="{completed: todo.completed}" ng-bind-html="todo.head | escapeHTML | codeToSmiley">{{todo.head}}</span>
+									<span ng-class="{completed: todo.completed}" compile="todo.head | escapeHTML | addTagLinks | codeToSmiley"></span>
 								</h4>
 								
 								<div compile="(todo.linkedDesc || '') | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
-								<div ng-show="todo.tags"><div ng-repeat="t in todo.tags track by $index" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
+								<div ng-show="todo.tags.length"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
 								
 								<div style="float:left">
-									<button ng-show="!isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button>
-									<button ng-show="!isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
+									<!-- <button ng-show="!isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button> -->
+									<button ng-show="!isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Remove</button>
 								</div>
 								<span am-time-ago="todo.timestamp" style="display:block; float:right; color:#999"></span>
 								<div style="clear:both"></div>
@@ -143,7 +143,7 @@
 								<div class="btn tag">{{t.title}}</div>({{t.count}})
 							</div>
 						</div>
-						<div>
+						<!-- <div>
 							<h3>Popular Posts</h3>
 							<ul>
 								<li>
@@ -156,7 +156,7 @@
 									#GOODGRADE
 								</li>
 							</ul>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>

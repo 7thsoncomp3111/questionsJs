@@ -51,7 +51,11 @@ $scope.$watchCollection('todos', function () {
 	var total = 0;
 	var remaining = 0;
 	var alltags = Array();
+	
+	var rankedTags = {};
+	
 	$scope.todos.forEach(function (todo) {
+		
 		// Skip invalid entries so they don't break the entire app.
 		if (!todo || !todo.head ) {
 			return;
@@ -61,51 +65,36 @@ $scope.$watchCollection('todos', function () {
 		if (todo.completed === false) {
 			remaining++;
 		}
+		
 		// set upvote/downvote percentage
 		var votes = todo.upvote + todo.downvote;
 		todo.upvotePercent = votes == 0 ? 0 : todo.upvote / votes * 100;
 		todo.downvotePercent = votes == 0 ? 0 : todo.downvote/ votes * 100;
+		
 		// set tags
-		function onlyUnique(value, index, self) {
-			return self.indexOf(value) === index;
-		}
-
-		var tagmatches = todo.wholeMsg.match(/#[\w\-]+/g);
-		if(tagmatches!=null){
-			//Filter duplicate matches
-			var uniquetags = tagmatches.filter( onlyUnique );
-			uniquetags.forEach(function(elem, i, A){
-				//Remove hash
-				A[i]=elem.replace("#","");
-				alltags.push(A[i]);
+		var matches = todo.wholeMsg.match(/#([\w\-]+)/g);
+		if (matches != null && matches.length > 0) {
+			matches = _.unique(matches);
+			matches.forEach(function(match, i) {
+				matches[i] = match.substring(1); // remove hashtag
+				rankedTags[matches[i]] = (rankedTags[matches[i]] || 0) + 1;
 			});
-			//Sort alphabetically
-			tagmatches = uniquetags.sort();
+			todo.tags = matches.sort();
+		} else {
+			todo.tags = [];
 		}
-		todo.tags = tagmatches;
 	});
-	//Get tagcount
-	var counts = {};
-	var ranknum = 0;
-	for(var i=0; i<alltags.length; i++) {
-	    var num = alltags[i];
-		if(counts[num]){
-			counts[num] +=1;
-			ranknum++;
-		}
-		else{
-			counts[num]=1;
-		}
-	}
-	//Convert object to array
-	var rankedTags = $.map(counts, function(value, index) {
-    	return [{title: index, count: value}];
+	
+	rankedTags = _.map(rankedTags, function(count, title) {
+		return { title: title, count: count };
 	});
+	
 	$scope.rankedTags = rankedTags;
 	$scope.totalCount = total;
 	$scope.remainingCount = remaining;
 	$scope.completedCount = total - remaining;
 	$scope.allChecked = remaining === 0;
+	
 }, true);
 
 // Get the first sentence and rest
