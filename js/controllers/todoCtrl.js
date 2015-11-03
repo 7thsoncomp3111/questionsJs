@@ -9,12 +9,12 @@
 todomvc.controller('TodoCtrl',
 ['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window','$compile', '$filter',
 function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $compile, $filter) {
-	
+
 	// set local storage
 	$scope.$storage = $localStorage;
 
 	var scrollCountDelta = 10;
-	
+
 	// show all questions for now
 	$scope.maxQuestion = 1000;//scrollCountDelta;
 
@@ -50,24 +50,24 @@ $scope.input = {};
 
 // pre-precessing for collection
 $scope.$watchCollection('todos', function () {
-	
+
 	var total = 0;
 	var rankedTags = {};
-	
+
 	$scope.todos.forEach(function (todo) {
-		
+
 		// Skip invalid entries so they don't break the entire app.
 		if (!todo || !todo.head ) {
 			return;
 		}
 
 		total++;
-		
+
 		// set upvote/downvote percentage
 		var votes = todo.upvote + todo.downvote;
 		todo.upvotePercent = votes == 0 ? 0 : todo.upvote / votes * 100;
 		todo.downvotePercent = votes == 0 ? 0 : todo.downvote/ votes * 100;
-		
+
 		// set tags
 		var matches = todo.wholeMsg.match(/#([\w\-]+)/g);
 		if (matches != null && matches.length > 0) {
@@ -81,19 +81,19 @@ $scope.$watchCollection('todos', function () {
 			todo.tags = [];
 		}
 	});
-	
+
 	rankedTags = _.map(rankedTags, function(count, title) {
 		return { title: title, count: count };
 	});
-	
+
 	$scope.rankedTags = rankedTags;
 	$scope.totalCount = total;
-	
+
 }, true);
 
 // Get the first sentence and rest
 $scope.getFirstAndRestSentence = function($string) {
-	
+
 	var head = $string;
 	var desc = "";
 
@@ -115,7 +115,7 @@ $scope.getFirstAndRestSentence = function($string) {
 };
 
 $scope.addTodo = function () {
-	
+
 	var newTodo = $scope.input.messagetext.trim();
 	newTodo = $filter('colonToCode')(newTodo);
 
@@ -141,7 +141,7 @@ $scope.addTodo = function () {
 		downvote: 0,
 		order: 0
 	});
-	
+
 	// remove the posted question in the input
 	$(".q-input").empty();
 	$scope.input = {};

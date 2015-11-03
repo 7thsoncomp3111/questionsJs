@@ -70,6 +70,24 @@ Ref: http://stackoverflow.com/questions/19432787/bootstrap-3-0-0-adding-extra-sp
     border-bottom: 5px solid #e7e7e7;
 }
 
+.section-modal-dialog{
+    margin-top: 25%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.section-modal-content{
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    border-bottom: 5px solid #e7e7e7;
+    border-radius: 0;
+}
+
+@media (min-width: 768px){
+    .section-modal-dialog{
+        width: auto;
+    }
+}
+
 .section.questionbody{
     min-height: 120px;
 }
@@ -345,4 +363,20 @@ input:focus{
 #home-btn img{
     height: 50px;
     width: 50px;
+}
+
+.replyexpand{
+    position: absolute;
+    display: block;
+    text-align: center;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #eee;
+    font-size: 0.5em;
+}
+
+.replyexpand:hover{
+    cursor: pointer;
+    background-color: #ddd;
 }

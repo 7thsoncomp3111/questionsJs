@@ -222,6 +222,7 @@
                     $window.location.href = 'room.html#/' + $scope.input.text.toLowerCase();
                 }
                 else{
+                    name = $(name).text();
 				    $window.location.href = 'room.html#/' + (name || $scope.input.text);
                 }
 		    };
@@ -239,25 +240,32 @@
             });
 	    }])
         .filter('roomFilter', function() {
-            return function (input, searchterm, p) {
+            return function (input, searchterm, notvalid) {
+                searchterm = searchterm.trim();
                 if(searchterm == '' || input==null){
                     return input;
                 }
-                var formattedRooms = [], found=false;
+                var formattedRooms = [], found=0;
                 input.forEach(function(room){
-                    if(room.indexOf(searchterm)!=-1){
-                        found=true;
-                    }
                     room = room.replace(searchterm,'<span style="background-color: #666">'+searchterm+'</span>');
-                    formattedRooms.push(room);
+                    if(room.indexOf(searchterm)!=-1){
+                        found++;
+                        formattedRooms.unshift(room);
+                    }
+                    else{
+                        formattedRooms.push(room);
+                    }
                 });
-                if(!found){
+                if(found==0){
                     formattedRooms = ['Create This Room'];
-                    if(p){
+                    if(notvalid){
                         formattedRooms = [];
                     }
+                    return formattedRooms;
                 }
-                return formattedRooms;
+                else{
+                    return formattedRooms.slice(0,found);
+                }
             }
         })
         .filter('trustAsHtmlFilter', ['$sce', function($sce) {

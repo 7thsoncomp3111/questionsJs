@@ -105,7 +105,7 @@
 									<div compile="(todo.linkedDesc || '') | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
 								</div>
 								<div ng-show="todo.tags.length"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
-								<div class="replyexpand" data-toggle="modal" data-target="#{{$index}}">
+								<div class="replyexpand" data-target="#todo.key()">
 									<div class="glyphicon glyphicon-triangle-bottom icon"></div>
 								</div>
 							</div>
@@ -121,19 +121,19 @@
 							  </div>
 							</div>
 							<!-- Modal to show details and replies -->
-							<div class="modal fade" id="{{$index}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-							  <div class="modal-dialog section-modal-dialog" role="document">
-							    <div class="modal-content section-modal-content">
+							<div class="modal fade" id="todo.key()" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+							  <div class="modal-dialog" role="document">
+							    <div class="modal-content">
 							      <div class="modal-header">
 							        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-									<div class="question-title">
-										<span compile="todo.head | escapeHTML | addTagLinks | codeToSmiley"></span><span class="time" am-time-ago="todo.timestamp"></span>
-									</div>
+							        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
 							      </div>
 							      <div class="modal-body">
-									  <div class="question-content">
-  										<div compile="(todo.linkedDesc || '') | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
-  										</div>
+							        ...
+							      </div>
+							      <div class="modal-footer">
+							        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							        <button type="button" class="btn btn-primary">Save changes</button>
 							      </div>
 							    </div>
 							  </div>
@@ -197,8 +197,6 @@
 
 <script src="js/lib/underscore.min.js"></script>
 <script src="js/lib/jquery.min.js"></script>
-<!-- Boostrap JS -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
 
 <!-- Autolink from https://github.com/gregjacobs/Autolinker.js> -->
 <script src="js/lib/Autolinker.min.js"></script>
