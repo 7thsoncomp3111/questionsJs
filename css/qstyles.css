@@ -70,10 +70,14 @@ Ref: http://stackoverflow.com/questions/19432787/bootstrap-3-0-0-adding-extra-sp
     border-bottom: 5px solid #e7e7e7;
 }
 
+/*Modal expand padding fix*/
+.modal.in{
+    padding: 0 !important;
+}
+
 .section-modal-dialog{
+    margin: 0;
     margin-top: 25%;
-    margin-left: 0;
-    margin-right: 0;
 }
 
 .section-modal-content{
@@ -84,7 +88,7 @@ Ref: http://stackoverflow.com/questions/19432787/bootstrap-3-0-0-adding-extra-sp
 
 @media (min-width: 768px){
     .section-modal-dialog{
-        width: auto;
+        width: 100%;
     }
 }
 
