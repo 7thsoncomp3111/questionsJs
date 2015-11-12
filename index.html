@@ -63,7 +63,7 @@
     <header>
         <div class="header-content">
             <div class="header-content-inner">
-                <div class="row">
+                <div class="row" ng-show="!isLoading">
                     <div class="col-lg-offset-4 col-lg-4">
                       <form name="form" ng-submit="join()" class="room-input-form" role="search">
         								<input type="text" name = "input" class="form-control large room-input"
@@ -81,6 +81,13 @@
                         <div class="room-list" ng-show="input.text">
                             <span ng-repeat="room in rooms | roomFilter:input.text"><a href="#" ng-click="join(room.plain)"><span ng-bind-html="room.html | trustAsHtmlFilter"></span></a></span>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <br>
+                    <div loading><img src="./images/loader_cover.gif"><br><div class="h3 text-primary text-bold"><span random-load-phrase></span></div></div>
+                    <div>
+                        <span ng-repeat="room in rooms"><a class="btn btn-md" href="#" ng-click="join(room.plain)">{{room.plain}}</a></span>
                     </div>
                 </div>
                 <!-- <h1>Your Favorite Source of Free Bootstrap Themes</h1>
@@ -222,8 +229,10 @@
                 });
             });
 
+            $scope.isLoading = true;
             var firebaseURL = "https://resplendent-inferno-9346.firebaseio.com/room";
             var echoRef = new Firebase(firebaseURL);
+            var echoRefObj = echoRef.$asObject;
             var query = echoRef.orderByKey();
 
             $firebaseArray(query).$loaded(function(data){
@@ -232,35 +241,60 @@
                     rooms.push({plain: datum.$id, html:''});
                 });
                 $scope.rooms = rooms;
+                $scope.isLoading = false;
             });
 	    }])
         .filter('roomFilter', function() {
             return function (input, searchterm) {
                 //Ref: http://stackoverflow.com/questions/25723455/custom-filter-giving-cannot-read-property-slice-of-undefined-in-angularjs
                 if (!input || !input.length) { return; }
-                if(searchterm==null){
-                    input = []
-                }
-                else{
+                var filtered = [];
+                if(searchterm!=null){
                     var found=0;
                     input.forEach(function(room){
+                        room.html = room.plain.replace(searchterm,'<span style="background-color: #666">'+searchterm+'</span>');
                         if(room.plain.indexOf(searchterm)!=-1){
                             found++;
+                            filtered.push(room);
                         }
-                        room.html = room.plain.replace(searchterm,'<span style="background-color: #666">'+searchterm+'</span>');
                     });
-                    if(found==0){
-                        input = [];
-                    }
                 }
-                return input;
+                return filtered;
             }
         })
         .filter('trustAsHtmlFilter', ['$sce', function($sce) {
             return function(text) {
                 return $sce.trustAsHtml(text);
             }
-        }]);
+        }])
+        .directive('loading', function () {
+            return {
+                restrict: 'A',
+                link: function (scope, elm, attrs) {
+                    scope.$watch('isLoading', function (o) {
+                        if(!o) {
+                            elm.hide();
+                        }
+                        else {
+                            elm.show();
+                        }
+                    });
+                }
+            };
+        })
+        .directive('randomLoadPhrase',function(){
+            return {
+                restrict: 'A',
+                link: function(scope, elem, attrs) {
+                    var phrases = ["Queuing up for 11M Minibus...",
+                                    "Buying dinner in LG7...",
+                                    "Adding up stress and tension...",
+                                    "Filling up the seafront...",
+                                    "Waiting for hall offer..."];
+                    elem.replaceWith(phrases[Math.floor((Math.random() * phrases.length))]);
+                }
+            }
+        });
 	</script>
 </body>
 </html>

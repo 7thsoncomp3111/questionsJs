@@ -527,6 +527,10 @@ body {
     background-color: rgba(255,255,255,0.4);
 }
 
+.text-bold{
+    font-weight: bold;
+}
+
 #github-btn{
     background-color: #7d9faa;
     color: #fff;
