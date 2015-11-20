@@ -25,13 +25,11 @@
                     ".read": true,
                     ".write": true,
 
-                    "hash": {".validate": "newData.isString()"},
-                    "author": { ".validate": "newData.isNumber()" },
+                    "author": { ".validate": "newData.isString()" },
                     "upvote": { ".validate": "newData.isNumber()" },
                     "downvote": { ".validate": "newData.isNumber()" },
                     "content": { ".validate": "newData.isString()"},
                     "prev": {".validate": "newData.isString()"},
-                    "next": {".validate": "newData.isString()"},
                     "timestamp": { ".validate": "newData.val() <= now" },
                     "hidden" : {".validate": false}
                 }

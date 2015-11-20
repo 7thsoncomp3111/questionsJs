@@ -49,11 +49,13 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $comp
             return setThreadLevel(prev, level+1);
         }
         function addNext(key){
+            var nexts = [];
             for(var i=0; i<$scope.threads.length; i++){
                 if(key == $scope.threads[i].prev){
-                    return $scope.threads[i].$id;
+                    nexts.push($scope.threads[i].$id);
                 }
             }
+            return nexts;
         }
         var total = 0;
     	$scope.threads.forEach(function (thread) {
@@ -67,13 +69,8 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $comp
     		var votes = thread.upvote + thread.downvote;
     		thread.upvotePercent = votes == 0 ? 0 : thread.upvote / votes * 100;
     		thread.downvotePercent = votes == 0 ? 0 : thread.downvote/ votes * 100;
-
-            // set hash (debug)
-            thread.hash = thread.$id;
-
-            // set next
-            thread.next = addNext(thread.$id);
     	});
+
         // set level
         $scope.threads.forEach(function(thread){
             thread.level = setThreadLevel(thread, 0);
@@ -103,10 +100,8 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $comp
     		timestamp: new Date().getTime(),
     		upvote: 0,
     		downvote: 0,
-            hash: null,
             author: 'anonymous',
-            prev: activeQuestion,
-            next: null
+            prev: activeQuestion
     	});
 
     	// remove the posted reply in the input
