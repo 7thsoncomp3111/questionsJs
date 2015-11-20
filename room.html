@@ -71,7 +71,7 @@
 								<!-- <input class="q-input" placeholder="| Enter Title" id="one"> -->
 								<!-- <div class="icon icon-inputbox"><i class="glyphicon glyphicon-search"></i></div> -->
 								<div emoji-form emoji-message="input">
-									<textarea type="text" id="new-todo" class="q-input" placeholder="| Ask A Question" id="two" ng-model="input.messagetext" autofocus></textarea>
+									<textarea type="text" id="new-todo" class="q-input rseparator" placeholder="| Ask A Question" id="two" ng-model="input.messagetext" autofocus></textarea>
 									<div class="btn" id="emojibtn"><i class="icon icon-emoji"></i></div>
 								</div>
 							</div>
@@ -105,7 +105,7 @@
 									<div compile="(todo.linkedDesc || '') | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
 								</div>
 								<div ng-show="todo.tags.length"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
-								<div class="replyexpand" data-toggle="modal" data-target="#{{$index}}">
+								<div class="replyexpand" ng-click="open(todo.$id)">
 									<div class="glyphicon glyphicon-triangle-bottom icon"></div>
 								</div>
 							</div>
@@ -121,23 +121,95 @@
 							  </div>
 							</div>
 							<!-- Modal to show details and replies -->
-							<div class="modal fade" id="{{$index}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-							  <div class="modal-dialog section-modal-dialog" role="document">
-							    <div class="modal-content section-modal-content">
+							<script type="text/ng-template" id="threadModal.html">
 							      <div class="modal-header">
-							        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							        <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
 									<div class="question-title">
-										<span compile="todo.head | escapeHTML | addTagLinks | codeToSmiley"></span><span class="time" am-time-ago="todo.timestamp"></span>
+										<span compile="todo.head | escapeHTML | addTagLinks | codeToSmiley"></span><span class="time" am-time-ago="todo.timestamp"></span><span class="time">{{todo.timestamp | amDateFormat:'[at] HH:mm [on] DD.MM.YYYY'}}</span>
 									</div>
 							      </div>
 							      <div class="modal-body">
-									  <div class="question-content">
-  										<div compile="(todo.linkedDesc || '') | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
-  										</div>
+									<div class="question-content">
+										<div ng-show="todo.linkedDesc">
+  											<div compile="(todo.linkedDesc || '') | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
+										</div>
+										<div ng-show="!todo.linkedDesc">
+											<span class="time">- Void: No Description Provided -</span>
+										</div>
+										<hr>
+										<form class="form" name="replyForm">
+											<div class="replyForm">
+												<div class="row">
+													<div class="col-xs-10">
+														<textarea type="text" class="form-control r-input r-separator" name="content" placeholder="| Reply here" ng-model="replyMessage"></textarea>
+													</div>
+													<div class="col-xs-2">
+														<div class="send-button r-button" type="button" ng-click="addThread()" data-ng-disabled="replyForm.$invalid">
+															<div class="icon"><i class="glyphicon glyphicon-send"></i></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</form>
+										<div class="row">
+											<div class="pull-right" ng-show="!isAdmin">
+												<span class="btn btn-sm btn-danger" ng-click="removeAllThreads()">Clear All Replies</span>
+											</div>
+										</div>
+										<div class="threadList">
+											<div ng-repeat="thread in threads">
+												<div class="thread nestIndent{{thread.level}}">
+													<div class="r-admintools" ng-show="!isAdmin">
+														<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true"></div> |
+														<div class="glyphicon glyphicon-minus-sign icon" aria-hidden="true" ng-click="thread.completed=!thread.completed"></div>
+														<div class="glyphicon glyphicon-lock icon" aria-hidden="true"></div>
+														<div class="glyphicon glyphicon-trash icon" aria-hidden="true" ng-click="removeThread(thread)"></div>
+													</div>
+													<div class="col-xs-1 profile">
+														<img src="http://placehold.it/50x50"><br/>
+														{{thread.author}}
+													</div>
+													<div class="col-xs-10">
+														<span class="time" am-time-ago="thread.timestamp"></span><span class="time">{{thread.timestamp | amDateFormat:'[at] HH:mm [on] DD.MM.YYYY'}}</span>&nbsp;&nbsp;<span class="btn text-primary">Reply</span>
+														<div class="content" compile="thread.content"></div>
+														<div>
+															<b>Debug Info</b><br>
+															Hash: {{thread.hash}}<br>
+															Prev: {{thread.prev}}<br>
+															Next: {{thread.next}}<br>
+															Level: {{thread.level}}
+														</div>
+													</div>
+													<div class="col-xs-1 votebox">
+														<div class="pull-right">
+															<div class="updownvote glyphicon glyphicon-triangle-top" ng-click="addUpvote(thread)" ng-disabled="$storage[todo.$id]"></div>
+															<div class="rating">{{ thread.upvote - thread.downvote }}</div>
+															<div class="updownvote glyphicon glyphicon-triangle-bottom" ng-click="addDownvote(thread)" ng-disabled="$storage[todo.$id]"></div>
+														</div>
+													</div>
+													<div ng-show="thread.level<2">
+														<form class="form" name="replyForm">
+															<div class="replyForm">
+																<div class="row">
+																	<div class="col-xs-10">
+																		<!-- Ref: http://stackoverflow.com/questions/22761201/angularjs-ng-model-is-undefined | ng-model="$parent.xxx" -->
+																		<textarea type="text" class="form-control r-input r-separator" name="content" placeholder="| Reply here" ng-model="$parent.replyMessageNested[$index]"></textarea>
+																	</div>
+																	<div class="col-xs-2">
+																		<div class="send-button r-button" type="button" ng-click="addThread(thread.$id,$index)" ng-disabled="replyForm.$invalid">
+																			<div class="icon"><i class="glyphicon glyphicon-send"></i></div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</form>
+													</div>
+												</div>
+											</div>
+										</div>
+  									</div>
 							      </div>
-							    </div>
-							  </div>
-							</div>
+							</script>
 						</span>
 					</div>
 
@@ -183,22 +255,16 @@
 	<div class="footer">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="col-md-8">
-					<a href="#">Terms of Service</a>
-					<a href="#">Privacy</a>
-					<a href="#">Security</a>
-				</div>
-				<div class="col-md-4">
-					<p class="muted pull-right">© 2015 7th Son. All rights reserved</p>
-				</div>
+				<a href="#">Terms of Service</a>
+				<a href="#">Privacy</a>
+				<a href="#">Security</a>
+				<span class="pull-right">© 2015 7th Son. All rights reserved</span>
 			</div>
 		</div>
 	</div>
 
 <script src="js/lib/underscore.min.js"></script>
 <script src="js/lib/jquery.min.js"></script>
-<!-- Boostrap JS -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 <!-- Autolink from https://github.com/gregjacobs/Autolinker.js> -->
 <script src="js/lib/Autolinker.min.js"></script>
@@ -218,6 +284,9 @@
 <script src="js/lib/moment.min.js"></script>
 <script src="js/lib/angular-moment.min.js"></script>
 
+<!-- UI Bootstrap 0.14.3 -->
+<script src="js/lib/ui-bootstrap-tpls-0.14.3.min.js"></script>
+
 <script src="js/app.js"></script>
 <script src="js/filters/questionFilter.js"></script>
 <script src="js/filters/tagFilter.js"></script>
@@ -226,6 +295,7 @@
 <script src="js/filters/nl2br.js"></script>
 <script src="js/directives/compile.js"></script>
 <script src="js/controllers/todoCtrl.js"></script>
+<script src="js/controllers/threadCtrl.js"></script>
 
 <!-- angular-emoji-popup -->
 <script type="text/javascript" src="js/emoji/config.js"></script>

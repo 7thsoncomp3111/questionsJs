@@ -1,5 +1,7 @@
 {
-    "rules": {
+    "rules":
+    {
+        ".read": true,
         "room":{
             "$roomname": {
                 "questions": {
@@ -24,9 +26,10 @@
                     ".write": true,
 
                     "hash": {".validate": "newData.isString()"},
+                    "author": { ".validate": "newData.isNumber()" },
                     "upvote": { ".validate": "newData.isNumber()" },
                     "downvote": { ".validate": "newData.isNumber()" },
-                    "head": { ".validate": "newData.isString()"},
+                    "content": { ".validate": "newData.isString()"},
                     "prev": {".validate": "newData.isString()"},
                     "next": {".validate": "newData.isString()"},
                     "timestamp": { ".validate": "newData.val() <= now" },

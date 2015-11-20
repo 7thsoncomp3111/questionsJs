@@ -7,8 +7,8 @@
 * - exposes the model to the template and provides event handlers
 */
 todomvc.controller('TodoCtrl',
-['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window','$compile', '$filter',
-function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $compile, $filter) {
+['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window', '$compile', '$filter', '$uibModal',
+function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $compile, $filter, $uibModal) {
 
 	// set local storage
 	$scope.$storage = $localStorage;
@@ -82,6 +82,7 @@ $scope.$watchCollection('todos', function () {
 		}
 	});
 
+	//map tag names and freq to verbose
 	rankedTags = _.map(rankedTags, function(count, title) {
 		return { title: title, count: count };
 	});
@@ -255,5 +256,27 @@ angular.element($window).bind("scroll", function() {
 		$scope.$apply();
 	}
 });
+
+	// UI Modal
+	$scope.open = function (qindex) {
+		var modalInstance = $uibModal.open({
+		  animation: true,
+		  templateUrl: 'threadModal.html',
+		  controller: 'ThreadCtrl',
+		  size: '',
+		  resolve: {
+	        questions: function () {
+	          return $scope.todos;
+		  	},
+			qindex: function(){
+				return qindex
+			}
+	      }
+		});
+	};
+
+	$scope.toggleAnimation = function () {
+		$scope.animationsEnabled = !$scope.animationsEnabled;
+	};
 
 }]);
