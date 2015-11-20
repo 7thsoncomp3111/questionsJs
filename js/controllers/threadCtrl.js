@@ -24,6 +24,13 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $comp
     //.limitToFirst(1000);
     $scope.threads = $firebaseArray(query);
 
+    // Identify active question
+    questions.forEach(function(q){
+        if(q.$id == qindex){
+            $scope.todo = q;
+        }
+    });
+
     // pre-precessing for collection
     $scope.$watchCollection('threads', function () {
         // Utility function to get node
@@ -67,8 +74,8 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $comp
             // set next
             thread.next = addNext(thread.$id);
     	});
+        // set level
         $scope.threads.forEach(function(thread){
-            // set level
             thread.level = setThreadLevel(thread, 0);
         });
     	$scope.totalCount = total;
@@ -122,10 +129,4 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $comp
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
-
-    questions.forEach(function(q){
-        if(q.$id == qindex){
-            $scope.todo = q;
-        }
-    });
 }]);

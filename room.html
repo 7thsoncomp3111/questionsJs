@@ -157,7 +157,7 @@
 											</div>
 										</div>
 										<div class="threadList">
-											<div ng-repeat="thread in threads">
+											<div ng-repeat="thread in threads | threadFilter:todo.$id">
 												<div class="thread nestIndent{{thread.level}}">
 													<div class="r-admintools" ng-show="!isAdmin">
 														<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true"></div> |
@@ -293,6 +293,7 @@
 <script src="js/filters/escapeHTML.js"></script>
 <script src="js/filters/addTagLinks.js"></script>
 <script src="js/filters/nl2br.js"></script>
+<script src="js/filters/threadFilter.js"></script>
 <script src="js/directives/compile.js"></script>
 <script src="js/controllers/todoCtrl.js"></script>
 <script src="js/controllers/threadCtrl.js"></script>
