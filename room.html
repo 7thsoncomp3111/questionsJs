@@ -157,7 +157,7 @@
 											</div>
 										</div>
 										<div class="threadList">
-											<div ng-repeat="thread in threads | threadFilter:todo.$id">
+											<div ng-repeat="thread in threads | threadFilter:todo.$id track by $index">
 												<div class="thread nestIndent{{thread.level}}">
 													<div class="r-admintools" ng-show="!isAdmin">
 														<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true"></div> |

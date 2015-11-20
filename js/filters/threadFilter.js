@@ -29,35 +29,36 @@ todomvc.filter('threadFilter', function () {
             return leaves;
         }
 
-        function getSiblings(sorted, start){
+        function getSiblings(sorted, buffer, start){
             angular.forEach(input, function(thread){
-                if(isLeaf(thread) && thread.prev == start.prev && sorted.indexOf(thread)==-1){
-                    console.log(thread);
-                    sorted.push(thread);
+                if(isLeaf(thread) && thread.prev == start.prev && thread != start && buffer.indexOf(thread)==-1){
+                    buffer.push(thread);
                 }
             });
-            return sorted;
+            return buffer;
         }
 
-        function getChildren(sorted, start, end){
+        function getChildren(sorted, buffer, start, end){
             if(start == null){
-                return sorted;
+                return sorted.concat(buffer.reverse());
             }
             // Prevent many-to-one
-            if(sorted.indexOf(start)==-1){
-                sorted.push(start);
-                sorted = getSiblings(sorted, start);
+            if(buffer.indexOf(start)==-1){
+                buffer.push(start);
+                buffer = getSiblings(sorted, buffer, start);
             }
-            return getChildren(sorted, input.$getRecord(start.prev), end);
+            return getChildren(sorted, buffer, input.$getRecord(start.prev), end);
         }
 
         function sortThreads(activeQuestionId){
             var leaves = returnLeaves();
             var sorted = [];
             angular.forEach(leaves, function(leaf){
-                sorted = getChildren(sorted, leaf, activeQuestionId);
+                if(sorted.indexOf(leaf)==-1){
+                    sorted = getChildren(sorted, [], leaf, activeQuestionId);
+                }
             });
-            return sorted.reverse();
+            return sorted;
         }
         if(!input || input.length == 0){return;}
         return sortThreads(activeQuestionId);
