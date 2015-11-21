@@ -73,6 +73,10 @@
 								<div emoji-form emoji-message="input">
 									<textarea type="text" id="new-todo" class="q-input rseparator" placeholder="| Ask A Question" id="two" ng-model="input.messagetext" autofocus></textarea>
 									<div class="btn" id="emojibtn"><i class="icon icon-emoji"></i></div>
+
+									<div ngf-drop="upload(picFile)" ngf-select="upload(picFile)" ng-model="picFile" class="drop-box" ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-allow-dir="true" accept="image/*" ngf-pattern="image/*"> </div>
+									<img ngf-src="picFile" ngf-resize="{width: 300, height: 300, quality: 0.9}">
+
 								</div>
 							</div>
 							<div class="col-xs-2 send-button" type="button" ng-click="addTodo()">
@@ -300,6 +304,10 @@
 <!-- angular-emoji-popup -->
 <script type="text/javascript" src="js/emoji/config.js"></script>
 <script type="text/javascript" src="js/emoji/emoji.min.js"></script>
+
+<!-- ng-file-upload -->
+<script src="js/lib/ng-file-upload-bower-10.0.2/ng-file-upload-shim.js"></script> <!-- for no html5 browsers support -->
+<script src="js/lib/ng-file-upload-bower-10.0.2/ng-file-upload.js"></script>
 
 </body>
 </html>

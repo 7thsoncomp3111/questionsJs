@@ -7,8 +7,8 @@
 * - exposes the model to the template and provides event handlers
 */
 todomvc.controller('TodoCtrl',
-['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window', '$compile', '$filter', '$uibModal',
-function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $compile, $filter, $uibModal) {
+['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window', '$compile', '$filter', '$uibModal', 'Upload', '$timeout',
+function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $compile, $filter, $uibModal, Upload, $timeout) {
 
 	// set local storage
 	$scope.$storage = $localStorage;
@@ -227,6 +227,35 @@ $scope.FBLogout = function () {
 	ref.unauth();
 	delete $scope.$authData;
 	$scope.isAdmin = false;
+};
+
+$scope.upload = function (file) {
+    Upload.upload({
+        url: 'http://comp3111images.s3.amazonaws.com/',
+        method:'POST',
+        data: {
+        	key: file.name, // the key to store the file on S3, could be file name or customized
+	        AWSAccessKeyId: 'AKIAIZEFM6CFYRMWAWTQ',
+	        acl: 'public-read', 
+	        policy:"ewogICJleHBpcmF0aW9uIjogIjIwMTUtMTItMTJUMDA6MDA6MDBaIiwKICAiY29uZGl0aW9ucyI6IFsKICAgIHsiYnVja2V0IjogImNvbXAzMTExaW1hZ2VzIn0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRrZXkiLCAiIl0sCiAgICB7ImFjbCI6ICJwdWJsaWMtcmVhZCJ9LAogICAgWyJzdGFydHMtd2l0aCIsICIkQ29udGVudC1UeXBlIiwgIiJdLAogICAgWyJzdGFydHMtd2l0aCIsICIkZmlsZW5hbWUiLCAiIl0sCiAgICBbImNvbnRlbnQtbGVuZ3RoLXJhbmdlIiwgMCwgNTI0Mjg4MDAwXQogIF0KfQ==",
+	        signature:"ev/fTZ0MnlaGnv+YL5hPRw+gkdE=",
+	        "Content-Type": file.type != '' ? file.type : 'image/*', // content type of the file (NotEmpty)
+	        filename: file.name, // this is needed for Flash polyfill IE8-9
+	        file: file
+        },
+    }).then(function (response) {
+        $timeout(function () {
+        $scope.result = response.data;
+        console.log('Success ' + response.config.data.file.name + 'uploaded. Response: ' + response.data);
+      	});
+    }, function (response) {
+       if (response.status > 0) 
+       		$scope.errorMsg = response.status + ': ' + response.data;
+       	 	console.log('Error status: ' + response.status);
+    }, function (evt) {
+            $scope.progress = parseInt(100.0 * evt.loaded / evt.total);
+            console.log('progress: ' + $scope.progress + '% ' + evt.config.data.file.name);
+    });
 };
 
 $scope.increaseMax = function () {
