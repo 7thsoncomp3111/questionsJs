@@ -7,23 +7,10 @@
 * - exposes the model to the template and provides event handlers
 */
 todomvc.controller('ThreadCtrl',
-['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window','$compile', '$filter', '$uibModalInstance', 'questions', 'qindex',
-function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $compile, $filter, $uibModalInstance, questions, qindex) {
-    var splits = $location.path().trim().split("/");
-    var roomId = angular.lowercase(splits[1]);
-    if (!roomId || roomId.length === 0) {
-    	roomId = "all";
-    }
-
-    var firebaseURL = "https://resplendent-inferno-9346.firebaseio.com/room/";
-    var url = firebaseURL + roomId + "/threads/";
-    var echoRef = new Firebase(url);
-
-    var query = echoRef.orderByChild("order");
-    // Should we limit?
-    //.limitToFirst(1000);
-    $scope.threads = $firebaseArray(query);
-
+['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window','$compile', '$filter', 'threads', '$uibModalInstance', 'questions', 'qindex',
+function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $compile, $filter, threads, $uibModalInstance, questions, qindex) {
+    // Initialize threads
+    $scope.threads = threads;
     // Identify active question
     questions.forEach(function(q){
         if(q.$id == qindex){

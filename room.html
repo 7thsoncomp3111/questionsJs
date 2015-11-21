@@ -61,6 +61,20 @@
 							<div class="btn btn-sm btn-default" ng-click="setOrderpref('-upvotePercent')">Rating</div>
 						</div>
 					</div>
+					<div class="section" ng-show="!isAdmin">
+						<p class="title center">Room Stats (debug version)</p>
+						<p>Total threads: <b>{{threads.length}}</b></p>
+						<table class="table table-hover">
+							<tr>
+								<th>Question</th>
+								<th>No. of threads</th>
+							</tr>
+							<tr ng-repeat="todo in todos">
+								<td><a ng-click="open(todo.$id)">[+]</a> {{todo.head | limitTo:10}}</td>
+								<td>{{getNumOfThreads(todo.$id)}}</td>
+							</tr>
+						</table>
+					</div>
 				</div>
 				<!-- Main -->
 				<div class="col-md-6">
@@ -89,7 +103,7 @@
 					</div>
 					<div id="todo-list">
 						<span class="section" ng-show="tagsearch&&(todos | tagFilter:tagsearchitems).length==0"><span class="glyphicon glyphicon-alert icon"></span> Sorry, none of the questions match the tag combination.</span>
-						<span class="section questionbody" ng-class="{qnew: todo.new, qalert: todo.headLastChar == '!', completed: todo.completed}" ng-repeat="todo in todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref">
+						<span class="section questionbody" ng-class="{qnew: todo.new, qalert: todo.headLastChar == '!', qreply: getNumOfThreads(todo.$id)>0 && todo.headLastChar != '!', completed: todo.completed}" ng-repeat="todo in todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref">
 							<div class="admintools" ng-show="!isAdmin">
 								<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true"></div> |
 								<div class="glyphicon glyphicon-minus-sign icon" aria-hidden="true" ng-click="todo.completed=!todo.completed"></div>
@@ -98,6 +112,7 @@
 							</div>
 							<div class="pull-left contentbox">
 								<div class="question-title">
+									<span class="reply-counter" ng-show="getNumOfThreads(todo.$id)"><span ng-show="getNumOfThreads(todo.$id)<10">&nbsp;</span><span ng-show="getNumOfThreads(todo.$id)<100">&nbsp;</span>{{getNumOfThreads(todo.$id)}}</span>
 									<span compile="todo.head | escapeHTML | addTagLinks | codeToSmiley"></span><span class="time" am-time-ago="todo.timestamp"></span>
 								</div>
 
@@ -157,7 +172,7 @@
 											</div>
 										</div>
 										<div class="threadList">
-											<div ng-repeat="thread in threads | threadFilter:todo.$id track by $index">
+											<div ng-repeat="thread in threads | threadFilter:todo.$id">
 												<div class="thread nestIndent{{thread.level}}">
 													<div class="r-admintools" ng-show="!isAdmin">
 														<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true"></div> |

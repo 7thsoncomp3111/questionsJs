@@ -32,19 +32,19 @@ var roomId = angular.lowercase(splits[1]);
 if (!roomId || roomId.length === 0) {
 	roomId = "all";
 }
-
-// TODO: Please change this URL for your app
-var firebaseURL = "https://resplendent-inferno-9346.firebaseio.com/room/";
-
 $scope.roomId = roomId;
-
-var url = firebaseURL + roomId + "/questions/";
-var echoRef = new Firebase(url);
-
+var firebaseURL = "https://resplendent-inferno-9346.firebaseio.com/room/";
+//Get questions
+var url_todos = firebaseURL + roomId + "/questions/";
+var echoRef = new Firebase(url_todos);
 var query = echoRef.orderByChild("order");
-// Should we limit?
-//.limitToFirst(1000);
 $scope.todos = $firebaseArray(query);
+
+//Get threads
+var url_threads = firebaseURL + roomId + "/threads/";
+echoRef = new Firebase(url_threads);
+query = echoRef.orderByChild("order");
+$scope.threads = $firebaseArray(query);
 
 $scope.input = {};
 
@@ -257,26 +257,53 @@ angular.element($window).bind("scroll", function() {
 	}
 });
 
-	// UI Modal
-	$scope.open = function (qindex) {
-		var modalInstance = $uibModal.open({
-		  animation: true,
-		  templateUrl: 'threadModal.html',
-		  controller: 'ThreadCtrl',
-		  size: '',
-		  resolve: {
-	        questions: function () {
-	          return $scope.todos;
-		  	},
-			qindex: function(){
-				return qindex
-			}
-	      }
-		});
-	};
+// UI Modal
+// resolve: pass variables to threadCtrl
+$scope.open = function (qindex) {
+	var modalInstance = $uibModal.open({
+	  animation: true,
+	  templateUrl: 'threadModal.html',
+	  controller: 'ThreadCtrl',
+	  size: '',
+	  resolve: {
+        questions: function () {
+          return $scope.todos;
+	  	},
+		qindex: function(){
+			return qindex
+		},
+		threads: function(){
+			return $scope.threads;
+		}
+      }
+	});
+};
 
-	$scope.toggleAnimation = function () {
-		$scope.animationsEnabled = !$scope.animationsEnabled;
-	};
+$scope.toggleAnimation = function () {
+	$scope.animationsEnabled = !$scope.animationsEnabled;
+};
+
+$scope.getNumOfThreads = function(qindex){
+	function isLeaf(idx){
+		var result = 1;
+		$scope.threads.forEach(function(thread){
+			if(thread.prev == idx){
+				result = 0;
+			}
+		});
+		return result;
+	}
+	function matchNum(target){
+		var counter = 0;
+		$scope.threads.forEach(function(thread){
+			if(thread.prev == target){
+				counter++;
+				counter+=matchNum(thread.$id);
+			}
+		});
+		return counter;
+	}
+	return matchNum(qindex);
+}
 
 }]);

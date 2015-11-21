@@ -3,8 +3,16 @@
 
 /**
 * The threadFilter
-* Inserts threads properly
+* Inserts threads in bottom-sibling-up order.
+* First start with init-leaves, find their respective children nodes.
+* For each children, move up one node and find its siblings (see Sibling Rule), until reaching root.
+* Siblings are sorted by timestamp and are also leaves, so that precedence of [sibling>ini-leaves] is maintained.
 *
+*
+* Sibling Rule
+* 1. Is a leaf
+* 2. Same immediate parent
+* 3. Not included before
 */
 todomvc.filter('threadFilter', function () {
     return function (input, activeQuestionId) {
@@ -30,37 +38,60 @@ todomvc.filter('threadFilter', function () {
         }
 
         function getSiblings(sorted, buffer, start){
+            var bufferSib = [];
+            bufferSib.push(buffer.pop()); // Needed for comparison
             angular.forEach(input, function(thread){
                 if(isLeaf(thread) && thread.prev == start.prev && thread != start && buffer.indexOf(thread)==-1){
-                    buffer.push(thread);
+                    bufferSib.push(thread);
                 }
             });
-            return buffer;
+            // Sort siblings by timestamp
+            if(bufferSib.length>1){
+                bufferSib.sort(function(a,b){
+                    return a.timestamp > b.timestamp;
+                });
+            }
+            return buffer.concat(bufferSib);
         }
 
-        function getChildren(sorted, buffer, start, end){
+        function getChildren(sorted, buffer, start){
+            // Condition: Reached root, i.e. start.prev=null && start.$id=activeQUestion
+            // Operation: Start pushing buffer to sorted
             if(start == null){
-                return sorted.concat(buffer.reverse());
+                // Condition: root does not match activeQuestion
+                // Operation: Dump buffer
+                if(buffer[buffer.length-1].prev != activeQuestionId){
+                    return sorted;
+                }
+                buffer = buffer.reverse();
+                buffer.forEach(function(b){
+                    // Prevent duplicates
+                    if(sorted.indexOf(b)==-1){
+                        sorted.push(b);
+                    }
+                });
+                return sorted;
             }
-            // Prevent many-to-one
+            // Prevent many-to-one duplications
             if(buffer.indexOf(start)==-1){
                 buffer.push(start);
                 buffer = getSiblings(sorted, buffer, start);
             }
-            return getChildren(sorted, buffer, input.$getRecord(start.prev), end);
+            return getChildren(sorted, buffer, input.$getRecord(start.prev));
         }
 
-        function sortThreads(activeQuestionId){
+        function sortThreads(){
             var leaves = returnLeaves();
             var sorted = [];
             angular.forEach(leaves, function(leaf){
+                // Prevent additional loops
                 if(sorted.indexOf(leaf)==-1){
-                    sorted = getChildren(sorted, [], leaf, activeQuestionId);
+                    sorted = getChildren(sorted, [], leaf);
                 }
             });
             return sorted;
         }
         if(!input || input.length == 0){return;}
-        return sortThreads(activeQuestionId);
+        return sortThreads();
     };
 });
