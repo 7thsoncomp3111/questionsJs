@@ -4,15 +4,19 @@
 /**
 * The threadFilter
 * Inserts threads in bottom-sibling-up order.
-* First start with init-leaves, find their respective children nodes.
+*
+* First start with init-leaves (sorted from latest to oldest, see Sorting Rule), find their respective children nodes.
 * For each children, move up one node and find its siblings (see Sibling Rule), until reaching root.
-* Siblings are sorted by timestamp and are also leaves, so that precedence of [sibling>ini-leaves] is maintained.
+* Siblings are sorted by timestamp (oldest to latest) and are also leaves, so that precedence of [sibling>ini-leaves] is maintained.
 *
 *
 * Sibling Rule
 * 1. Is a leaf
 * 2. Same immediate parent
 * 3. Not included before
+*
+* Sorting Rule
+* Thread with latest subthread gets promoted
 */
 todomvc.filter('threadFilter', function () {
     return function (input, activeQuestionId) {
@@ -46,9 +50,9 @@ todomvc.filter('threadFilter', function () {
                 }
             });
             // Sort siblings by timestamp
-            if(bufferSib.length>1){
+            if(bufferSib.length>1 && bufferSib[bufferSib.length-1].prev==start.$id){
                 bufferSib.sort(function(a,b){
-                    return a.timestamp > b.timestamp;
+                    return a.timestamp < b.timestamp;
                 });
             }
             return buffer.concat(bufferSib);
@@ -81,7 +85,8 @@ todomvc.filter('threadFilter', function () {
         }
 
         function sortThreads(){
-            var leaves = returnLeaves();
+            // reverse(): Show latest leaves first
+            var leaves = returnLeaves().reverse();
             var sorted = [];
             angular.forEach(leaves, function(leaf){
                 // Prevent additional loops

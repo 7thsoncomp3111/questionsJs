@@ -55,23 +55,29 @@
 					<div class="section">
 						<p class="title center">Settings</p>
 						<div class="btn-group">
-							<div class="btn btn-sm btn-default" ng-click="setOrderpref('head')">Title</div>
-							<div class="btn btn-sm btn-default disabled" ng-click="setOrderpref('activity')">Activity</div>
-							<div class="btn btn-sm btn-default active" ng-click="setOrderpref('-timestamp')">Date</div>
-							<div class="btn btn-sm btn-default" ng-click="setOrderpref('-upvotePercent')">Rating</div>
+							<div class="btn btn-sm btn-default" ng-class="{active: orderpref=='head'}" ng-click="setOrderpref('head')">Title</div>
+							<div class="btn btn-sm btn-default" ng-class="{active: orderpref=='-activity'||orderpref==null}" ng-click="setOrderpref('-activity')">Activity</div>
+							<div class="btn btn-sm btn-default" ng-class="{active: orderpref=='-timestamp'}" ng-click="setOrderpref('-timestamp')">Date</div>
+							<div class="btn btn-sm btn-default" ng-class="{active: orderpref=='-upvotePercent'}" ng-click="setOrderpref('-upvotePercent')">Rating</div>
 						</div>
 					</div>
 					<div class="section" ng-show="!isAdmin">
 						<p class="title center">Room Stats (debug version)</p>
 						<p>Total threads: <b>{{threads.length}}</b></p>
-						<table class="table table-hover">
+						<table class="table table-condensed table-hover" style="font-size:0.8em">
 							<tr>
 								<th>Question</th>
-								<th>No. of threads</th>
+								<th>Threads</th>
+								<th>Views</th>
+								<th>Votes</th>
+								<th>Activity</th>
 							</tr>
 							<tr ng-repeat="todo in todos">
 								<td><a ng-click="open(todo.$id)">[+]</a> {{todo.head | limitTo:10}}</td>
 								<td>{{getNumOfThreads(todo.$id)}}</td>
+								<td>{{todo.views}}</td>
+								<td>{{todo.upvote+todo.downvote}}</td>
+								<td>{{todo.activity}}</td>
 							</tr>
 						</table>
 					</div>
@@ -120,7 +126,7 @@
 									<div compile="(todo.linkedDesc || '') | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
 								</div>
 								<div ng-show="todo.tags.length"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
-								<div class="replyexpand" ng-click="open(todo.$id)">
+								<div class="replyexpand" ng-click="open(todo.$id);addViews(todo)">
 									<div class="glyphicon glyphicon-triangle-bottom icon"></div>
 								</div>
 							</div>
@@ -181,7 +187,7 @@
 														<div class="glyphicon glyphicon-trash icon" aria-hidden="true" ng-click="removeThread(thread)"></div>
 													</div>
 													<div class="col-xs-1 profile">
-														<img src="http://placehold.it/50x50"><br/>
+														<img src="https://robohash.org/{{thread.author}}?size=50x50"><br/>
 														{{thread.author}}
 													</div>
 													<div class="col-xs-10">

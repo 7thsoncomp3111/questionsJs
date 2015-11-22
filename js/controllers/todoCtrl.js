@@ -48,6 +48,29 @@ $scope.threads = $firebaseArray(query);
 
 $scope.input = {};
 
+$scope.getNumOfThreads = function(qindex){
+	function isLeaf(idx){
+		var result = 1;
+		$scope.threads.forEach(function(thread){
+			if(thread.prev == idx){
+				result = 0;
+			}
+		});
+		return result;
+	}
+	function matchNum(target){
+		var counter = 0;
+		$scope.threads.forEach(function(thread){
+			if(thread.prev == target){
+				counter++;
+				counter+=matchNum(thread.$id);
+			}
+		});
+		return counter;
+	}
+	return matchNum(qindex);
+}
+
 // pre-precessing for collection
 $scope.$watchCollection('todos', function () {
 
@@ -80,6 +103,10 @@ $scope.$watchCollection('todos', function () {
 		} else {
 			todo.tags = [];
 		}
+
+		// set activity
+		// Activity = views*multiplier + votes*multiplier + replies*multiplier
+		todo.activity = todo.views+votes+$scope.getNumOfThreads(todo.$id);
 	});
 
 	//map tag names and freq to verbose
@@ -140,6 +167,7 @@ $scope.addTodo = function () {
 		tags: "...",
 		upvote: 0,
 		downvote: 0,
+		views: 0,
 		order: 0
 	});
 
@@ -174,7 +202,14 @@ $scope.addDownvote = function (todo) {
 	$scope.$storage[todo.$id] = true;
 };
 
-//$scope.orderpref = '-timestamp';
+$scope.addViews = function(todo){
+	todo.views++;
+	// Hack to order using this order.
+	todo.order = todo.order -1;
+	$scope.todos.$save(todo);
+}
+
+// Note: Set Default order in questionFilter
 $scope.setOrderpref = function (pref){
 	$scope.orderpref = pref;
 }
@@ -282,28 +317,5 @@ $scope.open = function (qindex) {
 $scope.toggleAnimation = function () {
 	$scope.animationsEnabled = !$scope.animationsEnabled;
 };
-
-$scope.getNumOfThreads = function(qindex){
-	function isLeaf(idx){
-		var result = 1;
-		$scope.threads.forEach(function(thread){
-			if(thread.prev == idx){
-				result = 0;
-			}
-		});
-		return result;
-	}
-	function matchNum(target){
-		var counter = 0;
-		$scope.threads.forEach(function(thread){
-			if(thread.prev == target){
-				counter++;
-				counter+=matchNum(thread.$id);
-			}
-		});
-		return counter;
-	}
-	return matchNum(qindex);
-}
 
 }]);
