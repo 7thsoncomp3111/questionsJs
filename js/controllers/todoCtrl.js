@@ -7,8 +7,8 @@
 * - exposes the model to the template and provides event handlers
 */
 todomvc.controller('TodoCtrl',
-['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window', '$compile', '$filter', '$uibModal',
-function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $compile, $filter, $uibModal) {
+['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window', '$compile', '$filter', '$uibModal','Upload', '$timeout',
+function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $compile, $filter, $uibModal, Upload, $timeout) {
 
 	// set local storage
 	$scope.$storage = $localStorage;
@@ -142,7 +142,23 @@ $scope.getFirstAndRestSentence = function($string) {
 	return [head, desc];
 };
 
-$scope.addTodo = function () {
+$scope.checkImageExist = function(todo){
+
+	if(todo.image == null){
+		return false;
+	} else {
+		return true;
+	}
+
+}
+
+$scope.addTodo2 = function(todo){
+	var imageLink = "https://s3-ap-southeast-1.amazonaws.com/comp3111images/" + fileNameforUpload;
+	todo.image = imageLink;
+		$scope.todos.$add(todo);
+}
+
+$scope.addTodo = function (file) {
 
 	var newTodo = $scope.input.messagetext.trim();
 	newTodo = $filter('colonToCode')(newTodo);
@@ -156,7 +172,7 @@ $scope.addTodo = function () {
 	var head = firstAndLast[0];
 	var desc = firstAndLast[1];
 
-	$scope.todos.$add({
+	var newtodo = {
 		wholeMsg: newTodo,
 		head: head,
 		headLastChar: head.slice(-1),
@@ -169,7 +185,14 @@ $scope.addTodo = function () {
 		downvote: 0,
 		views: 0,
 		order: 0
-	});
+	};
+
+	if(file!=null){
+		$scope.upload1(file,newtodo);
+	}
+	else{
+		$scope.todos.$add(newtodo);
+	}
 
 	// remove the posted question in the input
 	$(".q-input").empty();
@@ -263,6 +286,70 @@ $scope.FBLogout = function () {
 	delete $scope.$authData;
 	$scope.isAdmin = false;
 };
+
+var isUploadValue = false;
+var fileNameforUpload = "";
+
+$scope.upload1 = function (file,todo) {
+	isUploadValue = true ;
+	$scope.checkValidKeyName(file.name,file,todo);
+
+};
+
+$scope.upload2 = function(file,todo) {
+    Upload.upload({
+        url: 'http://comp3111images.s3.amazonaws.com/',
+        method:'POST',
+        data: {
+        	key: fileNameforUpload,
+	        AWSAccessKeyId: 'AKIAIZEFM6CFYRMWAWTQ',
+	        acl: 'public-read',
+	        policy:"ewogICJleHBpcmF0aW9uIjogIjIwMTUtMTItMTJUMDA6MDA6MDBaIiwKICAiY29uZGl0aW9ucyI6IFsKICAgIHsiYnVja2V0IjogImNvbXAzMTExaW1hZ2VzIn0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRrZXkiLCAiIl0sCiAgICB7ImFjbCI6ICJwdWJsaWMtcmVhZCJ9LAogICAgWyJzdGFydHMtd2l0aCIsICIkQ29udGVudC1UeXBlIiwgIiJdLAogICAgWyJzdGFydHMtd2l0aCIsICIkZmlsZW5hbWUiLCAiIl0sCiAgICBbImNvbnRlbnQtbGVuZ3RoLXJhbmdlIiwgMCwgNTI0Mjg4MDAwXQogIF0KfQ==",
+	        signature:"ev/fTZ0MnlaGnv+YL5hPRw+gkdE=",
+	        "Content-Type": file.type != '' ? file.type : 'image/*', // content type of the file (NotEmpty)
+	        filename: file.name, // this is needed for Flash polyfill IE8-9
+	        file: file
+        },
+    }).then(function (response) {
+        $timeout(function () {
+        $scope.result = response.data;
+        console.log('Success ' + response.config.data.file.name + 'uploaded. Response: ' + response.data);
+        $scope.addTodo2(todo);
+        $scope.picFile = null;
+        isUploadValue = false;
+      	});
+    }, function (response) {
+       if (response.status > 0)
+       		$scope.errorMsg = response.status + ': ' + response.data;
+       	 	console.log('Error status: ' + response.status);
+    }, function (evt) {
+            $scope.progress = parseInt(100.0 * evt.loaded / evt.total);
+            console.log('progress: ' + $scope.progress + '% ' + evt.config.data.file.name);
+    });
+}
+
+$scope.checkValidKeyName = function (name,file,todo) {
+	AWS.config.update({
+	    accessKeyId: "AKIAIZEFM6CFYRMWAWTQ",
+	    secretAccessKey: "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",
+	});
+
+	var s3 = new AWS.S3();
+	var params = {
+		Bucket: 'comp3111images',
+		Key: name
+	};
+
+	fileNameforUpload = name;
+	s3.getObject(params, function(err, data) {
+  		if (err) {
+     		$scope.upload2(file,todo);
+		} else {
+			var newName = "1-" + name;
+    		$scope.checkValidKeyName(newName,file,todo);
+  		}
+	});
+}
 
 $scope.increaseMax = function () {
 	if ($scope.maxQuestion < $scope.totalCount) {

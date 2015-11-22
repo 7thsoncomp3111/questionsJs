@@ -8,6 +8,6 @@
 }
 #emojibtn{
     position: absolute;
-    bottom: 0;
-    right: 0;
+    top: 1px;
+    right: -10px;
 }

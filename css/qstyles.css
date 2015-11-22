@@ -559,3 +559,32 @@ input:focus{
 .thread.nestIndent2{
     margin-left: 20%;
 }
+
+.drop-box {
+    background: #F8F8F8;
+    border: 5px dashed #DDD;
+    /*width: 100%;*/
+    height: 100px;
+    text-align: center;
+    padding-top: 25px;
+    margin: 10px;
+    z-index:50 !important;
+}
+
+textarea #new-todo {
+    width:100%;
+}
+
+.ng-isolate-scope{
+    width:100%;
+}
+
+.ng-isolate-scope::before{
+    box-sizing: content-box;
+}
+
+.imgPreview{
+    width:100%;
+    margin-top:10px;
+    z-index:1 !important;
+}
