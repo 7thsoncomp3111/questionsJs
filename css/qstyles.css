@@ -196,13 +196,13 @@ Ref: http://stackoverflow.com/questions/19432787/bootstrap-3-0-0-adding-extra-sp
 }
 
 .section.questionbody.qnew:before{
-    border-top: solid 15px #c3d5db;
+    border-top: solid 17px #c3d5db;
     border-left: solid 15px #c3d5db;
 }
 
 .section.questionbody.qalert:before{
-    border-top: solid 15px #ff8a74;
-    border-left: solid 15px #ff8a74;
+    border-top: solid 17px #ff8a74;
+    border-left: solid 17px #ff8a74;
 }
 
 .section.questionbody.qreply:before{
@@ -226,15 +226,11 @@ input:focus{
     box-shadow: none;
     font-size: 2em;
     color: #999;
-    width: 97%
+    width: 95%;
 }
 
 .q-input:focus{
     background-color: #e7e7e7;
-}
-
-.rseparator{
-    /*border-right: 2px solid #999;*/
 }
 
 .r-input{
@@ -254,13 +250,12 @@ input:focus{
 }
 
 .send-button{
-    height: 45px;
+    height: 40px;
     cursor:pointer;
 }
 
 .send-button:hover{
-  /*background-color: #e7e7e7;*/
-  border-left: 2px solid #999;
+  background-color: #e7e7e7;
 }
 
 .send-button:hover .icon {

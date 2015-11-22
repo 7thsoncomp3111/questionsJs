@@ -91,7 +91,7 @@
 								<!-- <input class="q-input" placeholder="| Enter Title" id="one"> -->
 								<!-- <div class="icon icon-inputbox"><i class="glyphicon glyphicon-search"></i></div> -->
 								<div emoji-form emoji-message="input">
-									<textarea type="text" id="new-todo" class="q-input rseparator" placeholder="Ask A Question" id="two" ng-model="input.messagetext" autofocus></textarea>
+									<textarea type="text" id="new-todo" class="q-input" placeholder="Ask A Question" id="two" ng-model="input.messagetext" autofocus></textarea>
 									<div class="btn" id="emojibtn"><i class="icon icon-emoji"></i></div>
 								</div>
 							</div>
@@ -102,9 +102,9 @@
 						<div class="row">
 							<div class="col-xs-12">
 								<img class="imgPreview" ngf-src="picFile" ngf-resize="{height: 300, quality: 1}">
-								<div ngf-drop ngf-select ng-model="picFile" class="drop-box" ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-allow-dir="true" accept="image/*" ngf-pattern="image/*" ngf-hide-on-drop-not-available="false"> 
+								<div ngf-drop ngf-select ng-model="picFile" class="drop-box" ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-allow-dir="true" accept="image/*" ngf-pattern="image/*" ngf-hide-on-drop-not-available="false">
 									<div style="margin:auto; padding-top:10px; color:#999;">Click to add picture / drag your picture here</div>
-								</div>		
+								</div>
 							</div>
 						</div>
 					</div>
