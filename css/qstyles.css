@@ -671,3 +671,39 @@ textarea #new-todo {
     margin-left: 0;
     font-weight: normal;
 }
+
+.subscribe-menu{
+    position: absolute;
+    top: 0;
+    right: 68px;
+    background-color: #eee;
+    padding: 5px;
+}
+
+.subscribe-btn{
+    background-image: none;
+    border: none;
+    background-color: #f0ad4c;
+    padding: 2px 5px;
+    border-radius: 0;
+    color: #fff;
+}
+
+.subscribe-btn:hover{
+    color: #fff;
+    background-color: #eb9316;
+}
+
+.unsubscribe-btn{
+    background-image: none;
+    border: none;
+    background-color: #aaa;
+    padding: 2px 5px;
+    border-radius: 0;
+    color: #fff;
+}
+
+.unsubscribe-btn:hover{
+    color: #fff;
+    background-color: #666;
+}

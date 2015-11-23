@@ -435,4 +435,12 @@ $scope.toggleAnimation = function () {
 	$scope.animationsEnabled = !$scope.animationsEnabled;
 };
 
+$scope.subscribeAction = function(){
+
+}
+
+$scope.unsubsctibeAction = function(){
+
+}
+
 }]);

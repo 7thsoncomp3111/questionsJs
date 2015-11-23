@@ -163,6 +163,11 @@
 							<div class="updownvote glyphicon glyphicon-triangle-bottom" ng-click="addDownvote(todo)" ng-disabled="$storage[todo.$id]"></div>
 						</div>
 
+						<div class="subscribe-menu pull-right">
+							<span class="btn btn-sm subscribe-btn" ng-click="subscribeAction">Subscribe</span>
+							<span class="btn btn-sm unsubscribe-btn" ng-click="unsubscribeAction">Unsubscribe</span>
+						</div>
+
 						<!-- vote bar -->
 						<div class="progress">
 						  <div class="progress-bar progress-bar-success" style="width: {{todo.upvotePercent}}%">
