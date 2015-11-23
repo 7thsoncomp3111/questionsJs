@@ -566,6 +566,30 @@ describe('TodoCtrl', function() {
         expect(scope.subscribeAction(qid)).toEqual(2);
       });
 
+      it('test unsubscribeAction already subscribed', function() {
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+        scope.subscriptions = [
+          {
+            email:"7thsoncomp3111@gmail.com",
+            id: "-K3p9_Qo5uSu7Anm02Hn"
+          },
+          {
+            email:"bahikiv@vkcode.ru",
+            id: "-K3p9_Qo5uSu7Anm02Hn"
+          },
+          {
+            email:"rowijaya@ust.hk",
+            id: "-K3pF3IrMR68R-CRyle2"
+          }
+        ]
+        var email = '7thsoncomp3111@gmail.com';
+        var qid = '-K3p9_Qo5uSu7Anm02Hn';
+        scope.unsubscribeAction(qid);
+        expect(scope.getNumSubscription('-K3p9_Qo5uSu7Anm02Hn')).toEqual(2);
+      });
+
       it('test addTodo2', function(){
         var ctrl = controller('TodoCtrl',{
           $scope: scope
