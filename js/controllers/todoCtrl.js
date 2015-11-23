@@ -305,7 +305,7 @@ $scope.removeTodo = function (todo) {
 	$scope.todos.$remove(todo);
 };
 
-$scope.FBLogin = function () {
+/*$scope.FBLogin = function () {
 	var ref = new Firebase(firebaseURL);
 	ref.authWithOAuthPopup("facebook", function(error, authData) {
 		if (error) {
@@ -318,7 +318,7 @@ $scope.FBLogin = function () {
 			console.log("Authenticated successfully with payload:", authData);
 		}
 	});
-};
+};*/
 
 $scope.FBLogout = function () {
 	var ref = new Firebase(firebaseURL);
