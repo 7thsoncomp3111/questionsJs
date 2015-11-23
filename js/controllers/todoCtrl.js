@@ -33,6 +33,8 @@ if (!roomId || roomId.length === 0) {
 	roomId = "all";
 }
 $scope.roomId = roomId;
+$scope.nickname = 'anonymous';
+$scope.secret = null;
 
 $scope.copyRoomUrl = function() {
 	prompt('Copy the room URL:', $location.absUrl());
@@ -51,7 +53,7 @@ echoRef = new Firebase(url_threads);
 query = echoRef.orderByKey();
 $scope.threads = $firebaseArray(query);
 
-// Get threads
+// Get subscription
 var url_subscription = firebaseURL + "/subscription/";
 echoRef = new Firebase(url_subscription);
 query = echoRef.orderByKey();
@@ -329,7 +331,6 @@ var fileNameforUpload = "";
 $scope.upload1 = function (file,todo) {
 	isUploadValue = true ;
 	$scope.checkValidKeyName(file.name,file,todo);
-
 };
 
 $scope.upload2 = function(file,todo) {
@@ -418,6 +419,10 @@ angular.element($window).bind("scroll", function() {
 // UI Modal
 // resolve: pass variables to threadCtrl
 $scope.open = function (qindex) {
+	if(!$scope.validateAdmin()&&$scope.nickname=='admin'){
+		alert('Please change your nickname to proceed.');
+		return;
+	}
 	var modalInstance = $uibModal.open({
 	  animation: true,
 	  templateUrl: 'threadModal.html',
@@ -432,6 +437,9 @@ $scope.open = function (qindex) {
 		},
 		threads: function(){
 			return $scope.threads;
+		},
+		nickname: function(){
+			return $scope.nickname;
 		}
       }
 	});
@@ -496,6 +504,17 @@ $scope.unsubscribeAction = function(qid){
 			alert("Invalid subscribed email. Please first subscribe to this question with your email.");
 		}
 	}
+}
+
+$scope.validateAdmin = function(){
+	var result = false;
+	var url_admin = firebaseURL + "/admin/";
+	echoRef = new Firebase(url_admin);
+	echoRef.on("value", function(snap){
+		result = snap.val()==$scope.secret;
+	});
+	$scope.isAdmin = result;
+	return result;
 }
 
 }]);

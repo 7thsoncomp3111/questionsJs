@@ -455,7 +455,7 @@ input:focus{
     width: 100%;
     border-radius: 0;
     margin-left: -15px;
-    top: -2px;
+    top: -3px;
     height: 5px;
 }
 
@@ -677,16 +677,17 @@ textarea #new-todo {
     top: 0;
     right: 68px;
     background-color: #eee;
-    padding: 3px;
+    padding-top: 0;
 }
 
 .subscribe-btn{
     background-image: none;
     border: none;
     background-color: #f0ad4c;
-    padding: 2px 5px;
+    padding: 1px 5px;
     border-radius: 0;
     color: #fff;
+    font-size: 0.85em;
 }
 
 .subscribe-btn:hover{
@@ -698,9 +699,10 @@ textarea #new-todo {
     background-image: none;
     border: none;
     background-color: #aaa;
-    padding: 2px 5px;
+    padding: 1px 5px;
     border-radius: 0;
     color: #fff;
+    font-size: 0.85em;
 }
 
 .unsubscribe-btn:hover{

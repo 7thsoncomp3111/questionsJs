@@ -7,8 +7,8 @@
 * - exposes the model to the template and provides event handlers
 */
 todomvc.controller('ThreadCtrl',
-['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window','$compile', '$filter', 'threads', '$uibModalInstance', 'questions', 'qindex',
-function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $compile, $filter, threads, $uibModalInstance, questions, qindex) {
+['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window','$compile', '$filter', 'threads', '$uibModalInstance', 'questions', 'qindex', 'nickname',
+function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $compile, $filter, threads, $uibModalInstance, questions, qindex, nickname) {
     // Initialize threads
     $scope.threads = threads;
     // Identify active question
@@ -87,7 +87,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $comp
     		timestamp: new Date().getTime(),
     		upvote: 0,
     		downvote: 0,
-            author: 'anonymous',
+            author: nickname,
             prev: activeQuestion
     	});
 

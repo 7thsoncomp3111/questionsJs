@@ -38,6 +38,19 @@
 		<div>
 			<div class="row">
 				<div class="col-md-3">
+					<!-- Nickname -->
+					<div class="section" style="text-align:center">
+						<p class="title center">Nickname</p>
+						<div>
+				            <input type="text" class="form-control input-sm ng-pristine ng-valid ng-valid-maxlength ng-touched" maxlength="64" placeholder="Your nickname" ng-model="nickname">
+						</div>
+						<div ng-show="nickname=='admin'">
+							<p class="title center">Authentication</p>
+							<input type="password" class="form-control input-sm ng-pristine ng-valid ng-valid-maxlength ng-touched" maxlength="64" placeholder="SECRET" ng-model="secret">
+							<div class="alert-danger" ng-show="!validateAdmin()&&secret!=null"><span class="glyphicon glyphicon-cross"></span>Invalid Credentials</div>
+							<div class="alert-success" ng-show="validateAdmin()"><span class="glyphicon glyphicon-tick"></span>Valid Credentials</div>
+						</div>
+					</div>
 
 					<!-- Sort -->
 					<div class="section" style="text-align:center">
@@ -51,10 +64,10 @@
 					</div>
 
 					<!-- Statistics -->
-					<div class="section" ng-show="!isAdmin">
+					<div class="section" ng-show="isAdmin">
 						<p class="title center">Statistics</p>
 						<p>Total threads: <b>{{threads.length}}</b></p>
-						<table class="table table-condensed table-hover" style="font-size:0.8em">
+						<table class="table table-condensed table-hover" style="font-size:0.7em">
 							<tr>
 								<th>Question</th>
 								<th>Threads</th>
@@ -111,7 +124,7 @@
 					<div class="section" ng-show="textSearch">
 						<p class="title">Search</p>
 						<div class="pull-right glyphicon glyphicon-remove icon" ng-click="textSearch=false"></div>
-						<div id="tagsearchbar">
+						<div>
 				            <input type="text" class="form-control input-sm ng-pristine ng-valid ng-valid-maxlength ng-touched" maxlength="64" placeholder="Search here" ng-model="input.searchText">
 						</div>
 					</div>
@@ -131,7 +144,7 @@
 					<!-- Question List -->
 					<div class="section questionbody" ng-class="{qnew: todo.new&&!todo.completed, qalert: todo.headLastChar == '!'&&!todo.completed, qreply: todo.threadNum>0 && todo.headLastChar != '!' && !todo.completed, completed: todo.completed, pinned: todo.pinned}" ng-repeat="todo in filteredtodos = (todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref | orderBy:'-pinned' | filter: input.searchText)">
 
-						<div class="admintools" ng-show="!isAdmin">
+						<div class="admintools" ng-show="isAdmin">
 							<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true" ng-click="pinPost(todo)"></div> |
 							<div class="glyphicon glyphicon-minus-sign icon" aria-hidden="true" ng-click="lockPost(todo)"></div>
 							<div class="glyphicon glyphicon-trash icon" aria-hidden="true" ng-click="removeTodo(todo)"></div>
@@ -244,14 +257,14 @@
 				</div>
 			</form>
 			<div class="row">
-				<div class="pull-right" ng-show="!isAdmin">
+				<div class="pull-right" ng-show="isAdmin">
 					<span class="btn btn-sm btn-danger" ng-click="removeAllThreads()">Clear All Replies</span>
 				</div>
 			</div>
 			<div class="threadList">
 				<div ng-repeat="thread in threads | threadFilter:todo.$id">
 					<div class="thread nestIndent{{thread.level}}">
-						<div class="r-admintools" ng-show="!isAdmin">
+						<div class="r-admintools" ng-show="isAdmin">
 							<div class="glyphicon glyphicon-trash icon" aria-hidden="true" ng-click="removeThread(thread)"></div>
 						</div>
 						<div class="col-xs-1 profile">
