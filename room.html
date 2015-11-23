@@ -140,7 +140,7 @@
 						<div class="pull-left contentbox">
 
 							<div class="question-title">
-								<span class="reply-counter" ng-show="todo.threadNum"><span ng-show="todo.threadNum<10">&nbsp;</span><span ng-show="todo.threadNum<100">&nbsp;</span>{{todo.threadNum}}</span>
+								<span class="reply-counter" ng-show="todo.threadNum && !todo.completed"><span ng-show="todo.threadNum<10">&nbsp;</span><span ng-show="todo.threadNum<100">&nbsp;</span>{{todo.threadNum}}</span>
 								<span compile="todo.head | escapeHTML | addTagLinks | codeToSmiley"></span><span class="time" am-time-ago="todo.timestamp"></span>
 							</div>
 
@@ -164,8 +164,8 @@
 						</div>
 
 						<div class="subscribe-menu pull-right">
-							<span class="btn btn-sm subscribe-btn" ng-click="subscribeAction">Subscribe</span>
-							<span class="btn btn-sm unsubscribe-btn" ng-click="unsubscribeAction">Unsubscribe</span>
+							<span class="btn btn-sm subscribe-btn" ng-click="subscribeAction(todo.$id)">Subscribe</span>
+							<span class="btn btn-sm unsubscribe-btn" ng-click="unsubscribeAction(todo.$id)">Unsubscribe</span>
 						</div>
 
 						<!-- vote bar -->

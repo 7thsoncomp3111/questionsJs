@@ -38,18 +38,24 @@ $scope.copyRoomUrl = function() {
 	prompt('Copy the room URL:', $location.absUrl());
 }
 
-var firebaseURL = "https://resplendent-inferno-9346.firebaseio.com/room/";
+var firebaseURL = "https://resplendent-inferno-9346.firebaseio.com";
 //Get questions
-var url_todos = firebaseURL + roomId + "/questions/";
+var url_todos = firebaseURL + '/room/' + roomId + "/questions/";
 var echoRef = new Firebase(url_todos);
 var query = echoRef.orderByChild("order");
 $scope.todos = $firebaseArray(query);
 
 // Get threads
-var url_threads = firebaseURL + roomId + "/threads/";
+var url_threads = firebaseURL + '/room/' + roomId + "/threads/";
 echoRef = new Firebase(url_threads);
 query = echoRef.orderByKey();
 $scope.threads = $firebaseArray(query);
+
+// Get threads
+var url_subscription = firebaseURL + "/subscription/";
+echoRef = new Firebase(url_subscription);
+query = echoRef.orderByKey();
+$scope.subscriptions = $firebaseArray(query);
 
 $scope.input = {};
 $scope.textSearch = false;
@@ -435,12 +441,51 @@ $scope.toggleAnimation = function () {
 	$scope.animationsEnabled = !$scope.animationsEnabled;
 };
 
-$scope.subscribeAction = function(){
-
+function checkExistSubscription(e,q){
+	var exist = false
+	$scope.subscriptions.forEach(function(subscription){
+		if(subscription.email == e && subscription.id == q){
+			exist = true;
+		}
+	});
+	return exist;
 }
 
-$scope.unsubsctibeAction = function(){
+$scope.subscribeAction = function(qid){
+	var email = prompt("Please enter your email to [subscribe]", "@ust.hk");
+    if (email != null) {
+		if(!checkExistSubscription(email,qid)){
+			// Add email to Firebase
+			var newsubscription = {
+				email: email,
+				id: qid
+			}
+			$scope.subscriptions.$add(newsubscription);
+			$scope.subscriptions.$save(newsubscription);
+			alert("You have successfully subscribed to this question.");
+		}
+		else{
+			alert("You have already subscribed this question with the same email. Please try again.");
+		}
+    }
+}
 
+$scope.unsubscribeAction = function(qid){
+	var email = prompt("Please enter your email to [unsubscribe]","");
+	if(email != null){
+		if(checkExistSubscription(email,qid)){
+			// Remove email from Firebase
+			$scope.subscriptions.forEach(function(subscription){
+				if(subscription.email == email && subscription.id == qid){
+					$scope.subscriptions.$remove(subscription);
+				}
+			});
+			alert("You have successfully unsubscribed from this question.");
+		}
+		else{
+			alert("Invalid subscribed email. Please first subscribe to this question with your email.");
+		}
+	}
 }
 
 }]);
