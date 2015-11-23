@@ -85,6 +85,14 @@ $scope.$watchCollection('todos', function () {
 		} else {
 			todo.tags = [];
 		}
+
+		// initialize activity & threadNum
+		if(todo.activity == null){
+			todo.activity = 0;
+		}
+		if(todo.threadNum == null){
+			todo.threadNum = 0;
+		}
 	});
 
 	//map tag names and freq to verbose
@@ -114,7 +122,7 @@ $scope.$watchCollection('threads', function () {
 	$scope.todos.forEach(function (todo) {
 		//set threadnum
 		todo.threadNum = getNumOfThreads(todo.$id);
-		todo.activity = todo.views+(todo.upvote+todo.downvote)*1.5+todo.threadNum*2;
+		todo.activity = todo.views*0.5+(todo.upvote+todo.downvote)*1.5+todo.threadNum*2;
 	});
 }, true);
 
@@ -154,7 +162,7 @@ $scope.checkImageExist = function(todo){
 $scope.addTodo2 = function(todo){
 	var imageLink = "https://s3-ap-southeast-1.amazonaws.com/comp3111images/" + fileNameforUpload;
 	todo.image = imageLink;
-		$scope.todos.$add(todo);
+	$scope.todos.$add(todo);
 }
 
 $scope.addTodo = function (file) {
@@ -178,6 +186,7 @@ $scope.addTodo = function (file) {
 		desc: desc,
 		linkedDesc: Autolinker.link(desc, {newWindow: false, stripPrefix: false}),
 		completed: false,
+		pinned: false,
 		timestamp: new Date().getTime(),
 		tags: "...",
 		upvote: 0,
@@ -225,8 +234,25 @@ $scope.addDownvote = function (todo) {
 };
 
 $scope.addViews = function(todo){
-	todo.views++;
-	todo.activity = todo.views*0.5+(todo.upvote+todo.downvote)*1.5+todo.threadNum*2;
+	// Check if Locked
+	if(!todo.completed){
+		todo.views++;
+		todo.activity = todo.views*0.5+(todo.upvote+todo.downvote)*1.5+todo.threadNum*2;
+		// Hack to order using this order.
+		todo.order = todo.order -1;
+		$scope.todos.$save(todo);
+	}
+}
+
+$scope.lockPost = function(todo){
+	todo.completed = !todo.completed;
+	// Hack to order using this order.
+	todo.order = todo.order -1;
+	$scope.todos.$save(todo);
+}
+
+$scope.pinPost = function(todo){
+	todo.pinned = !todo.pinned;
 	// Hack to order using this order.
 	todo.order = todo.order -1;
 	$scope.todos.$save(todo);

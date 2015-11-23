@@ -23,22 +23,22 @@
 
 </head>
 <body>
-	
+
 	<div class="top-bar-background"></div>
-	
+
 	<div id="contentwrap">
-		
+
 		<ul class="top-bar">
 			<li class="name"><span>{{ roomId }}</span><a ng-click="copyRoomUrl()"><span class="glyphicon glyphicon-paperclip"></span></a></li>
 			<li class="right"><a href="index.html">Exit Room</a></li>
 		</ul>
-		
+
 		<div style="clear:both"></div>
-		
+
 		<div>
 			<div class="row">
 				<div class="col-md-3">
-					
+
 					<!-- Sort -->
 					<div class="section" style="text-align:center">
 						<p class="title center">Sort</p>
@@ -49,7 +49,7 @@
 							<div class="btn btn-sm btn-default" ng-class="{active: orderpref=='-upvotePercent'}" ng-click="setOrderpref('-upvotePercent')">Rating</div>
 						</div>
 					</div>
-					
+
 					<!-- Statistics -->
 					<div class="section" ng-show="!isAdmin">
 						<p class="title center">Statistics</p>
@@ -61,6 +61,7 @@
 								<th>Views</th>
 								<th>Votes</th>
 								<th>Activity</th>
+								<th>Pinned</th>
 							</tr>
 							<tr ng-repeat="todo in todos">
 								<td><a ng-click="open(todo.$id)">[+]</a> {{todo.head | limitTo:10}}</td>
@@ -68,25 +69,25 @@
 								<td>{{todo.views}}</td>
 								<td>{{todo.upvote+todo.downvote}}</td>
 								<td>{{todo.activity}}</td>
+								<td>{{todo.pinned}}</td>
 							</tr>
 						</table>
 					</div>
-					
 				</div>
-				
+
 				<!-- Main -->
 				<div class="col-md-6">
-					
+
 					<!-- Composer -->
 					<div class="section composer" emoji-form emoji-message="input">
-						
+
 						<textarea ng-model="input.messagetext"></textarea>
-						
+
 						<div class="preview" ng-show="picFile">
 							<span ng-click="picFile = null"><span class="glyphicon glyphicon-trash"></span> Remove</span>
 							<img ngf-src="picFile" ngf-resize="{height: 300, quality: 1}">
 						</div>
-						
+
 						<ul class="buttons">
 							<li>
 								<div id="emojibtn"><i class="icon icon-emoji"></i></div>
@@ -100,9 +101,9 @@
 								<span class="glyphicon glyphicon-send"></span><span class="text">Post</span>
 							</li>
 						</ul>
-						
+
 					</div>
-					
+
 					<!-- Tag Filter -->
 					<div class="section" ng-show="tagsearch">
 						<p class="title">Tag Filter</p>
@@ -111,46 +112,45 @@
 							<div ng-repeat="t in tagsearchitems" class="btn tag" ng-click="clearTag($index)">{{t}}</div>
 						</div>
 					</div>
-						
+
 					<!-- Message: no matched questions -->
-					<div class="section" ng-show="tagsearch&&(todos | tagFilter:tagsearchitems).length==0"><span class="glyphicon glyphicon-alert icon"></span> Sorry, none of the questions match the tag combination.</div>
-					
+					<div class="section" ng-show="tagsearch&&(todos | tagFilter:tagsearchitems).length==0"><span class="glyphicon glyphicon-alert icon"></span> Sorry, none of the questions match the tag(s) combination.</div>
+
 					<!-- Question List -->
-					<div class="section questionbody" ng-class="{qnew: todo.new, qalert: todo.headLastChar == '!', qreply: todo.threadNum>0 && todo.headLastChar != '!', completed: todo.completed}" ng-repeat="todo in todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref">
-						
+					<div class="section questionbody" ng-class="{qnew: todo.new&&!todo.completed, qalert: todo.headLastChar == '!'&&!todo.completed, qreply: todo.threadNum>0 && todo.headLastChar != '!' && !todo.completed, completed: todo.completed, pinned: todo.pinned}" ng-repeat="todo in todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref | orderBy:'-pinned'">
+
 						<div class="admintools" ng-show="!isAdmin">
-							<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true"></div> |
-							<div class="glyphicon glyphicon-minus-sign icon" aria-hidden="true" ng-click="todo.completed=!todo.completed"></div>
-							<div class="glyphicon glyphicon-lock icon" aria-hidden="true"></div>
+							<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true" ng-click="pinPost(todo)"></div> |
+							<div class="glyphicon glyphicon-minus-sign icon" aria-hidden="true" ng-click="lockPost(todo)"></div>
 							<div class="glyphicon glyphicon-trash icon" aria-hidden="true" ng-click="removeTodo(todo)"></div>
 						</div>
-						
+
 						<div class="pull-left contentbox">
-							
+
 							<div class="question-title">
 								<span class="reply-counter" ng-show="todo.threadNum"><span ng-show="todo.threadNum<10">&nbsp;</span><span ng-show="todo.threadNum<100">&nbsp;</span>{{todo.threadNum}}</span>
 								<span compile="todo.head | escapeHTML | addTagLinks | codeToSmiley"></span><span class="time" am-time-ago="todo.timestamp"></span>
 							</div>
 
 							<div class="question-content" compile="(todo.linkedDesc || '') | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
-							
+
 							<div class="question-image" ng-show="todo.image">
 								<a href="{{todo.image}}" target="_blank"><img ng-src="{{todo.image}}" /></a>
 							</div>
-							
+
 							<div ng-show="todo.tags.length"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
-							
+							<center ng-show="todo.completed"><div class="locked-msg">Locked</div></center>
 							<div class="replyexpand" ng-click="open(todo.$id);addViews(todo)">…</div>
-							
+
 						</div>
-						
+
 						<!-- vote -->
 						<div class="pull-right votebox">
 							<div class="updownvote glyphicon glyphicon-triangle-top" ng-click="addUpvote(todo)" ng-disabled="$storage[todo.$id]"></div>
 							<div class="rating">{{ todo.upvote - todo.downvote }}</div>
 							<div class="updownvote glyphicon glyphicon-triangle-bottom" ng-click="addDownvote(todo)" ng-disabled="$storage[todo.$id]"></div>
 						</div>
-						
+
 						<!-- vote bar -->
 						<div class="progress">
 						  <div class="progress-bar progress-bar-success" style="width: {{todo.upvotePercent}}%">
@@ -158,15 +158,15 @@
 						  <div class="progress-bar progress-bar-danger" style="width: {{todo.downvotePercent}}%">
 						  </div>
 						</div>
-						
+
 						<div style="clear:both"></div>
-						
+
 					</div>
-						
+
 					</div>
-				
+
 				<div class="col-md-3">
-					
+
 					<!-- Popular Tags -->
 					<div class="section">
 						<p class="title center">Popular Tags</p>
@@ -174,9 +174,9 @@
 							<div class="btn tag">{{t.title}}</div>({{t.count}})
 						</div>
 					</div>
-					
+
 				</div>
-				
+
 			</div>
 		</div>
 	</div>
@@ -184,9 +184,17 @@
 
 <!-- Modal to show details and replies -->
 <script type="text/ng-template" id="threadModal.html">
-      <div class="modal-header">
+      <div class="modal-header" ng-class="{completed: todo.completed}">
+		<!-- vote bar -->
+		<div class="progress">
+			<div class="progress-bar progress-bar-success" style="width: {{todo.upvotePercent}}%">
+			</div>
+			<div class="progress-bar progress-bar-danger" style="width: {{todo.downvotePercent}}%">
+			</div>
+		</div>
         <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
 		<div class="question-title">
+			<span class="locked-msg locked-msg-modal" ng-show="todo.completed">Locked</span>
 			<span compile="todo.head | escapeHTML | addTagLinks | codeToSmiley"></span><span class="time" am-time-ago="todo.timestamp"></span><span class="time">{{todo.timestamp | amDateFormat:'[at] HH:mm [on] DD.MM.YYYY'}}</span>
 		</div>
       </div>
@@ -198,13 +206,13 @@
 			<div ng-show="!todo.linkedDesc">
 				<span class="time">No Description</span>
 			</div>
-			
+
 			<div class="question-image" ng-show="todo.image">
 				<a href="{{todo.image}}" target="_blank"><img ng-src="{{todo.image}}" /></a>
 			</div>
-			
+
 			<hr>
-			<form class="form" name="replyForm">
+			<form class="form" name="replyForm" ng-show="!todo.completed">
 				<div class="replyForm">
 					<div class="row">
 						<div class="col-xs-10">
@@ -227,9 +235,6 @@
 				<div ng-repeat="thread in threads | threadFilter:todo.$id">
 					<div class="thread nestIndent{{thread.level}}">
 						<div class="r-admintools" ng-show="!isAdmin">
-							<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true"></div> |
-							<div class="glyphicon glyphicon-minus-sign icon" aria-hidden="true" ng-click="thread.completed=!thread.completed"></div>
-							<div class="glyphicon glyphicon-lock icon" aria-hidden="true"></div>
 							<div class="glyphicon glyphicon-trash icon" aria-hidden="true" ng-click="removeThread(thread)"></div>
 						</div>
 						<div class="col-xs-1 profile">
@@ -253,7 +258,7 @@
 								<div class="updownvote glyphicon glyphicon-triangle-bottom" ng-click="addDownvote(thread)" ng-disabled="$storage[todo.$id]"></div>
 							</div>
 						</div>
-						<div ng-show="thread.level<2">
+						<div ng-show="thread.level<2 && !todo.completed">
 							<form class="form" name="replyForm">
 								<div class="replyForm">
 									<div class="row">
