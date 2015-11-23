@@ -152,7 +152,7 @@ $scope.getFirstAndRestSentence = function($string) {
 	return [head, desc];
 };
 
-$scope.checkImageExist = function(todo){
+/*$scope.checkImageExist = function(todo){
 
 	if(todo.image == null){
 		return false;
@@ -160,7 +160,7 @@ $scope.checkImageExist = function(todo){
 		return true;
 	}
 
-}
+}*/
 
 $scope.addTodo2 = function(todo){
 	var imageLink = "https://s3-ap-southeast-1.amazonaws.com/comp3111images/" + fileNameforUpload;
@@ -348,14 +348,14 @@ $scope.upload2 = function(file,todo) {
         $scope.picFile = null;
         isUploadValue = false;
       	});
-    }, function (response) {
+    });/*, function (response) {
        if (response.status > 0)
        		$scope.errorMsg = response.status + ': ' + response.data;
        	 	console.log('Error status: ' + response.status);
     }, function (evt) {
             $scope.progress = parseInt(100.0 * evt.loaded / evt.total);
             console.log('progress: ' + $scope.progress + '% ' + evt.config.data.file.name);
-    });
+    });*/
 }
 
 $scope.checkValidKeyName = function (name,file,todo) {
