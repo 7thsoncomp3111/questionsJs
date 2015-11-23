@@ -64,7 +64,7 @@
 							</tr>
 							<tr ng-repeat="todo in todos">
 								<td><a ng-click="open(todo.$id)">[+]</a> {{todo.head | limitTo:10}}</td>
-								<td>{{getNumOfThreads(todo.$id)}}</td>
+								<td>{{todo.threadNum}}</td>
 								<td>{{todo.views}}</td>
 								<td>{{todo.upvote+todo.downvote}}</td>
 								<td>{{todo.activity}}</td>
@@ -116,7 +116,7 @@
 					<div class="section" ng-show="tagsearch&&(todos | tagFilter:tagsearchitems).length==0"><span class="glyphicon glyphicon-alert icon"></span> Sorry, none of the questions match the tag combination.</div>
 					
 					<!-- Question List -->
-					<div class="section questionbody" ng-class="{qnew: todo.new, qalert: todo.headLastChar == '!', qreply: getNumOfThreads(todo.$id)>0 && todo.headLastChar != '!', completed: todo.completed}" ng-repeat="todo in todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref">
+					<div class="section questionbody" ng-class="{qnew: todo.new, qalert: todo.headLastChar == '!', qreply: todo.threadNum>0 && todo.headLastChar != '!', completed: todo.completed}" ng-repeat="todo in todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref">
 						
 						<div class="admintools" ng-show="!isAdmin">
 							<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true"></div> |
@@ -128,7 +128,7 @@
 						<div class="pull-left contentbox">
 							
 							<div class="question-title">
-								<span class="reply-counter" ng-show="getNumOfThreads(todo.$id)"><span ng-show="getNumOfThreads(todo.$id)<10">&nbsp;</span><span ng-show="getNumOfThreads(todo.$id)<100">&nbsp;</span>{{getNumOfThreads(todo.$id)}}</span>
+								<span class="reply-counter" ng-show="todo.threadNum"><span ng-show="todo.threadNum<10">&nbsp;</span><span ng-show="todo.threadNum<100">&nbsp;</span>{{todo.threadNum}}</span>
 								<span compile="todo.head | escapeHTML | addTagLinks | codeToSmiley"></span><span class="time" am-time-ago="todo.timestamp"></span>
 							</div>
 
