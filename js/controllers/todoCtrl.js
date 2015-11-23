@@ -40,36 +40,13 @@ var echoRef = new Firebase(url_todos);
 var query = echoRef.orderByChild("order");
 $scope.todos = $firebaseArray(query);
 
-//Get threads
+// Get threads
 var url_threads = firebaseURL + roomId + "/threads/";
 echoRef = new Firebase(url_threads);
-query = echoRef.orderByChild("order");
+query = echoRef.orderByKey();
 $scope.threads = $firebaseArray(query);
 
 $scope.input = {};
-
-$scope.getNumOfThreads = function(qindex){
-	function isLeaf(idx){
-		var result = 1;
-		$scope.threads.forEach(function(thread){
-			if(thread.prev == idx){
-				result = 0;
-			}
-		});
-		return result;
-	}
-	function matchNum(target){
-		var counter = 0;
-		$scope.threads.forEach(function(thread){
-			if(thread.prev == target){
-				counter++;
-				counter+=matchNum(thread.$id);
-			}
-		});
-		return counter;
-	}
-	return matchNum(qindex);
-}
 
 // pre-precessing for collection
 $scope.$watchCollection('todos', function () {
@@ -103,10 +80,6 @@ $scope.$watchCollection('todos', function () {
 		} else {
 			todo.tags = [];
 		}
-
-		// set activity
-		// Activity = views*multiplier + votes*multiplier + replies*multiplier
-		todo.activity = todo.views+votes+$scope.getNumOfThreads(todo.$id);
 	});
 
 	//map tag names and freq to verbose
@@ -117,6 +90,27 @@ $scope.$watchCollection('todos', function () {
 	$scope.rankedTags = rankedTags;
 	$scope.totalCount = total;
 
+}, true);
+
+$scope.$watchCollection('threads', function () {
+	function getNumOfThreads(qindex){
+		function matchNum(target){
+			var counter = 0;
+			$scope.threads.forEach(function(thread){
+				if(thread.prev == target){
+					counter++;
+					counter+=matchNum(thread.$id);
+				}
+			});
+			return counter;
+		}
+		return matchNum(qindex);
+	}
+	$scope.todos.forEach(function (todo) {
+		//set threadnum
+		todo.threadNum = getNumOfThreads(todo.$id);
+		todo.activity = todo.views+(todo.upvote+todo.downvote)*1.5+todo.threadNum*2;
+	});
 }, true);
 
 // Get the first sentence and rest
@@ -227,12 +221,14 @@ $scope.addDownvote = function (todo) {
 
 $scope.addViews = function(todo){
 	todo.views++;
+	todo.activity = todo.views*0.5+(todo.upvote+todo.downvote)*1.5+todo.threadNum*2;
 	// Hack to order using this order.
 	todo.order = todo.order -1;
 	$scope.todos.$save(todo);
 }
 
-// Note: Set Default order in questionFilter
+// Set default order to ''-activity'
+$scope.orderpref='-activity';
 $scope.setOrderpref = function (pref){
 	$scope.orderpref = pref;
 }
