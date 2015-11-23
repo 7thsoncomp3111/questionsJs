@@ -33,6 +33,11 @@ if (!roomId || roomId.length === 0) {
 	roomId = "all";
 }
 $scope.roomId = roomId;
+
+$scope.copyRoomUrl = function() {
+	prompt('Copy the room URL:', $location.absUrl());
+}
+
 var firebaseURL = "https://resplendent-inferno-9346.firebaseio.com/room/";
 //Get questions
 var url_todos = firebaseURL + roomId + "/questions/";

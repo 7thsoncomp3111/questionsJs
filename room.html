@@ -23,37 +23,25 @@
 
 </head>
 <body>
+	
+	<div class="top-bar-background"></div>
+	
 	<div id="contentwrap">
-		<div class="top-banner">
-			<div class="container">
-				<div class="row headerrow">
-					<a class="" id="home-btn" href="./index.html"><img src="images/logo2.png"></a>
-					<span id="roomId">{{roomId}}</span>
-
-						<!--
-
-						<a ng-class="{selected: location.path() == '/newechos'}" class="btn btn-primary" href="#/newechos">New Echos</a>
-						<a ng-class="{selected: location.path() == '/tags'}" class="btn btn-success" href="#/tags">Tags</a>
-						<a ng-class="{selected: location.path() == '/users'}" class="btn btn-info" href="#/users">Users</a>
-						<a ng-class="{selected: location.path() == '/about'}" class="btn btn-warning" href="#/about">About</a>
-					-->
-
-					<div class="btn"><span class="glyphicon glyphicon-share-alt"></span>Share this room<: {{ location.absUrl() }}</div>&nbsp;
-					<!-- <button ng-hide="$authData" class="btn btn-primary left" type="button" ng-click="FBLogin()">Want Admin? Sign in with Facebook</button> -->
-
-					<!-- after login -->
-					<!-- <img ng-show="$authData" src="https://graph.facebook.com/{{$authData.facebook.id}}/picture/?type=square&return_ssl_resources=1" alt="{{name}}" />
-					{{$authData.facebook.displayName}}
-					<button ng-show="$authData" class="btn btn-primary left" type="button" ng-click="FBLogout()">Logout</button> -->
-				</div>
-			</div>
-		</div>
-		<div class="container">
-			<div class="row pull-up">
-				<!-- Settings -->
+		
+		<ul class="top-bar">
+			<li class="name"><span>{{ roomId }}</span><a ng-click="copyRoomUrl()"><span class="glyphicon glyphicon-paperclip"></span></a></li>
+			<li class="right"><a href="index.html">Exit Room</a></li>
+		</ul>
+		
+		<div style="clear:both"></div>
+		
+		<div>
+			<div class="row">
 				<div class="col-md-3">
-					<div class="section">
-						<p class="title center">Settings</p>
+					
+					<!-- Sort -->
+					<div class="section" style="text-align:center">
+						<p class="title center">Sort</p>
 						<div class="btn-group">
 							<div class="btn btn-sm btn-default" ng-class="{active: orderpref=='head'}" ng-click="setOrderpref('head')">Title</div>
 							<div class="btn btn-sm btn-default" ng-class="{active: orderpref=='-activity'||orderpref==null}" ng-click="setOrderpref('-activity')">Activity</div>
@@ -61,8 +49,10 @@
 							<div class="btn btn-sm btn-default" ng-class="{active: orderpref=='-upvotePercent'}" ng-click="setOrderpref('-upvotePercent')">Rating</div>
 						</div>
 					</div>
+					
+					<!-- Statistics -->
 					<div class="section" ng-show="!isAdmin">
-						<p class="title center">Room Stats (debug version)</p>
+						<p class="title center">Statistics</p>
 						<p>Total threads: <b>{{threads.length}}</b></p>
 						<table class="table table-condensed table-hover" style="font-size:0.8em">
 							<tr>
@@ -81,226 +71,214 @@
 							</tr>
 						</table>
 					</div>
+					
 				</div>
+				
 				<!-- Main -->
 				<div class="col-md-6">
-					<div class="section">
-						<div class="row">
-							<div class="col-xs-10">
-								<!-- <div class="icon icon-inputbox"><i class="glyphicon glyphicon-camera"></i></div> -->
-								<!-- <input class="q-input" placeholder="| Enter Title" id="one"> -->
-								<!-- <div class="icon icon-inputbox"><i class="glyphicon glyphicon-search"></i></div> -->
-								<div emoji-form emoji-message="input">
-									<textarea type="text" id="new-todo" class="q-input" placeholder="Ask A Question" id="two" ng-model="input.messagetext" autofocus></textarea>
-									<div class="btn" id="emojibtn"><i class="icon icon-emoji"></i></div>
-								</div>
-							</div>
-							<div class="col-xs-2 send-button" type="button" ng-click="addTodo(picFile);">
-								<div class="icon"><i class="glyphicon glyphicon-send"></i></div>
-							</div>
+					
+					<!-- Composer -->
+					<div class="section composer" emoji-form emoji-message="input">
+						
+						<textarea ng-model="input.messagetext"></textarea>
+						
+						<div class="preview" ng-show="picFile">
+							<span ng-click="picFile = null"><span class="glyphicon glyphicon-trash"></span> Remove</span>
+							<img ngf-src="picFile" ngf-resize="{height: 300, quality: 1}">
 						</div>
-						<div class="row">
-							<div class="col-xs-12">
-								<img class="imgPreview" ngf-src="picFile" ngf-resize="{height: 300, quality: 1}">
-								<div ngf-drop ngf-select ng-model="picFile" class="drop-box" ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-allow-dir="true" accept="image/*" ngf-pattern="image/*" ngf-hide-on-drop-not-available="false">
-									<div style="margin:auto; padding-top:10px; color:#999;">Click to add picture / drag your picture here</div>
+						
+						<ul class="buttons">
+							<li>
+								<div id="emojibtn"><i class="icon icon-emoji"></i></div>
+							</li>
+							<li>
+								<div ngf-select ng-model="picFile" ngf-multiple="false" accept="image/*" ngf-pattern="image/*">
+									<span class="glyphicon glyphicon-picture"></span>
 								</div>
-							</div>
-						</div>
+							</li>
+							<li class="right" ng-click="addTodo(picFile)">
+								<span class="glyphicon glyphicon-send"></span><span class="text">Post</span>
+							</li>
+						</ul>
+						
 					</div>
+					
+					<!-- Tag Filter -->
 					<div class="section" ng-show="tagsearch">
+						<p class="title">Tag Filter</p>
 						<div class="pull-right glyphicon glyphicon-remove icon" ng-click="clearTag()"></div>
-						<span>Tag filter applied</span>
 						<div id="tagsearchbar">
 							<div ng-repeat="t in tagsearchitems" class="btn tag" ng-click="clearTag($index)">{{t}}</div>
 						</div>
 					</div>
-					<div id="todo-list">
-						<span class="section" ng-show="tagsearch&&(todos | tagFilter:tagsearchitems).length==0"><span class="glyphicon glyphicon-alert icon"></span> Sorry, none of the questions match the tag combination.</span>
-						<span class="section questionbody" ng-class="{qnew: todo.new, qalert: todo.headLastChar == '!', qreply: getNumOfThreads(todo.$id)>0 && todo.headLastChar != '!', completed: todo.completed}" ng-repeat="todo in todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref">
-							<div class="admintools" ng-show="!isAdmin">
-								<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true"></div> |
-								<div class="glyphicon glyphicon-minus-sign icon" aria-hidden="true" ng-click="todo.completed=!todo.completed"></div>
-								<div class="glyphicon glyphicon-lock icon" aria-hidden="true"></div>
-								<div class="glyphicon glyphicon-trash icon" aria-hidden="true" ng-click="removeTodo(todo)"></div>
-							</div>
-							<div class="pull-left contentbox">
-								<div class="question-title">
-									<span class="reply-counter" ng-show="getNumOfThreads(todo.$id)"><span ng-show="getNumOfThreads(todo.$id)<10">&nbsp;</span><span ng-show="getNumOfThreads(todo.$id)<100">&nbsp;</span>{{getNumOfThreads(todo.$id)}}</span>
-									<span compile="todo.head | escapeHTML | addTagLinks | codeToSmiley"></span><span class="time" am-time-ago="todo.timestamp"></span>
-								</div>
-
-								<div class="question-content">
-									<div compile="(todo.linkedDesc || '') | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
-								</div>
-								<div class="question-image" ng-if="checkImageExist(todo)">
-									<img ng-src="{{todo.image}}" width="100%" />
-								</div>
-								<div ng-show="todo.tags.length"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
-								<div class="replyexpand" ng-click="open(todo.$id);addViews(todo)">
-									<div class="glyphicon glyphicon-triangle-bottom icon"></div>
-								</div>
-							</div>
-							<div class="pull-right votebox">
-								<div class="updownvote glyphicon glyphicon-triangle-top" ng-click="addUpvote(todo)" ng-disabled="$storage[todo.$id]"></div>
-								<div class="rating">{{ todo.upvote - todo.downvote }}</div>
-								<div class="updownvote glyphicon glyphicon-triangle-bottom" ng-click="addDownvote(todo)" ng-disabled="$storage[todo.$id]"></div>
-							</div>
-							<div class="progress">
-							  <div class="progress-bar progress-bar-success" style="width: {{todo.upvotePercent}}%">
-							  </div>
-							  <div class="progress-bar progress-bar-danger" style="width: {{todo.downvotePercent}}%">
-							  </div>
-							</div>
-							<!-- Modal to show details and replies -->
-							<script type="text/ng-template" id="threadModal.html">
-							      <div class="modal-header">
-							        <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
-									<div class="question-title">
-										<span compile="todo.head | escapeHTML | addTagLinks | codeToSmiley"></span><span class="time" am-time-ago="todo.timestamp"></span><span class="time">{{todo.timestamp | amDateFormat:'[at] HH:mm [on] DD.MM.YYYY'}}</span>
-									</div>
-							      </div>
-							      <div class="modal-body">
-									<div class="question-content">
-										<div ng-show="todo.linkedDesc">
-  											<div compile="(todo.linkedDesc || '') | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
-										</div>
-										<div ng-show="!todo.linkedDesc">
-											<span class="time">- Void: No Description Provided -</span>
-										</div>
-										<hr>
-										<form class="form" name="replyForm">
-											<div class="replyForm">
-												<div class="row">
-													<div class="col-xs-10">
-														<textarea type="text" class="form-control r-input r-separator" name="content" placeholder="| Reply here" ng-model="replyMessage"></textarea>
-													</div>
-													<div class="col-xs-2">
-														<div class="send-button r-button" type="button" ng-click="addThread()" data-ng-disabled="replyForm.$invalid">
-															<div class="icon"><i class="glyphicon glyphicon-send"></i></div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</form>
-										<div class="row">
-											<div class="pull-right" ng-show="!isAdmin">
-												<span class="btn btn-sm btn-danger" ng-click="removeAllThreads()">Clear All Replies</span>
-											</div>
-										</div>
-										<div class="threadList">
-											<div ng-repeat="thread in threads | threadFilter:todo.$id">
-												<div class="thread nestIndent{{thread.level}}">
-													<div class="r-admintools" ng-show="!isAdmin">
-														<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true"></div> |
-														<div class="glyphicon glyphicon-minus-sign icon" aria-hidden="true" ng-click="thread.completed=!thread.completed"></div>
-														<div class="glyphicon glyphicon-lock icon" aria-hidden="true"></div>
-														<div class="glyphicon glyphicon-trash icon" aria-hidden="true" ng-click="removeThread(thread)"></div>
-													</div>
-													<div class="col-xs-1 profile">
-														<img src="https://robohash.org/{{thread.author}}?size=50x50"><br/>
-														{{thread.author}}
-													</div>
-													<div class="col-xs-10">
-														<span class="time" am-time-ago="thread.timestamp"></span><span class="time">{{thread.timestamp | amDateFormat:'[at] HH:mm [on] DD.MM.YYYY'}}</span>&nbsp;&nbsp;<span class="btn text-primary">Reply</span>
-														<div class="content" compile="thread.content"></div>
-														<div>
-															<b>Debug Info</b><br>
-															this: {{thread.$id}}<br>
-															Prev: {{thread.prev}}<br>
-															Level: {{thread.level}}
-														</div>
-													</div>
-													<div class="col-xs-1 votebox">
-														<div class="pull-right">
-															<div class="updownvote glyphicon glyphicon-triangle-top" ng-click="addUpvote(thread)" ng-disabled="$storage[todo.$id]"></div>
-															<div class="rating">{{ thread.upvote - thread.downvote }}</div>
-															<div class="updownvote glyphicon glyphicon-triangle-bottom" ng-click="addDownvote(thread)" ng-disabled="$storage[todo.$id]"></div>
-														</div>
-													</div>
-													<div ng-show="thread.level<2">
-														<form class="form" name="replyForm">
-															<div class="replyForm">
-																<div class="row">
-																	<div class="col-xs-10">
-																		<!-- Ref: http://stackoverflow.com/questions/22761201/angularjs-ng-model-is-undefined | ng-model="$parent.xxx" -->
-																		<textarea type="text" class="form-control r-input r-separator" name="content" placeholder="| Reply here" ng-model="$parent.replyMessageNested[$index]"></textarea>
-																	</div>
-																	<div class="col-xs-2">
-																		<div class="send-button r-button" type="button" ng-click="addThread(thread.$id,$index)" ng-disabled="replyForm.$invalid">
-																			<div class="icon"><i class="glyphicon glyphicon-send"></i></div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</form>
-													</div>
-												</div>
-											</div>
-										</div>
-  									</div>
-							      </div>
-							</script>
-						</span>
-					</div>
-
-						<!--
-
-						<div id="toTop" class="btn btn-info"><span class="fa fa-arrow-up">Back to Top</span></div>
-
-						<button ng-hide="totalCount<=maxQuestion"
-						class="pull-right btn btn-default glyphicon glyphicon-arrow-down"
-						type="button" ng-click="increaseMax()"> Show more</button>
-					-->
-				</div>
-				<!-- Feed -->
-				<div class="col-md-3">
-					<div class="section">
-						<p class="title center">Feed</p>
-						<div>
-							<h3>Popular Tags</h3>
-							<div ng-repeat="t in rankedTags | orderBy: 'title' | orderBy: '-count' | limitTo:10" ng-click="clickTag(t.title)">
-								<div class="btn tag">{{t.title}}</div>({{t.count}})
-							</div>
+						
+					<!-- Message: no matched questions -->
+					<div class="section" ng-show="tagsearch&&(todos | tagFilter:tagsearchitems).length==0"><span class="glyphicon glyphicon-alert icon"></span> Sorry, none of the questions match the tag combination.</div>
+					
+					<!-- Question List -->
+					<div class="section questionbody" ng-class="{qnew: todo.new, qalert: todo.headLastChar == '!', qreply: getNumOfThreads(todo.$id)>0 && todo.headLastChar != '!', completed: todo.completed}" ng-repeat="todo in todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref">
+						
+						<div class="admintools" ng-show="!isAdmin">
+							<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true"></div> |
+							<div class="glyphicon glyphicon-minus-sign icon" aria-hidden="true" ng-click="todo.completed=!todo.completed"></div>
+							<div class="glyphicon glyphicon-lock icon" aria-hidden="true"></div>
+							<div class="glyphicon glyphicon-trash icon" aria-hidden="true" ng-click="removeTodo(todo)"></div>
 						</div>
-						<!-- <div>
-							<h3>Popular Posts</h3>
-							<ul>
-								<li>
-									#UST
-								</li>
-								<li>
-									#COMP
-								</li>
-								<li>
-									#GOODGRADE
-								</li>
-							</ul>
-						</div> -->
+						
+						<div class="pull-left contentbox">
+							
+							<div class="question-title">
+								<span class="reply-counter" ng-show="getNumOfThreads(todo.$id)"><span ng-show="getNumOfThreads(todo.$id)<10">&nbsp;</span><span ng-show="getNumOfThreads(todo.$id)<100">&nbsp;</span>{{getNumOfThreads(todo.$id)}}</span>
+								<span compile="todo.head | escapeHTML | addTagLinks | codeToSmiley"></span><span class="time" am-time-ago="todo.timestamp"></span>
+							</div>
+
+							<div class="question-content" compile="(todo.linkedDesc || '') | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
+							
+							<div class="question-image" ng-show="todo.image">
+								<a href="{{todo.image}}" target="_blank"><img ng-src="{{todo.image}}" /></a>
+							</div>
+							
+							<div ng-show="todo.tags.length"><div ng-repeat="t in todo.tags" class="btn tag" ng-click="clickTag(t)">{{t}}</div></div></p>
+							
+							<div class="replyexpand" ng-click="open(todo.$id);addViews(todo)">…</div>
+							
+						</div>
+						
+						<!-- vote -->
+						<div class="pull-right votebox">
+							<div class="updownvote glyphicon glyphicon-triangle-top" ng-click="addUpvote(todo)" ng-disabled="$storage[todo.$id]"></div>
+							<div class="rating">{{ todo.upvote - todo.downvote }}</div>
+							<div class="updownvote glyphicon glyphicon-triangle-bottom" ng-click="addDownvote(todo)" ng-disabled="$storage[todo.$id]"></div>
+						</div>
+						
+						<!-- vote bar -->
+						<div class="progress">
+						  <div class="progress-bar progress-bar-success" style="width: {{todo.upvotePercent}}%">
+						  </div>
+						  <div class="progress-bar progress-bar-danger" style="width: {{todo.downvotePercent}}%">
+						  </div>
+						</div>
+						
+						<div style="clear:both"></div>
+						
 					</div>
+						
+					</div>
+				
+				<div class="col-md-3">
+					
+					<!-- Popular Tags -->
+					<div class="section">
+						<p class="title center">Popular Tags</p>
+						<div ng-repeat="t in rankedTags | orderBy: 'title' | orderBy: '-count' | limitTo:10" ng-click="clickTag(t.title)">
+							<div class="btn tag">{{t.title}}</div>({{t.count}})
+						</div>
+					</div>
+					
 				</div>
+				
 			</div>
 		</div>
 	</div>
 	<div class="push" ng-show="todos.length==0"></div>
-	<div class="footer">
-		<div class="row">
-			<div class="col-md-12">
-				<a href="#">Terms of Service</a>
-				<a href="#">Privacy</a>
-				<a href="#">Security</a>
-				<span class="pull-right">© 2015 7th Son. All rights reserved</span>
+
+<!-- Modal to show details and replies -->
+<script type="text/ng-template" id="threadModal.html">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
+		<div class="question-title">
+			<span compile="todo.head | escapeHTML | addTagLinks | codeToSmiley"></span><span class="time" am-time-ago="todo.timestamp"></span><span class="time">{{todo.timestamp | amDateFormat:'[at] HH:mm [on] DD.MM.YYYY'}}</span>
+		</div>
+      </div>
+      <div class="modal-body">
+		<div class="question-content">
+			<div ng-show="todo.linkedDesc">
+				<div compile="(todo.linkedDesc || '') | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
+			</div>
+			<div ng-show="!todo.linkedDesc">
+				<span class="time">No Description</span>
+			</div>
+			
+			<div class="question-image" ng-show="todo.image">
+				<a href="{{todo.image}}" target="_blank"><img ng-src="{{todo.image}}" /></a>
+			</div>
+			
+			<hr>
+			<form class="form" name="replyForm">
+				<div class="replyForm">
+					<div class="row">
+						<div class="col-xs-10">
+							<textarea type="text" class="form-control r-input r-separator" name="content" placeholder="Reply here" ng-model="replyMessage"></textarea>
+						</div>
+						<div class="col-xs-2">
+							<div class="send-button r-button" type="button" ng-click="addThread()" data-ng-disabled="replyForm.$invalid">
+								<div class="icon"><i class="glyphicon glyphicon-send"></i></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+			<div class="row">
+				<div class="pull-right" ng-show="!isAdmin">
+					<span class="btn btn-sm btn-danger" ng-click="removeAllThreads()">Clear All Replies</span>
+				</div>
+			</div>
+			<div class="threadList">
+				<div ng-repeat="thread in threads | threadFilter:todo.$id">
+					<div class="thread nestIndent{{thread.level}}">
+						<div class="r-admintools" ng-show="!isAdmin">
+							<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true"></div> |
+							<div class="glyphicon glyphicon-minus-sign icon" aria-hidden="true" ng-click="thread.completed=!thread.completed"></div>
+							<div class="glyphicon glyphicon-lock icon" aria-hidden="true"></div>
+							<div class="glyphicon glyphicon-trash icon" aria-hidden="true" ng-click="removeThread(thread)"></div>
+						</div>
+						<div class="col-xs-1 profile">
+							<img src="https://robohash.org/{{thread.author}}?size=50x50"><br/>
+							{{thread.author}}
+						</div>
+						<div class="col-xs-10">
+							<span class="time" am-time-ago="thread.timestamp"></span><span class="time">{{thread.timestamp | amDateFormat:'[at] HH:mm [on] DD.MM.YYYY'}}</span>&nbsp;&nbsp;<span class="btn text-primary">Reply</span>
+							<div class="content" compile="thread.content"></div>
+							<div>
+								<b>Debug Info</b><br>
+								this: {{thread.$id}}<br>
+								Prev: {{thread.prev}}<br>
+								Level: {{thread.level}}
+							</div>
+						</div>
+						<div class="col-xs-1 votebox">
+							<div class="pull-right">
+								<div class="updownvote glyphicon glyphicon-triangle-top" ng-click="addUpvote(thread)" ng-disabled="$storage[todo.$id]"></div>
+								<div class="rating">{{ thread.upvote - thread.downvote }}</div>
+								<div class="updownvote glyphicon glyphicon-triangle-bottom" ng-click="addDownvote(thread)" ng-disabled="$storage[todo.$id]"></div>
+							</div>
+						</div>
+						<div ng-show="thread.level<2">
+							<form class="form" name="replyForm">
+								<div class="replyForm">
+									<div class="row">
+										<div class="col-xs-10">
+											<!-- Ref: http://stackoverflow.com/questions/22761201/angularjs-ng-model-is-undefined | ng-model="$parent.xxx" -->
+											<textarea type="text" class="form-control r-input r-separator" name="content" placeholder="Reply here" ng-model="$parent.replyMessageNested[$index]"></textarea>
+										</div>
+										<div class="col-xs-2">
+											<div class="send-button r-button" type="button" ng-click="addThread(thread.$id,$index)" ng-disabled="replyForm.$invalid">
+												<div class="icon"><i class="glyphicon glyphicon-send"></i></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
+      </div>
+</script>
 
 <script src="js/lib/underscore.min.js"></script>
 <script src="js/lib/jquery.min.js"></script>
-<script type="text/javascript">
-$(".imgPreview").onresize = function(){
-	$(".drop-box").css({"margin-top":(-1*$(".imgPreview").height() + 10)+"px"});
-}
-</script>
 
 <!-- Autolink from https://github.com/gregjacobs/Autolinker.js> -->
 <script src="js/lib/Autolinker.min.js"></script>
