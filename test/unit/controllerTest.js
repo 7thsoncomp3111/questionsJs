@@ -543,5 +543,49 @@ describe('TodoCtrl', function() {
         expect(scope.getNumSubscription('-K3p9_Qo5uSu7Anm02Hn')).toEqual(2);
       });
 
+      it('test subscribeAction already subscribed', function() {
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+        scope.subscriptions = [
+          {
+            email:"7thsoncomp3111@gmail.com",
+            id: "-K3p9_Qo5uSu7Anm02Hn"
+          },
+          {
+            email:"bahikiv@vkcode.ru",
+            id: "-K3p9_Qo5uSu7Anm02Hn"
+          },
+          {
+            email:"rowijaya@ust.hk",
+            id: "-K3pF3IrMR68R-CRyle2"
+          }
+        ]
+        var email = '7thsoncomp3111@gmail.com';
+        var qid = '-K3p9_Qo5uSu7Anm02Hn';
+        expect(scope.subscribeAction(qid)).toEqual(2);
+      });
+
+      it('test addTodo2', function(){
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+        scope.todos.$add = jasmine.createSpy('scope.todos.$add');
+        scope.addTodo2({});
+        expect(scope.todos.$add).toHaveBeenCalled();
+      });
+
+      it('test addTodo', function(){
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+
+        scope.todos.$add = jasmine.createSpy('scope.todos.$add(todo)');
+        var len = scope.todos.length;
+        scope.input = { messagetext: 'test' };
+        scope.addTodo('1.png');
+        expect(scope.todos.$add).not.toHaveBeenCalled();
+      });
+
     });
   });
