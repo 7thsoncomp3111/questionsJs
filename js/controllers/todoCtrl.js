@@ -442,13 +442,23 @@ $scope.toggleAnimation = function () {
 };
 
 function checkExistSubscription(e,q){
-	var exist = false
+	var exist = false;
 	$scope.subscriptions.forEach(function(subscription){
 		if(subscription.email == e && subscription.id == q){
 			exist = true;
 		}
 	});
 	return exist;
+}
+
+$scope.getNumSubscription = function(q){
+	var counter = 0;
+	$scope.subscriptions.forEach(function(subscription){
+		if(subscription.id == q){
+			counter++;
+		}
+	});
+	return counter;
 }
 
 $scope.subscribeAction = function(qid){

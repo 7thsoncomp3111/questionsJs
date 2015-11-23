@@ -707,3 +707,8 @@ textarea #new-todo {
     color: #fff;
     background-color: #666;
 }
+
+.label-subscribe{
+    background-color: #eee;
+    color: #666;
+}
