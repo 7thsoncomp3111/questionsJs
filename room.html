@@ -47,7 +47,7 @@
 						<div ng-show="nickname=='admin'">
 							<p class="title center">Authentication</p>
 							<input type="password" class="form-control input-sm ng-pristine ng-valid ng-valid-maxlength ng-touched" maxlength="64" placeholder="SECRET" ng-model="secret">
-							<div class="alert-danger" ng-show="!validateAdmin()&&secret!=null"><span class="glyphicon glyphicon-cross"></span>Invalid Credentials</div>
+							<div class="alert-danger" ng-show="!validateAdmin()&&secret.length>0"><span class="glyphicon glyphicon-cross"></span>Invalid Credentials</div>
 							<div class="alert-success" ng-show="validateAdmin()"><span class="glyphicon glyphicon-tick"></span>Valid Credentials</div>
 						</div>
 					</div>
@@ -123,7 +123,7 @@
 					<!-- searchText Filter -->
 					<div class="section" ng-show="textSearch">
 						<p class="title">Search</p>
-						<div class="pull-right glyphicon glyphicon-remove icon" ng-click="textSearch=false"></div>
+						<div class="pull-right glyphicon glyphicon-remove icon" ng-click="textSearch=false;input.searchText=''"></div>
 						<div>
 				            <input type="text" class="form-control input-sm ng-pristine ng-valid ng-valid-maxlength ng-touched" maxlength="64" placeholder="Search here" ng-model="input.searchText">
 						</div>
@@ -155,6 +155,7 @@
 							<div class="question-title">
 								<span class="reply-counter" ng-show="todo.threadNum && !todo.completed"><span ng-show="todo.threadNum<10">&nbsp;</span><span ng-show="todo.threadNum<100">&nbsp;</span>{{todo.threadNum}}</span>
 								<span compile="todo.head | escapeHTML | addTagLinks | codeToSmiley"></span><span class="time" am-time-ago="todo.timestamp"></span>
+								<span class="author" ng-click="input.searchText=todo.author">{{todo.author}}</span>
 							</div>
 
 							<div class="question-content" compile="(todo.linkedDesc || '') | escapeHTML | addTagLinks | codeToSmiley | nl2br"></div>
@@ -177,7 +178,7 @@
 						</div>
 
 						<div class="subscribe-menu pull-right">
-							<span class="btn btn-sm subscribe-btn" ng-click="subscribeAction(todo.$id)">							<span class="label label-default label-subscribe">{{getNumSubscription(todo.$id)}}</span>&nbsp;Subscribe</span>
+							<span class="btn btn-sm subscribe-btn" ng-click="subscribeAction(todo.$id)"><span class="label label-default label-subscribe">{{getNumSubscription(todo.$id)}}</span>&nbsp;Subscribe</span>
 							<span class="btn btn-sm unsubscribe-btn" ng-click="unsubscribeAction(todo.$id)">Unsubscribe</span>
 						</div>
 

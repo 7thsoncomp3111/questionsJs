@@ -714,3 +714,15 @@ textarea #new-todo {
     background-color: #eee;
     color: #666;
 }
+
+.author{
+    font-weight: normal;
+    font-size: 0.8em;
+    text-decoration: underline;
+    color: #c3d5db;
+}
+
+.author:hover{
+    color: #6495a4;
+    cursor: pointer;
+}

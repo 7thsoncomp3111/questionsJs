@@ -189,6 +189,7 @@ $scope.addTodo = function (file) {
 	var firstAndLast = $scope.getFirstAndRestSentence(newTodo);
 	var head = firstAndLast[0];
 	var desc = firstAndLast[1];
+	var author = $scope.nickname;
 
 	var newtodo = {
 		wholeMsg: newTodo,
@@ -199,6 +200,7 @@ $scope.addTodo = function (file) {
 		completed: false,
 		pinned: false,
 		timestamp: new Date().getTime(),
+		author: author,
 		tags: "...",
 		upvote: 0,
 		downvote: 0,
