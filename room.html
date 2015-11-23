@@ -90,6 +90,9 @@
 
 						<ul class="buttons">
 							<li>
+								<span class="glyphicon glyphicon-search" ng-click="textSearch=true"></span>
+							</li>
+							<li>
 								<div id="emojibtn"><i class="icon icon-emoji"></i></div>
 							</li>
 							<li>
@@ -102,6 +105,15 @@
 							</li>
 						</ul>
 
+					</div>
+
+					<!-- searchText Filter -->
+					<div class="section" ng-show="textSearch">
+						<p class="title">Search</p>
+						<div class="pull-right glyphicon glyphicon-remove icon" ng-click="textSearch=false"></div>
+						<div id="tagsearchbar">
+				            <input type="text" class="form-control input-sm ng-pristine ng-valid ng-valid-maxlength ng-touched" maxlength="64" placeholder="Search here" ng-model="input.searchText">
+						</div>
 					</div>
 
 					<!-- Tag Filter -->
@@ -117,7 +129,7 @@
 					<div class="section" ng-show="tagsearch&&(todos | tagFilter:tagsearchitems).length==0"><span class="glyphicon glyphicon-alert icon"></span> Sorry, none of the questions match the tag(s) combination.</div>
 
 					<!-- Question List -->
-					<div class="section questionbody" ng-class="{qnew: todo.new&&!todo.completed, qalert: todo.headLastChar == '!'&&!todo.completed, qreply: todo.threadNum>0 && todo.headLastChar != '!' && !todo.completed, completed: todo.completed, pinned: todo.pinned}" ng-repeat="todo in todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref | orderBy:'-pinned'">
+					<div class="section questionbody" ng-class="{qnew: todo.new&&!todo.completed, qalert: todo.headLastChar == '!'&&!todo.completed, qreply: todo.threadNum>0 && todo.headLastChar != '!' && !todo.completed, completed: todo.completed, pinned: todo.pinned}" ng-repeat="todo in filteredtodos = (todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref | orderBy:'-pinned' | filter: input.searchText)">
 
 						<div class="admintools" ng-show="!isAdmin">
 							<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true" ng-click="pinPost(todo)"></div> |
@@ -184,7 +196,7 @@
 
 <!-- Modal to show details and replies -->
 <script type="text/ng-template" id="threadModal.html">
-      <div class="modal-header" ng-class="{completed: todo.completed}">
+      <div class="modal-header" ng-class="{completed: todo.completed, pinned: todo.pinned}">
 		<!-- vote bar -->
 		<div class="progress">
 			<div class="progress-bar progress-bar-success" style="width: {{todo.upvotePercent}}%">

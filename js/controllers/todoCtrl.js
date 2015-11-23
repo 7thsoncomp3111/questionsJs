@@ -52,6 +52,7 @@ query = echoRef.orderByKey();
 $scope.threads = $firebaseArray(query);
 
 $scope.input = {};
+$scope.textSearch = false;
 
 // pre-precessing for collection
 $scope.$watchCollection('todos', function () {
@@ -122,7 +123,9 @@ $scope.$watchCollection('threads', function () {
 	$scope.todos.forEach(function (todo) {
 		//set threadnum
 		todo.threadNum = getNumOfThreads(todo.$id);
+		//console.log(todo.threadNum);
 		todo.activity = todo.views*0.5+(todo.upvote+todo.downvote)*1.5+todo.threadNum*2;
+		$scope.todos.$save(todo);
 	});
 }, true);
 
@@ -209,7 +212,7 @@ $scope.addTodo = function (file) {
 
 $scope.addUpvote = function (todo) {
 
-	if ($scope.$storage[todo.$id]) return;
+	if ($scope.$storage[todo.$id]||todo.completed) return;
 
 	todo.upvote++;
 	// Hack to order using this order.
@@ -222,7 +225,7 @@ $scope.addUpvote = function (todo) {
 
 $scope.addDownvote = function (todo) {
 
-	if ($scope.$storage[todo.$id]) return;
+	if ($scope.$storage[todo.$id]||todo.completed) return;
 
 	todo.downvote++;
 	// Hack to order using this order.
