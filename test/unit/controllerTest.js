@@ -446,7 +446,7 @@ describe('TodoCtrl', function() {
 
       });
 
-      it('test getNumOfThreads 2 in 3', function() {
+    it('test getNumOfThreads 2 in 3', function() {
 
         var ctrl = controller('TodoCtrl',{
           $scope: scope
@@ -498,6 +498,49 @@ describe('TodoCtrl', function() {
         };
 
       expect(scope.getNumOfThreads(test.$id)).toEqual(2);
+      });
+      
+      it('test checkExistSubscription', function(){
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        })
+        scope.subscriptions = [
+          {
+            email:"7thsoncomp3111@gmail.com",
+            id: "-K3p9_Qo5uSu7Anm02Hn"
+          },
+          {
+            email:"bahikiv@vkcode.ru",
+            id: "-K3p9_Qo5uSu7Anm02Hn"
+          },
+          {
+            email:"rowijaya@ust.hk",
+            id: "-K3pF3IrMR68R-CRyle2"
+          }
+        ]
+        expect(scope.checkExistSubscription('7thsoncomp3111@gmail.com','-K3p9_Qo5uSu7Anm02Hn')).toEqual(true);
+      });
+
+
+      it('test getNumSubscription', function() {
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+        scope.subscriptions = [
+          {
+            email:"7thsoncomp3111@gmail.com",
+            id: "-K3p9_Qo5uSu7Anm02Hn"
+          },
+          {
+            email:"bahikiv@vkcode.ru",
+            id: "-K3p9_Qo5uSu7Anm02Hn"
+          },
+          {
+            email:"rowijaya@ust.hk",
+            id: "-K3pF3IrMR68R-CRyle2"
+          }
+        ]
+        expect(scope.getNumSubscription('-K3p9_Qo5uSu7Anm02Hn')).toEqual(2);
       });
 
     });

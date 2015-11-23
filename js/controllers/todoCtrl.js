@@ -451,7 +451,7 @@ $scope.toggleAnimation = function () {
 	$scope.animationsEnabled = !$scope.animationsEnabled;
 };
 
-function checkExistSubscription(e,q){
+$scope.checkExistSubscription = function(e,q){
 	var exist = false;
 	$scope.subscriptions.forEach(function(subscription){
 		if(subscription.email == e && subscription.id == q){
@@ -474,7 +474,7 @@ $scope.getNumSubscription = function(q){
 $scope.subscribeAction = function(qid){
 	var email = prompt("Please enter your email to [subscribe]", "@ust.hk");
     if (email != null) {
-		if(!checkExistSubscription(email,qid)){
+		if(!$scope.checkExistSubscription(email,qid)){
 			// Add email to Firebase
 			var newsubscription = {
 				email: email,
@@ -493,7 +493,7 @@ $scope.subscribeAction = function(qid){
 $scope.unsubscribeAction = function(qid){
 	var email = prompt("Please enter your email to [unsubscribe]","");
 	if(email != null){
-		if(checkExistSubscription(email,qid)){
+		if($scope.checkExistSubscription(email,qid)){
 			// Remove email from Firebase
 			$scope.subscriptions.forEach(function(subscription){
 				if(subscription.email == email && subscription.id == qid){
