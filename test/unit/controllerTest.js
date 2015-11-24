@@ -152,7 +152,8 @@ describe('TodoCtrl', function() {
           order: 2
         },
         {}]
-
+		
+		scope.todos.$save = function() {};
         scope.$digest();
 
 		// vote percentage
@@ -561,9 +562,22 @@ describe('TodoCtrl', function() {
             id: "-K3pF3IrMR68R-CRyle2"
           }
         ]
+		
         var email = '7thsoncomp3111@gmail.com';
         var qid = '-K3p9_Qo5uSu7Anm02Hn';
-        expect(scope.subscribeAction(qid)).toEqual(2);
+		
+		scope.subscriptions.$add = function() {};
+		scope.subscriptions.$save = function() {};
+		scope.subscriptions.$remove = function() {};
+		
+		var original = window.prompt;
+		window.prompt = function() { return email; }
+		
+		// already subscribed
+        expect(scope.subscribeAction(qid)).toEqual(false);
+		
+		window.prompt = original;
+		
       });
 
       it('test unsubscribeAction already subscribed', function() {
@@ -584,10 +598,21 @@ describe('TodoCtrl', function() {
             id: "-K3pF3IrMR68R-CRyle2"
           }
         ]
+		
         var email = '7thsoncomp3111@gmail.com';
         var qid = '-K3p9_Qo5uSu7Anm02Hn';
+		
+		scope.subscriptions.$add = function() {};
+		scope.subscriptions.$save = function() {};
+		scope.subscriptions.$remove = function() {};
+		
+		var original = window.prompt;
+		window.prompt = function() { return email; }
+		
         scope.unsubscribeAction(qid);
-        expect(scope.getNumSubscription('-K3p9_Qo5uSu7Anm02Hn')).toEqual(2);
+        expect(scope.getNumSubscription('-K3p9_Qo5uSu7Anm02Hn')).toEqual(2); // as the real $remove is not triggered
+		
+		window.prompt = original;
       });
 
       it('test unsubscribeAction invalid email', function() {
@@ -608,10 +633,21 @@ describe('TodoCtrl', function() {
             id: "-K3pF3IrMR68R-CRyle2"
           }
         ]
-        var email = '7thsoncomp3111@gmail.com';
+		
+        var email = '7thsoncomp3111gmailcom';
         var qid = '-K3p9_Qo5uSu7Anm02Hn';
+		
+		scope.subscriptions.$add = function() {};
+		scope.subscriptions.$save = function() {};
+		scope.subscriptions.$remove = function() {};
+		
+		var original = window.prompt;
+		window.prompt = function() { return email; }
+		
         scope.unsubscribeAction(qid);
         expect(scope.getNumSubscription('-K3p9_Qo5uSu7Anm02Hn')).toEqual(2);
+		
+		window.prompt = original;
       });
 
       it('test addTodo2', function(){

@@ -115,27 +115,29 @@ $scope.$watchCollection('todos', function () {
 }, true);
 
 $scope.$watchCollection('threads', function () {
-	function getNumOfThreads(qindex){
-		function matchNum(target){
-			var counter = 0;
-			$scope.threads.forEach(function(thread){
-				if(thread.prev == target){
-					counter++;
-					counter+=matchNum(thread.$id);
-				}
-			});
-			return counter;
-		}
-		return matchNum(qindex);
-	}
+	
 	$scope.todos.forEach(function (todo) {
 		//set threadnum
-		todo.threadNum = getNumOfThreads(todo.$id);
+		todo.threadNum = $scope.getNumOfThreads(todo.$id);
 		//console.log(todo.threadNum);
 		todo.activity = todo.views*0.5+(todo.upvote+todo.downvote)*1.5+todo.threadNum*2;
 		$scope.todos.$save(todo);
 	});
 }, true);
+
+$scope.getNumOfThreads = function(qindex){
+	function matchNum(target){
+		var counter = 0;
+		$scope.threads.forEach(function(thread){
+			if(thread.prev == target){
+				counter++;
+				counter+=matchNum(thread.$id);
+			}
+		});
+		return counter;
+	}
+	return matchNum(qindex);
+};
 
 // Get the first sentence and rest
 $scope.getFirstAndRestSentence = function($string) {
@@ -483,10 +485,14 @@ $scope.subscribeAction = function(qid){
 			$scope.subscriptions.$add(newsubscription);
 			$scope.subscriptions.$save(newsubscription);
 			alert("You have successfully subscribed to this question.");
+			return true;
 		}
 		else{
 			alert("You have already subscribed this question with the same email. Please try again.");
+			return false;
 		}
+    } else {
+    	return false;
     }
 }
 
