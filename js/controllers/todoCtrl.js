@@ -120,7 +120,7 @@ $scope.$watchCollection('threads', function () {
 		//set threadnum
 		todo.threadNum = $scope.getNumOfThreads(todo.$id);
 		//console.log(todo.threadNum);
-		todo.activity = todo.views*0.5+(todo.upvote+todo.downvote)*1.5+todo.threadNum*2;
+		todo.activity = (todo.views || 0)*0.5+(todo.upvote+todo.downvote)*1.5+(todo.threadNum || 0)*2;
 		$scope.todos.$save(todo);
 	});
 }, true);
@@ -252,7 +252,7 @@ $scope.addViews = function(todo){
 	// Check if Locked
 	if(!todo.completed){
 		todo.views++;
-		todo.activity = todo.views*0.5+(todo.upvote+todo.downvote)*1.5+todo.threadNum*2;
+		todo.activity = (todo.views || 0)*0.5+(todo.upvote+todo.downvote)*1.5+(todo.threadNum || 0)*2;
 		// Hack to order using this order.
 		todo.order = todo.order -1;
 		$scope.todos.$save(todo);

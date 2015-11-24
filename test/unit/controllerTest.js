@@ -109,7 +109,7 @@ describe('TodoCtrl', function() {
       });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      it('watchCollection', function() {
+      it('watchCollection todos', function() {
 
         var ctrl = controller('TodoCtrl', {
           $scope: scope
@@ -178,6 +178,97 @@ describe('TodoCtrl', function() {
 
 		// total count
 		expect(scope.totalCount).toEqual(3);
+
+      });
+
+      it('watchCollection threads', function() {
+
+        var ctrl = controller('TodoCtrl', {
+          $scope: scope
+        });
+
+        scope.todos=[{
+		'$id': '122',
+          wholeMsg: "test testing #a",
+          head: "meteor",
+          headLastChar: "!",
+          desc: "yeoman",
+          linkedDesc: Autolinker.link("underscore!", {newWindow: false, stripPrefix: false}),
+          completed: false,
+          timestamp: new Date().getTime(),
+          upvote: 0,
+		  downvote: 0,
+          order: 0
+        },
+        {
+		'$id': '123',
+          wholeMsg: "test testing2 #b",
+          head: "backbone",
+          headLastChar: "!",
+          desc: "",
+          linkedDesc: Autolinker.link("", {newWindow: false, stripPrefix: false}),
+          completed: false,
+          timestamp: new Date().getTime(),
+          upvote: 3,
+		  downvote: 0,
+          order: 2
+        },
+        {
+		'$id': '124',
+          wholeMsg: "test testing3",
+          head: "backbone",
+          headLastChar: "!",
+          desc: "meteorJS",
+          linkedDesc: Autolinker.link("", {newWindow: false, stripPrefix: false}),
+          completed: false,
+          timestamp: new Date().getTime(),
+          upvote: 2,
+		  downvote: 2,
+          order: 2
+        }];
+		
+        scope.threads = [
+            {
+                content: 'backbone',
+        		completed: false,
+        		timestamp: new Date().getTime(),
+        		upvote: 0,
+        		downvote: 0,
+                author: 'anonymous',
+                prev: '123'
+            },
+            {
+                content: 'backbone',
+                completed: false,
+                timestamp: new Date().getTime(),
+                upvote: 0,
+                downvote: 0,
+                author: 'anonymous',
+                prev: '123'
+            },
+            {
+                content: 'backbone',
+                completed: false,
+                timestamp: new Date().getTime(),
+                upvote: 0,
+                downvote: 0,
+                author: 'anonymous',
+                prev: '124'
+            }
+        ];
+		
+		scope.todos.$save = function() {};
+        scope.$digest();
+
+		// vote percentage
+		expect(scope.todos[0].threadNum).toEqual(0);
+		expect(scope.todos[0].activity).toEqual(0);
+
+		expect(scope.todos[1].threadNum).toEqual(2);
+		expect(scope.todos[1].activity).toEqual(8.5);
+
+		expect(scope.todos[2].threadNum).toEqual(1);
+		expect(scope.todos[2].activity).toEqual(8);
 
       });
 
@@ -669,6 +760,92 @@ describe('TodoCtrl', function() {
         scope.input = { messagetext: 'test' };
         scope.addTodo('1.png');
         expect(scope.todos.$add).not.toHaveBeenCalled();
+      });
+	  
+      it('test addViews', function(){
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+		
+		var todo = {
+			views: 0,
+			upvote: 0,
+			downvote: 0,
+			threadNum: 0,
+			completed: false
+		};
+		
+		scope.todos.$save = jasmine.createSpy('scope.todos.$save');
+        scope.addViews(todo);
+		
+        expect(todo.views).toEqual(1);
+		expect(todo.activity).toEqual(0.5);
+		
+      });
+	  
+      it('test lockPost', function(){
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+		
+		var todo = {
+			views: 0,
+			upvote: 0,
+			downvote: 0,
+			threadNum: 0,
+			completed: false
+		};
+		
+		scope.todos.$save = jasmine.createSpy('scope.todos.$save');
+        scope.lockPost(todo);
+		
+        expect(todo.completed).toEqual(true);
+		
+      });
+	  
+      it('test pinPost', function(){
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+		
+		var todo = {
+			views: 0,
+			upvote: 0,
+			downvote: 0,
+			threadNum: 0,
+			completed: false,
+			pinned: false
+		};
+		
+		scope.todos.$save = jasmine.createSpy('scope.todos.$save');
+        scope.pinPost(todo);
+		
+        expect(todo.pinned).toEqual(true);
+		
+      });
+	  
+      it('test toggleAnimation', function(){
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+		
+		scope.animationsEnabled = false;
+        scope.toggleAnimation();
+		
+        expect(scope.animationsEnabled).toEqual(true);
+		
+      });
+	  
+      it('test validateAdmin', function(){
+        var ctrl = controller('TodoCtrl',{
+          $scope: scope
+        });
+		
+		scope.secret = '';
+        var result = scope.validateAdmin();
+		
+        expect(result).toEqual(false);
+		
       });
 
     });
