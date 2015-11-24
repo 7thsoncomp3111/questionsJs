@@ -142,7 +142,7 @@
 					<div class="section" ng-show="tagsearch&&(todos | tagFilter:tagsearchitems).length==0"><span class="glyphicon glyphicon-alert icon"></span> Sorry, none of the questions match the tag(s) combination.</div>
 
 					<!-- Question List -->
-					<div class="section questionbody" ng-class="{qnew: todo.new&&!todo.completed, qalert: todo.headLastChar == '!'&&!todo.completed, qreply: todo.threadNum>0 && todo.headLastChar != '!' && !todo.completed, completed: todo.completed, pinned: todo.pinned}" ng-repeat="todo in filteredtodos = (todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderpref | orderBy:'-pinned' | filter: input.searchText)">
+					<div class="section questionbody" ng-class="{qnew: todo.new&&!todo.completed, qalert: todo.headLastChar == '!'&&!todo.completed, qreply: todo.threadNum>0 && todo.headLastChar != '!' && !todo.completed, completed: todo.completed, pinned: todo.pinned}" ng-repeat="todo in filteredtodos = (todos | questionFilter:maxQuestion | tagFilter:tagsearchitems | orderBy:orderprefArray | filter: input.searchText)">
 
 						<div class="admintools" ng-show="isAdmin">
 							<div class="glyphicon glyphicon-pushpin icon" aria-hidden="true" ng-click="pinPost(todo)"></div> |

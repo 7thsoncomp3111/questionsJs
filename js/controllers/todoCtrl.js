@@ -275,8 +275,10 @@ $scope.pinPost = function(todo){
 
 // Set default order to ''-activity'
 $scope.orderpref='-activity';
+$scope.orderprefArray = [function(x) { return x.pinned ? 0 : 1; }, '-activity'];
 $scope.setOrderpref = function (pref){
 	$scope.orderpref = pref;
+	$scope.orderprefArray = [function(x) { return x.pinned ? 0 : 1; }, pref];
 }
 
 //Append tag to tag search box
