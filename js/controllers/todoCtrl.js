@@ -345,10 +345,10 @@ $scope.upload2 = function(file,todo) {
         method:'POST',
         data: {
         	key: fileNameforUpload,
-	        AWSAccessKeyId: 'AKIAIZEFM6CFYRMWAWTQ',
+	        //AWSAccessKeyId: 'AKIAIZEFM6CFYRMWAWTQ',
 	        acl: 'public-read',
-	        policy:"ewogICJleHBpcmF0aW9uIjogIjIwMTUtMTItMTJUMDA6MDA6MDBaIiwKICAiY29uZGl0aW9ucyI6IFsKICAgIHsiYnVja2V0IjogImNvbXAzMTExaW1hZ2VzIn0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRrZXkiLCAiIl0sCiAgICB7ImFjbCI6ICJwdWJsaWMtcmVhZCJ9LAogICAgWyJzdGFydHMtd2l0aCIsICIkQ29udGVudC1UeXBlIiwgIiJdLAogICAgWyJzdGFydHMtd2l0aCIsICIkZmlsZW5hbWUiLCAiIl0sCiAgICBbImNvbnRlbnQtbGVuZ3RoLXJhbmdlIiwgMCwgNTI0Mjg4MDAwXQogIF0KfQ==",
-	        signature:"ev/fTZ0MnlaGnv+YL5hPRw+gkdE=",
+	        //policy:"ewogICJleHBpcmF0aW9uIjogIjIwMTUtMTItMTJUMDA6MDA6MDBaIiwKICAiY29uZGl0aW9ucyI6IFsKICAgIHsiYnVja2V0IjogImNvbXAzMTExaW1hZ2VzIn0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRrZXkiLCAiIl0sCiAgICB7ImFjbCI6ICJwdWJsaWMtcmVhZCJ9LAogICAgWyJzdGFydHMtd2l0aCIsICIkQ29udGVudC1UeXBlIiwgIiJdLAogICAgWyJzdGFydHMtd2l0aCIsICIkZmlsZW5hbWUiLCAiIl0sCiAgICBbImNvbnRlbnQtbGVuZ3RoLXJhbmdlIiwgMCwgNTI0Mjg4MDAwXQogIF0KfQ==",
+	        //signature:"ev/fTZ0MnlaGnv+YL5hPRw+gkdE=",
 	        "Content-Type": file.type != '' ? file.type : 'image/*', // content type of the file (NotEmpty)
 	        filename: file.name, // this is needed for Flash polyfill IE8-9
 	        file: file
@@ -373,8 +373,8 @@ $scope.upload2 = function(file,todo) {
 
 $scope.checkValidKeyName = function (name,file,todo) {
 	AWS.config.update({
-	    accessKeyId: "AKIAIZEFM6CFYRMWAWTQ",
-	    secretAccessKey: "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",
+	    //accessKeyId: "AKIAIZEFM6CFYRMWAWTQ",
+	    //secretAccessKey: "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",
 	});
 
 	var s3 = new AWS.S3();
